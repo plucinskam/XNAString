@@ -1,5 +1,5 @@
 Package: XNAString
-Title: Efficient manipulation of modified oligonucleotide sequences
+Title: Efficient Manipulation of Modified Oligonucleotide Sequences
 Version: 0.1.52
 Authors@R:c(person(given = "Anna",
                   family = "Górska",
@@ -35,7 +35,6 @@ Imports:
     GenomicRanges,
     IRanges,
     methods,
-    pander,
     Rcpp,
     stringi,
     S4Vectors,
@@ -43,11 +42,13 @@ Imports:
     stringr,
     formattable,
     stats,
-    testthat
-Suggested:
+    testthat,
     BSgenome.Hsapiens.UCSC.hg38
-    testthat
-    pander
+Suggested:
+    testthat,
+    pander,
+    knitr,
+    rmarkdown
 LinkingTo: Rcpp
 License: GPL-2
 Encoding: UTF-8
@@ -74,7 +75,4 @@ Collate:
     'predictMfeStructure.R'
     'reverseComplement.R'
     'setterGetter.R'
-Suggests: 
-    knitr,
-    rmarkdown
 VignetteBuilder: knitr
