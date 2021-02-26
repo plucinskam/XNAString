@@ -19,6 +19,7 @@ Imports:
     GenomicRanges,
     IRanges,
     methods,
+    pander,
     Rcpp,
     stringi,
     S4Vectors,
