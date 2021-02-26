@@ -45,7 +45,7 @@ Imports:
     testthat,
     BSgenome.Hsapiens.UCSC.hg38,
     pander
-Suggested:
+Suggests:
     testthat,
     knitr,
     rmarkdown
