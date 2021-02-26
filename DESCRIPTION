@@ -1,0 +1,62 @@
+Package: XNAString
+Title: Efficient manipulation of modified oligonucleotide sequences
+Version: 0.1.52
+Author: Anna Górska <anna.gorska@contractors.roche.com>
+        Marianna Plucinska <marianna.plucinska@roche.com>
+        Lykke Pedersen <lykke.pedersen@roche.com>
+        Lukasz Kielpinski <lukasz.kielpinski@roche.com>
+        Disa Tehler <disa.tehler@roche.com>,
+        Peter H. Hagedorn <peter.hagedorn@roche.com>,
+Date: 17.02.2020
+Maintainer: Marianna Plucinska <marianna.plucinska@roche.com>
+Description: Package for efficient manipulation of modified oligonucleotide sequences.
+biocViews: SequenceMatching, Alignment, Sequencing, Genetics
+Depends: R (>= 4.0)
+Imports:
+    Biostrings,
+    BSgenome,
+    data.table,
+    GenomicRanges,
+    IRanges,
+    methods,
+    Rcpp,
+    stringi,
+    S4Vectors,
+    future.apply,
+    stringr,
+    formattable,
+    stats
+Suggested:
+    BSgenome.Hsapiens.UCSC.hg38
+    testthat
+    pander
+LinkingTo: Rcpp
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Collate:
+    'RcppExports.R'
+    'classUnion.R'
+    'xnaStringClass.R'
+    'XNAString2Helm.R'
+    'XNAStringFromHelm.R'
+    'utils.R'
+    'xnaStringSetClass.R'
+    'alphabetFrequency.R'
+    'data.R'
+    'dictFromMimir.R'
+    'dinucleotideFrequency.R'
+    'helm2String.R'
+    'matchPDict.R'
+    'matchPattern.R'
+    'pairwiseAlignment.R'
+    'predictDuplexStructure.R'
+    'predictMfeStructure.R'
+    'reverseComplement.R'
+    'setterGetter.R'
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

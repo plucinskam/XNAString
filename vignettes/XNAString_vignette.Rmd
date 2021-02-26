@@ -1,0 +1,824 @@
+---
+title: "XNAString_vignette"
+subtitle: "Methods overview and classes description"
+author: "Anna Gorska & Marianna Plucinska"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{XNAString_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+```
+Development of XNAString package aims at enabling efficient manipulation of modified oligonucleotide sequences.
+The package inherits some of the functionalities from Biostrings package. In contrary to Biostrings sequences, XNAString classes allow for description of base sequence, sugar and backbone in a single object. 
+XNAString is able to capture single stranded oligonucleotides, siRNAs, PNAs, shRNAs, gRNAs and synthetic mRNAs, and enable users to apply sequence-manipulating Bioconductor packages to their analysis. 
+XNAString can read and write a HELM notation, compute alphabet frequency, align and match targets.
+```
+
+<!-- <p style="color: blue; text-align: center; font-size: 20px;">Methods overview</p> -->
+
+# Methods and functions overview
+
+```
+All exported methods are listed in this section. They are divided into three tables:
+* XNAString methods
+* XNAStringSet methods
+* Both XNAString and XNAStringSet methods
+* Other functions
+```
+ 
+## XNAString methods
+
+```{r, include=TRUE, echo=FALSE, results = 'asis', warning=FALSE}
+library(knitr)
+library(pander)
+fun_descr_xnastring <- data.frame("function" = c('XNAString',
+                                                 'XNAReverseComplement',
+                                                 'predictMfeStructure',
+                                                 'predictDuplexStructure',
+                                                 'XNAStringToHelm'),
+                        description = c('Create XNAString object by passing at least base and sugar slots (name, backbone, target, conjugates and dictionary are optional).',
+                                        'Take XNAString object and return reverse complement of base slot.',
+                                        'Take XNAString object and apply RNAfold_MFE function from ViennaRNA package on base slot (if single stranded molecule).',
+                                        'Take XNAString object and apply RNAcofold_MFE function from ViennaRNA package on base slot (if double stranded molecule) or duplicate base and apply RNAcofold_MFE function from ViennaRNA (if single stranded molecule)',
+                                        'Change XNAString/XNAStringSet object to helm notation.'))
+#m <- mtcars[1:3, 1:4]
+pandoc.table(fun_descr_xnastring, keep.line.breaks = TRUE, style='rmarkdown', justify = 'left', caption = "XNAString class methods",  split.table = Inf) # style = 'rmarkdown'
+
+```
+
+## XNAStringSet methods
+
+```{r, include=TRUE, echo=FALSE, results = 'asis', warning=FALSE}
+library(knitr)
+library(pander)
+fun_descr_xnastringset <- data.frame("function" = c('XNAStringSet',
+                                       'set2List',
+                                       'set2Dt',
+                                       'dt2Set',
+                                       '[',
+                                       '[['
+                                      ),
+                        description = c('Create XNAStringSet object by passing XNAString objects list.', 
+                                        'Change XNAStringSet object to list of XNAString objects.',
+                                        'Change XNAStringSet object to data.table.',
+                                        'Change data.table (or data.frame) to XNAStringSet object',
+                                        'Extract single/multiple XNAString objects (XNAStringSet object returned) by passing index/indexes number or name/names.',
+                                        'Extract single XNAString object (XNAString object returned) by passing index number or name.'
+                                       ))
+#m <- mtcars[1:3, 1:4]
+pandoc.table(fun_descr_xnastringset, keep.line.breaks = TRUE, style='rmarkdown', justify = 'left', caption = "XNAStringSet class methods",  split.table = Inf) # style = 'rmarkdown'
+
+```
+
+
+##  Both XNAString and XNAStringSet methods
+
+```{r, include=TRUE, echo=FALSE, results = 'asis', warning=FALSE}
+library(knitr)
+library(pander)
+fun_descr <- data.frame("function" = c(
+                                       'name / name<-',
+                                       'base / base<-',
+                                       'sugar / sugar<-',
+                                       'backbone / backbone<-',
+                                       'target / target<-', 
+                                       'conjugate5 / conjugate5<-', 
+                                       'conjugate3 / conjugate3<-',
+                                       'secondary_structure / secondary_structure<-',
+                                       'duplex_structure / duplex_structure<-',
+                                       'dictionary / dictionary<-',
+                                       'compl_dictionary / compl_dictionary<-',
+                                       'XNAStringFromHelm',
+                                       'XNAPairwiseAlignment',
+                                       'XNAMatchPattern',
+                                       'XNAVmatchPattern',
+                                       'XNAMatchPDict',
+                                       'XNAAlphabetFrequency',
+                                       'XNADinucleotideFrequency',
+                                       'mimir2XnaDict'),
+                        description = c(
+                                        'Extract / overwrite name slot.',
+                                        'Extract / overwrite base slot.',
+                                        'Extract / overwrite sugar slot.',
+                                        'Extract / overwrite backbone slot.',
+                                        'Extract / overwrite target slot.',
+                                        'Extract / overwrite conjugate5 slot.',
+                                        'Extract / overwrite conjugate3 slot.',
+                                        'Extract / overwrite secondary_structure slot.',
+                                        'Extract / overwrite duplex_structure slot.',
+                                        'Extract / overwrite dictionary slot.',
+                                        'Extract / overwrite compl_dictionary slot.',
+                                        'Change helm notation to XNAString/XNAStringSet object.',
+                                        'Inherited from Biostrings package. Solve  global/local/ends-free alignment problems.',
+                                        'Inherited from Biostrings package. Find/count all the occurrences of a given pattern (typically short) in a reference sequence (typically long). Support mismatches and indels.',
+                                        'Inherited from Biostrings package. Find/count all the occurrences of a given pattern (typically short) in a set of reference sequences. Support mismatches and indels.',
+                                        'Inherited from Biostrings package. Find/count all the occurrences of a set of patterns in a reference sequence. Support a small number of mismatches.',
+                                        'Tabulate the letters and count frequency for nucleotides.',
+                                        'Tabulate the letters and count frequency for dinucleotides.',
+                                        'Reformat mimir table to XNA dictionary standards'))
+#m <- mtcars[1:3, 1:4]
+pandoc.table(fun_descr, keep.line.breaks = TRUE, style='rmarkdown', justify = 'left', caption = "XNAString and XNAStringSet class methods", split.table = Inf) # style = 'rmarkdown'
+
+```
+
+## Other functions
+
+```{r, include=TRUE, echo=FALSE, results = 'asis', warning=FALSE}
+library(knitr)
+library(pander)
+fun_descr_other <- data.frame("function" = c('concatDict',
+                                              'mimir2XnaDict'),
+                        description = c('Concatanate custom HELM-symbol dictionary with built-in HELM-symbol xna_dictionary.',
+                                        'Rewrite dictionary table to standard format.'
+                                       ))
+#m <- mtcars[1:3, 1:4]
+pandoc.table(fun_descr_other, keep.line.breaks = TRUE, style='rmarkdown', justify = 'left', caption = "XNAString class methods",  split.table = Inf) # style = 'rmarkdown'
+
+```
+
+
+# XNAString class
+
+```
+XNAString class is subclass of Biostrings::BString
+and has 11 slots:
+* name (character)
+* base (character, RNAString, RNAStringSet, DNAString or DNAStringSet)
+* sugar (character)
+* backbone (character, if missing and base is character default string is created by replicating character 'X', if missing and base is DNAString/RNAString, backbone all 'O')
+* target (DNAStringSet, DNAString or character)
+* conjugate5 (character)
+* conjugate3 (character)
+* secondary_structure (list - structure is character and mfe numeric)
+* duplex_structure (list - structure is character and mfe numeric)
+* dictionary (xna_dictionary default, data.table type)
+* compl_dictionary (complementary_bases default, data.table type)
+
+Target, name and conjugate slots can be NA. If backbone or dictionaries missing, default values in use.
+
+Validation procedure requirements for XNAString objects:
+* slots type must reflect above requirements
+* length of sugar equals base
+* lenght of backbone is one element shorter than sugar and base
+* condition on available letters in base / sugar / backbone dictionary must be satisfied
+* length of base, sugar and backbone vectors is the same and is equal 1 or 2,
+  length of target vector >0,
+  length of name and conjugates vectors equal 1
+  
+Object can be created only when all validation procedure requirements are met.
+```
+
+## Object creation
+
+```{r, include=FALSE, echo=FALSE}
+library(XNAString)
+library(Biostrings)
+XNAString::xna_dictionary
+```
+
+
+### Example 1 - basic XNAString object 
+```
+If base slot is passed as character then sugar slot must be also passed manually and default backbone is a replication of character 'X'.
+Target / secondary_structure / duplex_structure slot default is created by XNAReverseComplement / predictMfeStructure / predictDuplexStructure method applied on base slot.
+```
+```{r, include=TRUE, echo=TRUE}
+
+obj <- XNAString(base = 'ATCG', sugar = 'OOOO')
+obj
+```
+
+### Example 2 - XNAString object with optional slots
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(base = 'ATCG', 
+                 sugar = 'OOOO', 
+                 backbone = 'SOS', 
+                 target = Biostrings::DNAStringSet('TAGC'), 
+                 conjugate3 = "[5gn2c6]", 
+                 name = "oligo1")
+obj
+```
+
+
+### Example 3 - XNAString object with multiple targets
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(base = 'ATCG', 
+                 sugar = 'OOOO', 
+                 backbone = 'SOS', 
+                 target = Biostrings::DNAStringSet(c('TAGC', 'TATC')))
+obj
+```
+
+### Example 4 - XNAString for siRNA
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(base = c('ATCG', 'TAGC'),
+                 sugar = c('OOOO', 'OOOO'),
+                 backbone = c('SOS','SOS'),
+                 target = Biostrings::DNAStringSet(c('TAGC', 'TATC')))
+obj
+```
+
+### Example 5 - DNAString/ RNAString as base slot
+```
+XNAString with DNAString base should create default sugar all D, and backbone all O.
+XNAString with RNAString base should create default sugar all R, and backbone all O.
+```
+```{r, include=TRUE, echo=TRUE}
+d1 <- Biostrings::DNAString(x = "ACGATCG")
+
+obj <- XNAString(base = d1)
+obj
+```
+
+## Methods
+
+
+### Example 1 - public slots getter and setter
+```
+Public slots setter - once an object is created, the setter enables users to modify all slots.
+New input has to satisfy validation procedures (e.g. the sugar must be of the same length as base)
+
+```
+```{r, include=TRUE, echo=TRUE}
+
+obj <- XNAString(base = 'ATCG', sugar = 'FODL', backbone = 'SOO')
+base(obj)
+base(obj) <- 'CTGA'
+base(obj)
+
+```
+
+
+
+### Example 2 - XNAReverseComplement
+```
+XNAReverseComplement - this method takes XNAString object as an input and finds reverse complement for base slot. If base is DNAString or RNAString, Biostrings::reverseComplement in use. If base is character then compl_dictionary comes into play.
+XNAReverseComplement method is used to create default target slot. Each object has compl_dictionary slot (if not passed while creating an object - complementary_bases table used as default). All bases from dictionary must be present also in compl_dictionary. If that is not the case, target slot default is empty.
+It is also possible to return multiple targets with XNAReverseComlement method. It can be done by passing custom complementary_bases dictionary and using Iupac symbols. E.g. by adding symbol 'R' to custom complementary_bases dictionary, there are two possibile bases: 'G' and 'A' (see the example below).
+More symbols and corresponding bases (Iupac standards):
+        symbol "W" - bases "A", "T"
+        symbol "S" - bases "G", "C"
+        symbol "M" - bases "A", "C"
+        symbol "K" - bases "G", "T"
+        symbol "R" - bases "A", "G"
+        symbol "Y" - bases "C", "T"
+        symbol "B" - bases "C", "G", "T"
+        symbol "D" - bases "A", "G", "T"
+        symbol "H" - bases "A", "C", "T"
+        symbol "V" - bases "A", "C", "G"
+        symbol "N" - bases "A", "C", "G", "T"
+
+```
+```{r, include=TRUE, echo=TRUE}
+
+XNAString::complementary_bases
+obj1 <- XNAString(base = "ACEGTTGGT",
+                    sugar = 'FODDDDDDD',
+                    conjugate3 = 'TAG')
+XNAString::XNAReverseComplement(obj1)
+
+```
+
+
+
+
+```{r, include=TRUE, echo=TRUE}
+
+custom_compl_dict <-
+  rbind(
+    XNAString::complementary_bases[seq(1, 5),],
+    data.table::data.table(
+      base = 'U',
+      target = 'R',
+      compl_target = 'T'
+    )
+  )
+obj2 <- XNAString(base = "ACGCUUA",
+                  sugar = 'DDDDDDD',
+                  compl_dictionary = custom_compl_dict)
+obj2
+
+```
+
+
+### Example 3 - predictMfeStructure
+```
+predictMfeStructure - this method uses RNAfold_MFE function from C library ViennaRNA, this function can handle only standard bases.
+Takes XNAString object and applies RNAfold_MFE function on base slot if base is  DNAString or RNAString. If base is character (not-standard bases allowed), then RNAfold_mfe works  for A, C, G, T, E, U letters with built-in complementary_bases dictionary (e.g. E letter is changed to C before applying predictMfeStructure function). If base slot includes other letters, their translation to compl_target must be included in compl_dict slot. Otherwise predictMfeStructure returns empty string.
+predictMfeStructure method is used to create default secondary_structure slot.
+
+```
+```{r, include=TRUE, echo=TRUE}
+
+obj <- XNAString(base = 'GAGAGGGAACCAGGCAGGGACCGCAGACAACA', 
+                   sugar = 'FODLMFODLMFODLMFODLMFODLMFFFFFFF')
+XNAString::predictMfeStructure(obj)
+
+```
+
+
+### Example 4 - predictDuplexStructure - double stranded molecule
+```
+predictDuplexStructure - this method uses RNAcofold_MFE function from C library ViennaRNA, this function can handle only standard bases.
+predictDuplexStructure takes XNAString object and applies RNAcofold_MFE function on base slot if base is DNAStringSet or RNAStringSet. If base is character vector (not-standard bases allowed), then RNAcofold_mfe works for A, C, G, T, E, U letters with built-in complementary_bases dictionary (e.g. E letter is changed to C before applying predictDuplexStructure function). If base slot includes other letters, their translation to compl_target must be included in compl_dict slot passed manually. Otherwise predictDuplexStructure returns empty string.
+predictDuplexStructure method is used to create default duplex_structure slot.
+
+```
+```{r, include=TRUE, echo=TRUE}
+
+obj <- XNAString(base = Biostrings::DNAStringSet(c('GAGAGGGAACCAGGCAGGGACCGCAGACAACA', 'GAGAGGGAACCAGGCAGGGACCGCAGACAACA')))
+
+XNAString::predictDuplexStructure(obj)
+
+```
+
+### Example 5 - predictDuplexStructure - single stranded molecule
+```
+RNAcofold_MFE function needs two sequences, so if molecule is sinlge stranded, base sequence is duplicated within the predictDuplexStructure method.
+```
+```{r, include=TRUE, echo=TRUE}
+
+obj <- XNAString(base = Biostrings::DNAString('GAGAGGGAACCAGGCAGGGACCGCAGACAACA'), 
+                 sugar = 'FODLMFODLMFODLMFODLMFODLMFFFFFFF')
+  
+XNAString::predictDuplexStructure(obj)
+
+```
+
+
+
+# XNAStringSet class
+
+
+```
+XNAStringSet class consists of XNAString objects given as a list.
+Validation procedure checks if all objects are of XNAString class.
+```
+
+## Object creation
+
+### Example 1 - basic XNAStringSet object
+
+```{r, include=TRUE, echo=TRUE}
+
+XNAString_obj1 <- XNAString(base = 'ATCG', sugar = 'FODD')
+XNAString_obj2 <- XNAString(base = 'TTCT', sugar = 'FOLL')
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAStringSet_obj
+```
+
+
+### Example 2 - XNAStringSet consists of XNAString objects for siRNA
+```{r, include=TRUE, echo=TRUE}
+XNAString_obj1 <- XNAString(base = c('ATCG', 'TAGC'), 
+                 sugar = c('OOOO', 'OOOO'), 
+                 backbone = c('SOS','SOS'), 
+                 target = Biostrings::DNAStringSet(c('TAGC', 'TACC')))
+
+XNAString_obj2 <- XNAString(base = c('GGCG', 'TATC'), 
+                 sugar = c('OOOO', 'OOOO'), 
+                 target = Biostrings::DNAStringSet(c('CCGC', 'TATG')))
+
+XNAStringSet_siRNA <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAStringSet_siRNA
+```
+
+
+## Methods
+
+```
+Methods which enable XNAStringSet extraction / modification.
+* set2List
+* extraction methods ("[" and "[[")
+* set2Dt method
+* public slots setter/getter
+* XNAStringSet from data.table/data.frame
+```
+
+### Example 1 - change XNAStringSet object to a list of XNAString objects
+```{r, include=TRUE, echo=TRUE}
+XNAString_obj1 <- XNAString(name = 'oligo1', base = 'ATCG', sugar = 'FODD')
+XNAString_obj2 <- XNAString(name = 'oligo2',base = 'TTCT', sugar = 'FOLL')
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+set2List(XNAStringSet_obj)
+```
+
+### Example 2 - extract single XNAString object or part of XNAStringSet object
+```{r, include=TRUE, echo=TRUE}
+XNAStringSet_obj[2]
+
+XNAStringSet_obj['oligo2']
+
+XNAStringSet_obj[c(1,2)]
+
+XNAStringSet_obj[c('oligo1', 'oligo2')]
+
+XNAStringSet_obj[[2]]
+
+XNAStringSet_obj[['oligo2']]
+```
+
+### Example 3 - change XNAStringSet object to data.table
+```{r, include=TRUE, echo=TRUE}
+set2Dt(XNAStringSet_obj, slots =c('name', 'base', 'sugar', 'backbone', 'target', 'conjugate5', 'conjugate3'))
+```
+
+### Example 4 - public slots getter and setter
+```{r, include=TRUE, echo=TRUE}
+
+base(XNAStringSet_siRNA)
+base(XNAStringSet_siRNA, 2)
+base(XNAStringSet_siRNA) <- c('CTGA', 'CCCC')
+base(XNAStringSet_siRNA, 2) <- c('TTTT', 'TTTT')
+XNAStringSet_siRNA
+```
+
+### Example 5 - XNAStringSet from data.table
+```{r, include=TRUE, echo=TRUE}
+
+dt <- data.table::data.table(base= c('AEACACACACACAEAE', 'AAETGCTETGTATTTTTE'), 
+                  sugar = c('LLLDDDDDDDDDDLLL', 'LLLDDDDDDDDDDDLLLL'), 
+                  backbone =c('SSSSSSSSSSSSSSS', 'SSSSSSSSSSSSSSSSS'))
+dt
+dt2Set(dt)
+
+```
+
+
+# HELM notation to XNAString object
+```
+Methods written in this section translate HELM notation to multistring notation and create XNAString/XNAStringSet object.
+```
+
+### Example 1 - ssRNA
+```{r, include=TRUE, echo=TRUE}
+helm <-
+    "CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0"
+
+XNAStringFromHelm(helm, name ='oligo1')
+
+```
+
+### Example 2 - siRNA
+```{r, include=TRUE, echo=TRUE}
+helm <-
+"RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR](C)P.[mR](G)P.[fR](C)P.[mR](C)P.[fR](G)P.[mR](T)P.[fR](G)P.[mR](G)P.[fR](T)P.[mR](T)P.[fR](C)P.[mR](A)P.[fR](T)P.[mR](A)P.[fR](A)}|RNA2{[fR](T)P.[fR](T)P.[mR](A)P.[fR](T)P.[mR](G)P.[fR](A)P.[mR](A)P.[fR](C)P.[mR](C)P.[fR](A)P.[mR](C)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](A)P.[fR](G)P.[mR](G)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](G)}$RNA1,RNA2,2:pair-56:pair|RNA1,RNA2,5:pair-53:pair|RNA1,RNA2,8:pair-50:pair|RNA1,RNA2,11:pair-47:pair|RNA1,RNA2,14:pair-44:pair|RNA1,RNA2,17:pair-41:pair|RNA1,RNA2,20:pair-38:pair|RNA1,RNA2,23:pair-35:pair|RNA1,RNA2,26:pair-32:pair|RNA1,RNA2,29:pair-29:pair|RNA1,RNA2,32:pair-26:pair|RNA1,RNA2,35:pair-23:pair|RNA1,RNA2,38:pair-20:pair|RNA1,RNA2,41:pair-17:pair|RNA1,RNA2,44:pair-14:pair|RNA1,RNA2,47:pair-11:pair|RNA1,RNA2,50:pair-8:pair|RNA1,RNA2,53:pair-5:pair|RNA1,RNA2,56:pair-2:pair$$$V2.0"
+
+
+XNAStringFromHelm(helm)
+
+```
+
+### Example 3 - removed linker
+```{r, include=TRUE, echo=TRUE}
+helm <-
+"CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](T)[sP].[LR](T)[sP].[LR](G)[sP].[dR](A)[sP].[dR](A)[sP].[dR](T)[sP].[dR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](T)[sP].[dR](G)[sP].[dR](G)[sP].[dR](A)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0"
+
+XNAStringFromHelm(helm)
+
+```
+
+### Example 4 - create XNAStringSet from list of HELM strings
+```{r, include=TRUE, echo=TRUE}
+helm <- c("CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0",     
+          "RNA1{[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$$$$V2.0")
+
+XNAStringFromHelm(helm, name =c('oligo1', 'oligo2'))
+
+```
+
+
+# XNAString object to HELM notation 
+```
+Methods written in this section translate multistring notation from XNAString/XNAStringSet object to HELM notation. If molecule is double stranded also pairing information is added.
+```
+### Example 1 - single stranded molecule
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(base = 'GAGTTACTTGCCAAET',
+                 sugar = 'LLLDMDDDDDDDDLLL',
+                 backbone = 'XXXXXXXXXXXXXX2')
+  
+XNAStringToHelm(obj)
+
+```
+
+### Example 2 - double stranded molecule, base is DNAString
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(
+    base = Biostrings::DNAStringSet(c("CCCC", "GGGG")),
+    sugar = c("OOFO", "FFOF"),
+    backbone = c("OOO", "OOO"),
+    target = '',
+    conjugate3 = "",
+    conjugate5 = "")
+  
+XNAStringToHelm(obj)
+```
+
+### Example 3 - double stranded molecule - pairing information added
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(
+    base = c("CCCCEGC", "UUAUGAT"),
+    sugar = c("OOFOFOF", "FFOFOFO"),
+    backbone = c("OOOOOO", "OOOOOO"),
+    target = '',
+    conjugate3 = "[5gn2c6]",
+    conjugate5 = "")
+  
+XNAStringToHelm(obj)
+
+```
+
+
+# Alignment and matching functions
+
+```
+Methods in this section are inherited from Biostrings package. All options in Biostrings methods:
+* pairwiseAlignment
+* matchPattern
+* vmatchPattern
+* matchPDict
+are available in XNAStrng package as well. XNAString package renamed these mathods by adding XNA prefix in the beginning.
+```
+
+## XNAPairwiseAlignment for target sequence
+```
+Target sequence is used as pattern.
+```
+
+### Example: global alignment
+```{r, include=TRUE, echo=TRUE}
+obj <- XNAString(base = 'ATCGATATATATACACATGTATGATG',
+                 sugar = 'OOOODDDDDDDDDDDDDDDDDDDDDD',
+                 target = DNAStringSet(c('TAGCTATATATATGTGTACATACTAC', 'TAGCTAGATATATGTGTACATACTAC')))
+
+subject <- 'ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG'
+```
+
+```{r, include=TRUE, echo=TRUE}
+
+substitutionMatrix <- Biostrings::nucleotideSubstitutionMatrix()
+
+XNAString::XNAPairwiseAlignment(pattern = obj, subject = subject, substitutionMatrix = substitutionMatrix)
+
+```
+
+### Example: local alignment
+
+```{r, include=TRUE, echo=TRUE}
+
+substitutionMatrix <- Biostrings::nucleotideSubstitutionMatrix()
+
+XNAString::XNAPairwiseAlignment(pattern = obj, subject = subject, type = "local", substitutionMatrix = substitutionMatrix)
+
+```
+
+
+## XNAMatchPattern for target sequence
+```
+Target sequence is used as pattern. If more then one target is present in XNAString object, first is used as default. User can specify which target sequence should be taken as pattern (target.number parameter).
+```
+
+
+### Example: default matching of first target
+```{r, include=TRUE, echo=TRUE}
+XNAString::XNAMatchPattern(pattern = obj, subject = subject)
+
+```
+
+### Example: match target selected by user
+```{r, include=TRUE, echo=TRUE}
+
+XNAString::XNAMatchPattern(pattern = obj, subject = subject, target.number = 2)
+
+```
+
+### Example: match pattern selected by user with 1 mismatch
+```{r, include=TRUE, echo=TRUE}
+XNAString::XNAMatchPattern(pattern = obj, subject = subject, target.number = 2, max.mismatch = 1)
+```
+
+
+## XNAVmatchPattern for multiple subjects
+```{r, include=TRUE, echo=TRUE}
+subject <- c('ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG', 'ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTGCGACTACATCGATATATATACACATGTATGATG')
+
+XNAString::XNAVmatchPattern(pattern = obj, subject)
+
+```
+
+## XNAMatchPDict for multiple targets
+```
+Only one subject is allowed. Results created for all targets.
+```
+```{r, include=TRUE, echo=TRUE}
+subject <- 'ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG'
+
+XNAString::XNAMatchPDict(pdict = obj, subject = subject)
+
+```
+
+
+# AlphabetFrequency for nucleotides
+
+```
+Letters are tabulated and occurence frequency calculated for nucleotides. 
+There are 6 arguments:
+* obj (either XNAString and XNAStringSet object)
+* slot ('base', 'sugar' or 'backbone')
+* letters (frequency checked just for these letters. If empty, letters from object's dictionary taken as the default. )
+* matrix_nbr (1 is the default. If 1 - first slot's element is use, if 2 - 2nd element in slot)
+* as.prob (default FALSE)
+* base_only (default FALSE. If TRUE, 'A', 'C', 'G', 'T', 'other' are tabulated)
+```
+### Example 1: XNAString object
+```{r, include=TRUE, echo=TRUE}
+
+xnastring_obj <- XNAString(name = 'oligo1',
+                           base = c('AEEE'),
+                           sugar = c('FFOO'),
+                           target = DNAStringSet('TTT'))
+
+XNAString::XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base')
+XNAString::XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', as.prob = TRUE)
+XNAString::XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', base_only = TRUE)
+XNAString::XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', letters = c('A', 'C'))
+
+
+```
+
+### Example 2: XNAString object
+```{r, include=TRUE, echo=TRUE}
+
+xnastring_obj <- XNAString(name = 'oligo1',
+                           base = c('AAEC', 'ECTA'),
+                           sugar = c('FFOO', 'DDLM'))
+
+XNAString::XNAAlphabetFrequency(obj = xnastring_obj, slot = 'sugar', matrix_nbr =  2)
+
+```
+
+
+### Example 3: XNAStringSet object, single base, sugar and backbone
+```{r, include=TRUE, echo=TRUE}
+
+XNAString_obj1 <- XNAString(base = 'ATCG', sugar = 'FODD')
+XNAString_obj2 <- XNAString(base = 'TTCT', sugar = 'FOLL')
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAString::XNAAlphabetFrequency(obj = XNAStringSet_obj, slot = 'base')
+
+```
+
+### Example 4: XNAStringSet object, double base, sugar and backbone
+```{r, include=TRUE, echo=TRUE}
+
+XNAString_obj1 <- XNAString(base = c('ATCG', 'TAGC'),
+                 sugar = c('OFOO', 'ODDF'),
+                 backbone = c('SOS','SOS'))
+
+XNAString_obj2 <- XNAString(base = c('GGCG', 'TATC'),
+                 sugar = c('OOOO', 'OOFO'))
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAString::XNAAlphabetFrequency(obj = XNAStringSet_obj, slot = 'sugar', matrix_nbr = 2)
+
+```
+
+
+
+# AlphabetFrequency for dinucleotides
+
+```
+Letters are tabulated and occurence frequency calculated for dinucleotides. 
+There are 6 arguments:
+* obj (either XNAString and XNAStringSet object)
+* slot ('base', 'sugar' or 'backbone')
+* double_letters (frequency checked just for these double letters. If empty, all possible double letters from object's dictionary taken as the default. )
+* matrix_nbr (1 is the default. If 1 - first slot's element is use, if 2 - 2nd element in slot)
+* as.prob (default FALSE)
+* base_only (default FALSE. If TRUE, all possible double letters composed of: 'A', 'C', 'G', 'T' are tabulated)
+```
+### Example 1: XNAString object
+```{r, include=TRUE, echo=TRUE}
+
+xnastring_obj <- XNAString(name = 'oligo1',
+                           base = c('GCGC'),
+                           sugar = c('FODL'),
+                           target = DNAStringSet('TTTT'))
+
+XNAString::XNADinucleotideFrequency(obj = xnastring_obj, slot = 'base')
+XNAString::XNADinucleotideFrequency(obj = xnastring_obj, slot = 'base', as.prob = TRUE)
+XNAString::XNADinucleotideFrequency(obj = xnastring_obj, slot = 'base', base_only = TRUE)
+XNAString::XNADinucleotideFrequency(obj = xnastring_obj, slot = 'base', double_letters = c('GC', 'CU'))
+
+```
+
+### Example 2: XNAString object with custom dictionary
+```{r, include=TRUE, echo=TRUE}
+my_dict <- data.table::data.table(type = c(rep('base', 3), rep('sugar', 2), rep('backbone', 2)),
+                                  symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B'))
+
+xnastring_obj <-      XNAString_obj1 <- XNAString(
+  base = c('AGGE', 'EEEA'),
+  sugar = c('FFFO', 'OOOO'),
+  backbone = c('SBS', 'SBS'),
+  dictionary = my_dict
+)
+
+
+
+XNAString::XNADinucleotideFrequency(obj = xnastring_obj,
+                                    slot = 'sugar',
+                                    matrix_nbr =  2)
+
+```
+
+
+### Example 3: XNAStringSet object, single base, sugar and backbone 
+```{r, include=TRUE, echo=TRUE}
+
+XNAString_obj1 <- XNAString(base = 'ATCG', sugar = 'FODD')
+XNAString_obj2 <- XNAString(base = 'TTCT', sugar = 'FOLL')
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAString::XNADinucleotideFrequency(obj = XNAStringSet_obj, slot = 'base')
+
+```
+
+### Example 4: XNAStringSet object, double base, sugar and backbone
+```{r, include=TRUE, echo=TRUE}
+
+XNAString_obj1 <- XNAString(base = c('ATCG', 'TAGC'),
+                 sugar = c('OFOO', 'ODDF'),
+                 backbone = c('SOS','SOS'))
+
+XNAString_obj2 <- XNAString(base = c('GGCG', 'TATC'),
+                 sugar = c('OOOO', 'OOFO'))
+
+XNAStringSet_obj <- XNAStringSet(objects = list(XNAString_obj1, XNAString_obj2))
+
+XNAString::XNADinucleotideFrequency(obj = XNAStringSet_obj, slot = 'sugar', matrix_nbr = 2)
+
+```
+
+
+
+# Other functions
+
+### Example 1: mimir2XnaDict 
+```{r, include=TRUE, echo=TRUE}
+
+dt <- data.table::data.table(HELM = c("([PPG])", "[fR]", "[srP]"),
+                  TS_BASE_SEQ = c("F", NA, NA),
+                  TS_SUGAR_SEQ = c(NA, NA, 'F'),
+                  TS_BACKBONE_SEQ = c(NA, 'S', NA))
+dt
+
+mimir2XnaDict(dt, 'TS_BASE_SEQ', 'TS_SUGAR_SEQ', 'TS_BACKBONE_SEQ')
+```
+
+### Example 2: concatDict
+```{r, include=TRUE, echo=TRUE}
+
+my_dict <- data.table::data.table(HELM = c('[[B]]'),
+                                   type = c('base'),
+                                   symbol = c('B'))
+concatDict(my_dict)
+```
+
+
+### Example 3: concatDict with duplicates
+```{r, include=TRUE, echo=TRUE, error=TRUE}
+
+my_dict <- data.table::data.table(HELM = c('[[U]]'),
+                                   type = c('base'),
+                                   symbol = c('U'))
+concatDict(my_dict)
+```
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<!-- ```{r setup} -->
+<!-- library(XNAString) -->
+<!-- ``` -->
