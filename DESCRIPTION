@@ -25,7 +25,6 @@ Author@R:c(person(given = "Anna",
                    family = "Hagedorn",
                    role = "aut"))
 Date: 17.02.2020
-Maintainer: Marianna Plucinska <marianna.plucinska@roche.com>
 Description: Package for efficient manipulation of modified oligonucleotide sequences.
 biocViews: SequenceMatching, Alignment, Sequencing, Genetics
 Depends: R (>= 4.0)
