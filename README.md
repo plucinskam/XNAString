@@ -2,6 +2,7 @@
 ------------------------------------------------------------------------
 <!-- badges: start -->
 [![R build status](https://github.com/plucinskam/XNAString/workflows/R-CMD-check/badge.svg)](https://github.com/plucinskam/XNAString/actions)
+[![R-CMD-check-bioc](https://github.com/plucinskam/XNAString/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/plucinskam/XNAString/actions)
 <!-- badges: end -->
 
 ### **Description**
