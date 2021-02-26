@@ -1,12 +1,29 @@
 Package: XNAString
 Title: Efficient manipulation of modified oligonucleotide sequences
 Version: 0.1.52
-Author: Anna Górska <anna.gorska@contractors.roche.com>
-        Marianna Plucinska <marianna.plucinska@roche.com>
-        Lykke Pedersen <lykke.pedersen@roche.com>
-        Lukasz Kielpinski <lukasz.kielpinski@roche.com>
-        Disa Tehler <disa.tehler@roche.com>,
-        Peter H. Hagedorn <peter.hagedorn@roche.com>,
+Author@R:c(person(given = "Anna",
+                  family = "Górska",
+                  role = c("aut", "cre"),
+                  email = "anna.gorska@contractors.roche.com"),
+            person(given = "Marianna",
+                   family = "Plucinska",
+                   role = c("aut", "cre"),
+                   email = "marianna.plucinska@roche.com"),
+            person(given = "Lykke",
+                   family = "Pedersen",
+                   role = "aut"),
+            person(given = "Lykke",
+                   family = "Pedersen",
+                   role = "aut"),
+            person(given = "Lukasz",
+                   family = "Kielpinski",
+                   role = "aut"),
+            person(given = "Disa",
+                   family = "Tehler",
+                   role = "aut"),
+            person(given = "Peter",
+                   family = "Hagedorn",
+                   role = "aut"))
 Date: 17.02.2020
 Maintainer: Marianna Plucinska <marianna.plucinska@roche.com>
 Description: Package for efficient manipulation of modified oligonucleotide sequences.
@@ -26,7 +43,8 @@ Imports:
     future.apply,
     stringr,
     formattable,
-    stats
+    stats,
+    testthat
 Suggested:
     BSgenome.Hsapiens.UCSC.hg38
     testthat
