@@ -3,3 +3,4 @@ src/*/*.o
 src/*/*/*.o
 src/.DS_Store
 inst/.DS_Store
+.Rproj.user
