@@ -3,7 +3,7 @@ Title: Efficient manipulation of modified oligonucleotide sequences
 Version: 0.1.52
 Authors@R:c(person(given = "Anna",
                   family = "Górska",
-                  role = c("aut", "cre"),
+                  role = "aut",
                   email = "anna.gorska@contractors.roche.com"),
             person(given = "Marianna",
                    family = "Plucinska",
