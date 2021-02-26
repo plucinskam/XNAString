@@ -42,10 +42,10 @@ Imports:
     stringr,
     formattable,
     stats,
-    testthat,
-    BSgenome.Hsapiens.UCSC.hg38,
-    pander
+    testthat
 Suggests:
+    BSgenome.Hsapiens.UCSC.hg38,
+    pander,
     testthat,
     knitr,
     rmarkdown
