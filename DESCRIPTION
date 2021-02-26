@@ -43,10 +43,10 @@ Imports:
     formattable,
     stats,
     testthat,
-    BSgenome.Hsapiens.UCSC.hg38
+    BSgenome.Hsapiens.UCSC.hg38,
+    pander
 Suggested:
     testthat,
-    pander,
     knitr,
     rmarkdown
 LinkingTo: Rcpp
