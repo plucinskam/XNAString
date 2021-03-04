@@ -100,7 +100,7 @@ XNADinucleotideFrequencyFun <-
     (is(obj, "XNAString") |  is(obj, "XNAStringSet")) ||
       stop("An object must be of XNAString or XNAStringSet class")
     
-    ! (base_only == TRUE & !is.na(double_letters)) ||
+    ! (base_only == TRUE & !all(is.na(double_letters))) ||
       stop("If base_only is TRUE, double_letters argument must be ommited")
     
     matrix_nbr %in% c(1, 2) ||

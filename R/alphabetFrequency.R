@@ -89,7 +89,7 @@ XNAAlphabetFrequencyFun <-
       stop("An object must be of XNAString or XNAStringSet class")
     
     # ifelse(base_only == TRUE & !is.na(letters), FALSE, TRUE) ||
-    !(base_only == TRUE & !is.na(letters)) ||
+    !(base_only == TRUE & !all(is.na(letters))) ||
       stop("If base_only is TRUE, letters argument must be ommited")
     
     matrix_nbr %in% c(1, 2) ||
