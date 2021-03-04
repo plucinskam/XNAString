@@ -22,6 +22,8 @@ base, sugar and backbone columns)}
 \item{col.sugar}{character (name of sugar column)}
 
 \item{col.backbone}{character (name of backbone column)}
+
+\item{col.target}{character (name of target column)}
 }
 \value{
 XNAStringSet object
