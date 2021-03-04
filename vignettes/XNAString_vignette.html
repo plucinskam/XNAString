@@ -33,6 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
@@ -122,6 +131,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -628,7 +638,7 @@ and has 11 slots:
 * name (character)
 * base (character, RNAString, RNAStringSet, DNAString or DNAStringSet)
 * sugar (character)
-* backbone (character, if missing and base is character default string is created by replicating character &#39;S&#39;, if missing and base is DNAString/RNAString, backbone all &#39;O&#39;)
+* backbone (character, if missing and base is character default string is created by replicating character &#39;X&#39;, if missing and base is DNAString/RNAString, backbone all &#39;O&#39;)
 * target (DNAStringSet, DNAString or character)
 * conjugate5 (character)
 * conjugate3 (character)
@@ -653,7 +663,7 @@ Object can be created only when all validation procedure requirements are met.</
 <h2><span class="header-section-number">3.1</span> Object creation</h2>
 <div id="example-1---basic-xnastring-object" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Example 1 - basic XNAString object</h3>
-<pre><code>If base slot is passed as character then sugar slot must be also passed manually and default backbone is a replication of character &#39;S&#39;.
+<pre><code>If base slot is passed as character then sugar slot must be also passed manually and default backbone is a replication of character &#39;X&#39;.
 Target / secondary_structure / duplex_structure slot default is created by XNAReverseComplement / predictMfeStructure / predictDuplexStructure method applied on base slot.</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;OOOO&#39;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a>obj</span></code></pre></div>
@@ -661,7 +671,7 @@ Target / secondary_structure / duplex_structure slot default is created by XNARe
 ## name:       NA
 ## base:       ATCG
 ## sugar:      OOOO
-## backbone:   SSS
+## backbone:   XXX
 ## target:     CGAT
 ## conjugate5: NA
 ## conjugate3: NA
@@ -762,6 +772,19 @@ New input has to satisfy validation procedures (e.g. the sugar must be of the sa
 <h3><span class="header-section-number">3.2.2</span> Example 2 - XNAReverseComplement</h3>
 <pre><code>XNAReverseComplement - this method takes XNAString object as an input and finds reverse complement for base slot. If base is DNAString or RNAString, Biostrings::reverseComplement in use. If base is character then compl_dictionary comes into play.
 XNAReverseComplement method is used to create default target slot. Each object has compl_dictionary slot (if not passed while creating an object - complementary_bases table used as default). All bases from dictionary must be present also in compl_dictionary. If that is not the case, target slot default is empty.
+It is also possible to return multiple targets with XNAReverseComlement method. It can be done by passing custom complementary_bases dictionary and using Iupac symbols. E.g. by adding symbol &#39;R&#39; to custom complementary_bases dictionary, there are two possibile bases: &#39;G&#39; and &#39;A&#39; (see the example below).
+More symbols and corresponding bases (Iupac standards):
+        symbol &quot;W&quot; - bases &quot;A&quot;, &quot;T&quot;
+        symbol &quot;S&quot; - bases &quot;G&quot;, &quot;C&quot;
+        symbol &quot;M&quot; - bases &quot;A&quot;, &quot;C&quot;
+        symbol &quot;K&quot; - bases &quot;G&quot;, &quot;T&quot;
+        symbol &quot;R&quot; - bases &quot;A&quot;, &quot;G&quot;
+        symbol &quot;Y&quot; - bases &quot;C&quot;, &quot;T&quot;
+        symbol &quot;B&quot; - bases &quot;C&quot;, &quot;G&quot;, &quot;T&quot;
+        symbol &quot;D&quot; - bases &quot;A&quot;, &quot;G&quot;, &quot;T&quot;
+        symbol &quot;H&quot; - bases &quot;A&quot;, &quot;C&quot;, &quot;T&quot;
+        symbol &quot;V&quot; - bases &quot;A&quot;, &quot;C&quot;, &quot;G&quot;
+        symbol &quot;N&quot; - bases &quot;A&quot;, &quot;C&quot;, &quot;G&quot;, &quot;T&quot;
 </code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>XNAString<span class="op">::</span>complementary_bases</span></code></pre></div>
 <pre><code>##    base target compl_target
@@ -776,6 +799,29 @@ XNAReverseComplement method is used to create default target slot. Each object h
 <span id="cb24-3"><a href="#cb24-3"></a>                    <span class="dt">conjugate3 =</span> <span class="st">&#39;TAG&#39;</span>)</span>
 <span id="cb24-4"><a href="#cb24-4"></a>XNAString<span class="op">::</span><span class="kw">XNAReverseComplement</span>(obj1)</span></code></pre></div>
 <pre><code>## [1] &quot;ACCAACGGT&quot;</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>custom_compl_dict &lt;-</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb26-3"><a href="#cb26-3"></a>    XNAString<span class="op">::</span>complementary_bases[<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>),],</span>
+<span id="cb26-4"><a href="#cb26-4"></a>    data.table<span class="op">::</span><span class="kw">data.table</span>(</span>
+<span id="cb26-5"><a href="#cb26-5"></a>      <span class="dt">base =</span> <span class="st">&#39;U&#39;</span>,</span>
+<span id="cb26-6"><a href="#cb26-6"></a>      <span class="dt">target =</span> <span class="st">&#39;R&#39;</span>,</span>
+<span id="cb26-7"><a href="#cb26-7"></a>      <span class="dt">compl_target =</span> <span class="st">&#39;T&#39;</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a>    )</span>
+<span id="cb26-9"><a href="#cb26-9"></a>  )</span>
+<span id="cb26-10"><a href="#cb26-10"></a>obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&quot;ACGCUUA&quot;</span>,</span>
+<span id="cb26-11"><a href="#cb26-11"></a>                  <span class="dt">sugar =</span> <span class="st">&#39;DDDDDDD&#39;</span>,</span>
+<span id="cb26-12"><a href="#cb26-12"></a>                  <span class="dt">compl_dictionary =</span> custom_compl_dict)</span>
+<span id="cb26-13"><a href="#cb26-13"></a>obj2</span></code></pre></div>
+<pre><code>## XNAString object
+## name:       NA
+## base:       ACGCUUA
+## sugar:      DDDDDDD
+## backbone:   XXXXXX
+## target:     TAAGCGT, TGAGCGT, TAGGCGT, TGGGCGT
+## conjugate5: NA
+## conjugate3: NA
+## secondary_structure: ......., 0
+## duplex_structure: ..((...&amp;..))..., -2.1</code></pre>
 </div>
 <div id="example-3---predictmfestructure" class="section level3">
 <h3><span class="header-section-number">3.2.3</span> Example 3 - predictMfeStructure</h3>
@@ -783,9 +829,9 @@ XNAReverseComplement method is used to create default target slot. Each object h
 Takes XNAString object and applies RNAfold_MFE function on base slot if base is  DNAString or RNAString. If base is character (not-standard bases allowed), then RNAfold_mfe works  for A, C, G, T, E, U letters with built-in complementary_bases dictionary (e.g. E letter is changed to C before applying predictMfeStructure function). If base slot includes other letters, their translation to compl_target must be included in compl_dict slot. Otherwise predictMfeStructure returns empty string.
 predictMfeStructure method is used to create default secondary_structure slot.
 </code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>, </span>
-<span id="cb27-2"><a href="#cb27-2"></a>                   <span class="dt">sugar =</span> <span class="st">&#39;FODLMFODLMFODLMFODLMFODLMFFFFFFF&#39;</span>)</span>
-<span id="cb27-3"><a href="#cb27-3"></a>XNAString<span class="op">::</span><span class="kw">predictMfeStructure</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>, </span>
+<span id="cb29-2"><a href="#cb29-2"></a>                   <span class="dt">sugar =</span> <span class="st">&#39;FODLMFODLMFODLMFODLMFODLMFFFFFFF&#39;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>XNAString<span class="op">::</span><span class="kw">predictMfeStructure</span>(obj)</span></code></pre></div>
 <pre><code>## $structure
 ## [1] &quot;.....((..((.....))..))..........&quot;
 ## 
@@ -798,9 +844,9 @@ predictMfeStructure method is used to create default secondary_structure slot.
 predictDuplexStructure takes XNAString object and applies RNAcofold_MFE function on base slot if base is DNAStringSet or RNAStringSet. If base is character vector (not-standard bases allowed), then RNAcofold_mfe works for A, C, G, T, E, U letters with built-in complementary_bases dictionary (e.g. E letter is changed to C before applying predictDuplexStructure function). If base slot includes other letters, their translation to compl_target must be included in compl_dict slot passed manually. Otherwise predictDuplexStructure returns empty string.
 predictDuplexStructure method is used to create default duplex_structure slot.
 </code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>, <span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>)))</span>
-<span id="cb30-2"><a href="#cb30-2"></a></span>
-<span id="cb30-3"><a href="#cb30-3"></a>XNAString<span class="op">::</span><span class="kw">predictDuplexStructure</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>, <span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>)))</span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a>XNAString<span class="op">::</span><span class="kw">predictDuplexStructure</span>(obj)</span></code></pre></div>
 <pre><code>## $structure
 ## [1] &quot;.....((..((..((.((..((..........&amp;.....))..))..)).))..))..........&quot;
 ## 
@@ -810,10 +856,10 @@ predictDuplexStructure method is used to create default duplex_structure slot.
 <div id="example-5---predictduplexstructure---single-stranded-molecule" class="section level3">
 <h3><span class="header-section-number">3.2.5</span> Example 5 - predictDuplexStructure - single stranded molecule</h3>
 <pre><code>RNAcofold_MFE function needs two sequences, so if molecule is sinlge stranded, base sequence is duplicated within the predictDuplexStructure method.</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAString</span>(<span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>), </span>
-<span id="cb33-2"><a href="#cb33-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;FODLMFODLMFODLMFODLMFODLMFFFFFFF&#39;</span>)</span>
-<span id="cb33-3"><a href="#cb33-3"></a>  </span>
-<span id="cb33-4"><a href="#cb33-4"></a>XNAString<span class="op">::</span><span class="kw">predictDuplexStructure</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAString</span>(<span class="st">&#39;GAGAGGGAACCAGGCAGGGACCGCAGACAACA&#39;</span>), </span>
+<span id="cb35-2"><a href="#cb35-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;FODLMFODLMFODLMFODLMFODLMFFFFFFF&#39;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>  </span>
+<span id="cb35-4"><a href="#cb35-4"></a>XNAString<span class="op">::</span><span class="kw">predictDuplexStructure</span>(obj)</span></code></pre></div>
 <pre><code>## $structure
 ## [1] &quot;.....((..((..((.((..((..........&amp;.....))..))..)).))..))..........&quot;
 ## 
@@ -830,35 +876,35 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 <h2><span class="header-section-number">4.1</span> Object creation</h2>
 <div id="example-1---basic-xnastringset-object" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Example 1 - basic XNAStringSet object</h3>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
-<span id="cb36-2"><a href="#cb36-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
-<span id="cb36-3"><a href="#cb36-3"></a></span>
-<span id="cb36-4"><a href="#cb36-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb36-5"><a href="#cb36-5"></a></span>
-<span id="cb36-6"><a href="#cb36-6"></a>XNAStringSet_obj</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3"></a></span>
+<span id="cb38-4"><a href="#cb38-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb38-5"><a href="#cb38-5"></a></span>
+<span id="cb38-6"><a href="#cb38-6"></a>XNAStringSet_obj</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##    name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1:   NA ATCG  FODD      SSS   CGAT         NA         NA           &lt;list[2]&gt;
-## 2:   NA TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+## 1:   NA ATCG  FODD      XXX   CGAT         NA         NA           &lt;list[2]&gt;
+## 2:   NA TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
 </div>
 <div id="example-2---xnastringset-consists-of-xnastring-objects-for-sirna" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Example 2 - XNAStringSet consists of XNAString objects for siRNA</h3>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>), </span>
-<span id="cb38-2"><a href="#cb38-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>), </span>
-<span id="cb38-3"><a href="#cb38-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>), </span>
-<span id="cb38-4"><a href="#cb38-4"></a>                 <span class="dt">target =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;TAGC&#39;</span>, <span class="st">&#39;TACC&#39;</span>)))</span>
-<span id="cb38-5"><a href="#cb38-5"></a></span>
-<span id="cb38-6"><a href="#cb38-6"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>), </span>
-<span id="cb38-7"><a href="#cb38-7"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>), </span>
-<span id="cb38-8"><a href="#cb38-8"></a>                 <span class="dt">target =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;CCGC&#39;</span>, <span class="st">&#39;TATG&#39;</span>)))</span>
-<span id="cb38-9"><a href="#cb38-9"></a></span>
-<span id="cb38-10"><a href="#cb38-10"></a>XNAStringSet_siRNA &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb38-11"><a href="#cb38-11"></a></span>
-<span id="cb38-12"><a href="#cb38-12"></a>XNAStringSet_siRNA</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>), </span>
+<span id="cb40-2"><a href="#cb40-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>), </span>
+<span id="cb40-3"><a href="#cb40-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>), </span>
+<span id="cb40-4"><a href="#cb40-4"></a>                 <span class="dt">target =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;TAGC&#39;</span>, <span class="st">&#39;TACC&#39;</span>)))</span>
+<span id="cb40-5"><a href="#cb40-5"></a></span>
+<span id="cb40-6"><a href="#cb40-6"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>), </span>
+<span id="cb40-7"><a href="#cb40-7"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>), </span>
+<span id="cb40-8"><a href="#cb40-8"></a>                 <span class="dt">target =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;CCGC&#39;</span>, <span class="st">&#39;TATG&#39;</span>)))</span>
+<span id="cb40-9"><a href="#cb40-9"></a></span>
+<span id="cb40-10"><a href="#cb40-10"></a>XNAStringSet_siRNA &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb40-11"><a href="#cb40-11"></a></span>
+<span id="cb40-12"><a href="#cb40-12"></a>XNAStringSet_siRNA</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##    name      base     sugar backbone    target conjugate5 conjugate3
 ## 1:   NA ATCG,TAGC OOOO,OOOO  SOS,SOS TAGC,TACC         NA         NA
-## 2:   NA GGCG,TATC OOOO,OOOO  SSS,SSS CCGC,TATG         NA         NA
+## 2:   NA GGCG,TATC OOOO,OOOO  XXX,XXX CCGC,TATG         NA         NA
 ##    secondary_structure
 ## 1:           &lt;list[1]&gt;
 ## 2:           &lt;list[1]&gt;</code></pre>
@@ -874,58 +920,58 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 * XNAStringSet from data.table/data.frame</code></pre>
 <div id="example-1---change-xnastringset-object-to-a-list-of-xnastring-objects" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Example 1 - change XNAStringSet object to a list of XNAString objects</h3>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>, <span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
-<span id="cb41-2"><a href="#cb41-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo2&#39;</span>,<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
-<span id="cb41-3"><a href="#cb41-3"></a></span>
-<span id="cb41-4"><a href="#cb41-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="kw">set2List</span>(XNAStringSet_obj)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>, <span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
+<span id="cb43-2"><a href="#cb43-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo2&#39;</span>,<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
+<span id="cb43-3"><a href="#cb43-3"></a></span>
+<span id="cb43-4"><a href="#cb43-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="kw">set2List</span>(XNAStringSet_obj)</span></code></pre></div>
 <pre><code>## [[1]]
 ## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo1 ATCG  FODD      SSS   CGAT         NA         NA           &lt;list[2]&gt;
+## 1: oligo1 ATCG  FODD      XXX   CGAT         NA         NA           &lt;list[2]&gt;
 ## 
 ## [[2]]
 ## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+## 1: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
 </div>
 <div id="example-2---extract-single-xnastring-object-or-part-of-xnastringset-object" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Example 2 - extract single XNAString object or part of XNAStringSet object</h3>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>XNAStringSet_obj[<span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>XNAStringSet_obj[<span class="dv">2</span>]</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>XNAStringSet_obj[<span class="st">&#39;oligo2&#39;</span>]</span></code></pre></div>
+## 1: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>XNAStringSet_obj[<span class="st">&#39;oligo2&#39;</span>]</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>XNAStringSet_obj[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</span></code></pre></div>
+## 1: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>XNAStringSet_obj[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo1 ATCG  FODD      SSS   CGAT         NA         NA           &lt;list[2]&gt;
-## 2: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>XNAStringSet_obj[<span class="kw">c</span>(<span class="st">&#39;oligo1&#39;</span>, <span class="st">&#39;oligo2&#39;</span>)]</span></code></pre></div>
+## 1: oligo1 ATCG  FODD      XXX   CGAT         NA         NA           &lt;list[2]&gt;
+## 2: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>XNAStringSet_obj[<span class="kw">c</span>(<span class="st">&#39;oligo1&#39;</span>, <span class="st">&#39;oligo2&#39;</span>)]</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##      name base sugar backbone target conjugate5 conjugate3 secondary_structure
-## 1: oligo1 ATCG  FODD      SSS   CGAT         NA         NA           &lt;list[2]&gt;
-## 2: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>XNAStringSet_obj[[<span class="dv">2</span>]]</span></code></pre></div>
+## 1: oligo1 ATCG  FODD      XXX   CGAT         NA         NA           &lt;list[2]&gt;
+## 2: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA           &lt;list[2]&gt;</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>XNAStringSet_obj[[<span class="dv">2</span>]]</span></code></pre></div>
 <pre><code>## XNAString object
 ## name:       oligo2
 ## base:       TTCT
 ## sugar:      FOLL
-## backbone:   SSS
+## backbone:   XXX
 ## target:     AGAA
 ## conjugate5: NA
 ## conjugate3: NA
 ## secondary_structure: ...., 0
 ## duplex_structure: ....&amp;...., 0</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>XNAStringSet_obj[[<span class="st">&#39;oligo2&#39;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>XNAStringSet_obj[[<span class="st">&#39;oligo2&#39;</span>]]</span></code></pre></div>
 <pre><code>## XNAString object
 ## name:       oligo2
 ## base:       TTCT
 ## sugar:      FOLL
-## backbone:   SSS
+## backbone:   XXX
 ## target:     AGAA
 ## conjugate5: NA
 ## conjugate3: NA
@@ -934,38 +980,38 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 </div>
 <div id="example-3---change-xnastringset-object-to-data.table" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> Example 3 - change XNAStringSet object to data.table</h3>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="kw">set2Dt</span>(XNAStringSet_obj, <span class="dt">slots =</span><span class="kw">c</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;base&#39;</span>, <span class="st">&#39;sugar&#39;</span>, <span class="st">&#39;backbone&#39;</span>, <span class="st">&#39;target&#39;</span>, <span class="st">&#39;conjugate5&#39;</span>, <span class="st">&#39;conjugate3&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="kw">set2Dt</span>(XNAStringSet_obj, <span class="dt">slots =</span><span class="kw">c</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;base&#39;</span>, <span class="st">&#39;sugar&#39;</span>, <span class="st">&#39;backbone&#39;</span>, <span class="st">&#39;target&#39;</span>, <span class="st">&#39;conjugate5&#39;</span>, <span class="st">&#39;conjugate3&#39;</span>))</span></code></pre></div>
 <pre><code>##      name base sugar backbone target conjugate5 conjugate3
-## 1: oligo1 ATCG  FODD      SSS   CGAT         NA         NA
-## 2: oligo2 TTCT  FOLL      SSS   AGAA         NA         NA</code></pre>
+## 1: oligo1 ATCG  FODD      XXX   CGAT         NA         NA
+## 2: oligo2 TTCT  FOLL      XXX   AGAA         NA         NA</code></pre>
 </div>
 <div id="example-4---public-slots-getter-and-setter" class="section level3">
 <h3><span class="header-section-number">4.2.4</span> Example 4 - public slots getter and setter</h3>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="kw">base</span>(XNAStringSet_siRNA)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">base</span>(XNAStringSet_siRNA)</span></code></pre></div>
 <pre><code>## [1] &quot;ATCG&quot; &quot;GGCG&quot;</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;TAGC&quot; &quot;TATC&quot;</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="kw">base</span>(XNAStringSet_siRNA) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;CTGA&#39;</span>, <span class="st">&#39;CCCC&#39;</span>)</span>
-<span id="cb61-2"><a href="#cb61-2"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;TTTT&#39;</span>, <span class="st">&#39;TTTT&#39;</span>)</span>
-<span id="cb61-3"><a href="#cb61-3"></a>XNAStringSet_siRNA</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">base</span>(XNAStringSet_siRNA) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;CTGA&#39;</span>, <span class="st">&#39;CCCC&#39;</span>)</span>
+<span id="cb63-2"><a href="#cb63-2"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;TTTT&#39;</span>, <span class="st">&#39;TTTT&#39;</span>)</span>
+<span id="cb63-3"><a href="#cb63-3"></a>XNAStringSet_siRNA</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##    name      base     sugar backbone    target conjugate5 conjugate3
 ## 1:   NA CTGA,TTTT OOOO,OOOO  SOS,SOS TAGC,TACC         NA         NA
-## 2:   NA CCCC,TTTT OOOO,OOOO  SSS,SSS CCGC,TATG         NA         NA
+## 2:   NA CCCC,TTTT OOOO,OOOO  XXX,XXX CCGC,TATG         NA         NA
 ##    secondary_structure
 ## 1:           &lt;list[1]&gt;
 ## 2:           &lt;list[1]&gt;</code></pre>
 </div>
 <div id="example-5---xnastringset-from-data.table" class="section level3">
 <h3><span class="header-section-number">4.2.5</span> Example 5 - XNAStringSet from data.table</h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>dt &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">base=</span> <span class="kw">c</span>(<span class="st">&#39;AEACACACACACAEAE&#39;</span>, <span class="st">&#39;AAETGCTETGTATTTTTE&#39;</span>), </span>
-<span id="cb63-2"><a href="#cb63-2"></a>                  <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;LLLDDDDDDDDDDLLL&#39;</span>, <span class="st">&#39;LLLDDDDDDDDDDDLLLL&#39;</span>), </span>
-<span id="cb63-3"><a href="#cb63-3"></a>                  <span class="dt">backbone =</span><span class="kw">c</span>(<span class="st">&#39;SSSSSSSSSSSSSSS&#39;</span>, <span class="st">&#39;SSSSSSSSSSSSSSSSS&#39;</span>))</span>
-<span id="cb63-4"><a href="#cb63-4"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>dt &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">base=</span> <span class="kw">c</span>(<span class="st">&#39;AEACACACACACAEAE&#39;</span>, <span class="st">&#39;AAETGCTETGTATTTTTE&#39;</span>), </span>
+<span id="cb65-2"><a href="#cb65-2"></a>                  <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;LLLDDDDDDDDDDLLL&#39;</span>, <span class="st">&#39;LLLDDDDDDDDDDDLLLL&#39;</span>), </span>
+<span id="cb65-3"><a href="#cb65-3"></a>                  <span class="dt">backbone =</span><span class="kw">c</span>(<span class="st">&#39;SSSSSSSSSSSSSSS&#39;</span>, <span class="st">&#39;SSSSSSSSSSSSSSSSS&#39;</span>))</span>
+<span id="cb65-4"><a href="#cb65-4"></a>dt</span></code></pre></div>
 <pre><code>##                  base              sugar          backbone
 ## 1:   AEACACACACACAEAE   LLLDDDDDDDDDDLLL   SSSSSSSSSSSSSSS
 ## 2: AAETGCTETGTATTTTTE LLLDDDDDDDDDDDLLLL SSSSSSSSSSSSSSSSS</code></pre>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a><span class="kw">dt2Set</span>(dt)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a><span class="kw">dt2Set</span>(dt)</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##    name               base              sugar          backbone
 ## 1:   NA   AEACACACACACAEAE   LLLDDDDDDDDDDLLL   SSSSSSSSSSSSSSS
@@ -981,10 +1027,10 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 <pre><code>Methods written in this section translate HELM notation to multistring notation and create XNAString/XNAStringSet object.</code></pre>
 <div id="example-1---ssrna" class="section level3">
 <h3><span class="header-section-number">5.0.1</span> Example 1 - ssRNA</h3>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>helm &lt;-</span>
-<span id="cb68-2"><a href="#cb68-2"></a><span class="st">    &quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span></span>
-<span id="cb68-3"><a href="#cb68-3"></a></span>
-<span id="cb68-4"><a href="#cb68-4"></a><span class="kw">XNAStringFromHelm</span>(helm, <span class="dt">name =</span><span class="st">&#39;oligo1&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>helm &lt;-</span>
+<span id="cb70-2"><a href="#cb70-2"></a><span class="st">    &quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span></span>
+<span id="cb70-3"><a href="#cb70-3"></a></span>
+<span id="cb70-4"><a href="#cb70-4"></a><span class="kw">XNAStringFromHelm</span>(helm, <span class="dt">name =</span><span class="st">&#39;oligo1&#39;</span>)</span></code></pre></div>
 <pre><code>## XNAString object
 ## name:       oligo1
 ## base:       GAGAAGGCACAGAEGG
@@ -998,11 +1044,11 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 </div>
 <div id="example-2---sirna" class="section level3">
 <h3><span class="header-section-number">5.0.2</span> Example 2 - siRNA</h3>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>helm &lt;-</span>
-<span id="cb70-2"><a href="#cb70-2"></a><span class="st">&quot;RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR](C)P.[mR](G)P.[fR](C)P.[mR](C)P.[fR](G)P.[mR](T)P.[fR](G)P.[mR](G)P.[fR](T)P.[mR](T)P.[fR](C)P.[mR](A)P.[fR](T)P.[mR](A)P.[fR](A)}|RNA2{[fR](T)P.[fR](T)P.[mR](A)P.[fR](T)P.[mR](G)P.[fR](A)P.[mR](A)P.[fR](C)P.[mR](C)P.[fR](A)P.[mR](C)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](A)P.[fR](G)P.[mR](G)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](G)}$RNA1,RNA2,2:pair-56:pair|RNA1,RNA2,5:pair-53:pair|RNA1,RNA2,8:pair-50:pair|RNA1,RNA2,11:pair-47:pair|RNA1,RNA2,14:pair-44:pair|RNA1,RNA2,17:pair-41:pair|RNA1,RNA2,20:pair-38:pair|RNA1,RNA2,23:pair-35:pair|RNA1,RNA2,26:pair-32:pair|RNA1,RNA2,29:pair-29:pair|RNA1,RNA2,32:pair-26:pair|RNA1,RNA2,35:pair-23:pair|RNA1,RNA2,38:pair-20:pair|RNA1,RNA2,41:pair-17:pair|RNA1,RNA2,44:pair-14:pair|RNA1,RNA2,47:pair-11:pair|RNA1,RNA2,50:pair-8:pair|RNA1,RNA2,53:pair-5:pair|RNA1,RNA2,56:pair-2:pair$$$V2.0&quot;</span></span>
-<span id="cb70-3"><a href="#cb70-3"></a></span>
-<span id="cb70-4"><a href="#cb70-4"></a></span>
-<span id="cb70-5"><a href="#cb70-5"></a><span class="kw">XNAStringFromHelm</span>(helm)</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>helm &lt;-</span>
+<span id="cb72-2"><a href="#cb72-2"></a><span class="st">&quot;RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR](C)P.[mR](G)P.[fR](C)P.[mR](C)P.[fR](G)P.[mR](T)P.[fR](G)P.[mR](G)P.[fR](T)P.[mR](T)P.[fR](C)P.[mR](A)P.[fR](T)P.[mR](A)P.[fR](A)}|RNA2{[fR](T)P.[fR](T)P.[mR](A)P.[fR](T)P.[mR](G)P.[fR](A)P.[mR](A)P.[fR](C)P.[mR](C)P.[fR](A)P.[mR](C)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](A)P.[fR](G)P.[mR](G)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](G)}$RNA1,RNA2,2:pair-56:pair|RNA1,RNA2,5:pair-53:pair|RNA1,RNA2,8:pair-50:pair|RNA1,RNA2,11:pair-47:pair|RNA1,RNA2,14:pair-44:pair|RNA1,RNA2,17:pair-41:pair|RNA1,RNA2,20:pair-38:pair|RNA1,RNA2,23:pair-35:pair|RNA1,RNA2,26:pair-32:pair|RNA1,RNA2,29:pair-29:pair|RNA1,RNA2,32:pair-26:pair|RNA1,RNA2,35:pair-23:pair|RNA1,RNA2,38:pair-20:pair|RNA1,RNA2,41:pair-17:pair|RNA1,RNA2,44:pair-14:pair|RNA1,RNA2,47:pair-11:pair|RNA1,RNA2,50:pair-8:pair|RNA1,RNA2,53:pair-5:pair|RNA1,RNA2,56:pair-2:pair$$$V2.0&quot;</span></span>
+<span id="cb72-3"><a href="#cb72-3"></a></span>
+<span id="cb72-4"><a href="#cb72-4"></a></span>
+<span id="cb72-5"><a href="#cb72-5"></a><span class="kw">XNAStringFromHelm</span>(helm)</span></code></pre></div>
 <pre><code>## XNAString object
 ## name:       NA
 ## base:       CCCCCGCCGTGGTTCATAA, TTATGAACCACGGCAGGGGCG
@@ -1016,10 +1062,10 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 </div>
 <div id="example-3---removed-linker" class="section level3">
 <h3><span class="header-section-number">5.0.3</span> Example 3 - removed linker</h3>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>helm &lt;-</span>
-<span id="cb72-2"><a href="#cb72-2"></a><span class="st">&quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](T)[sP].[LR](T)[sP].[LR](G)[sP].[dR](A)[sP].[dR](A)[sP].[dR](T)[sP].[dR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](T)[sP].[dR](G)[sP].[dR](G)[sP].[dR](A)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span></span>
-<span id="cb72-3"><a href="#cb72-3"></a></span>
-<span id="cb72-4"><a href="#cb72-4"></a><span class="kw">XNAStringFromHelm</span>(helm)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>helm &lt;-</span>
+<span id="cb74-2"><a href="#cb74-2"></a><span class="st">&quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](T)[sP].[LR](T)[sP].[LR](G)[sP].[dR](A)[sP].[dR](A)[sP].[dR](T)[sP].[dR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](T)[sP].[dR](G)[sP].[dR](G)[sP].[dR](A)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span></span>
+<span id="cb74-3"><a href="#cb74-3"></a></span>
+<span id="cb74-4"><a href="#cb74-4"></a><span class="kw">XNAStringFromHelm</span>(helm)</span></code></pre></div>
 <pre><code>## XNAString object
 ## name:       NA
 ## base:       TTGAATAAGTGGATGT
@@ -1033,10 +1079,10 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 </div>
 <div id="example-4---create-xnastringset-from-list-of-helm-strings" class="section level3">
 <h3><span class="header-section-number">5.0.4</span> Example 4 - create XNAStringSet from list of HELM strings</h3>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>helm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span>,     </span>
-<span id="cb74-2"><a href="#cb74-2"></a>          <span class="st">&quot;RNA1{[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$$$$V2.0&quot;</span>)</span>
-<span id="cb74-3"><a href="#cb74-3"></a></span>
-<span id="cb74-4"><a href="#cb74-4"></a><span class="kw">XNAStringFromHelm</span>(helm, <span class="dt">name =</span><span class="kw">c</span>(<span class="st">&#39;oligo1&#39;</span>, <span class="st">&#39;oligo2&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>helm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CHEM1{[5gn2c6]}|RNA1{P.[dR](C)P.[dR](A)P.[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[LR](A)[sP].[dR](A)[sP].[dR](G)[sP].[dR](G)[sP].[dR](C)[sP].[dR](A)[sP].[dR](C)[sP].[dR](A)[sP].[dR](G)[sP].[dR](A)[sP].[LR]([5meC])[sP].[LR](G)[sP].[LR](G)}$CHEM1,RNA1,1:R2-1:R1$$$V2.0&quot;</span>,     </span>
+<span id="cb76-2"><a href="#cb76-2"></a>          <span class="st">&quot;RNA1{[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[dR](T)[sP].[dR](G)[sP].[LR](T)[sP].[LR](G)[sP].[LR](T)}$$$$V2.0&quot;</span>)</span>
+<span id="cb76-3"><a href="#cb76-3"></a></span>
+<span id="cb76-4"><a href="#cb76-4"></a><span class="kw">XNAStringFromHelm</span>(helm, <span class="dt">name =</span><span class="kw">c</span>(<span class="st">&#39;oligo1&#39;</span>, <span class="st">&#39;oligo2&#39;</span>))</span></code></pre></div>
 <pre><code>## XNAStringSet object
 ##      name             base            sugar        backbone           target
 ## 1: oligo1 GAGAAGGCACAGAEGG LLLLDDDDDDDDDLLL XXXXXXXXXXXXXXX CCGTCTGTGCCTTCTC
@@ -1051,37 +1097,37 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 <pre><code>Methods written in this section translate multistring notation from XNAString/XNAStringSet object to HELM notation. If molecule is double stranded also pairing information is added.</code></pre>
 <div id="example-1---single-stranded-molecule" class="section level3">
 <h3><span class="header-section-number">6.0.1</span> Example 1 - single stranded molecule</h3>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;GAGTTACTTGCCAAET&#39;</span>,</span>
-<span id="cb77-2"><a href="#cb77-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;LLLDMDDDDDDDDLLL&#39;</span>,</span>
-<span id="cb77-3"><a href="#cb77-3"></a>                 <span class="dt">backbone =</span> <span class="st">&#39;XXXXXXXXXXXXXX2&#39;</span>)</span>
-<span id="cb77-4"><a href="#cb77-4"></a>  </span>
-<span id="cb77-5"><a href="#cb77-5"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;GAGTTACTTGCCAAET&#39;</span>,</span>
+<span id="cb79-2"><a href="#cb79-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;LLLDMDDDDDDDDLLL&#39;</span>,</span>
+<span id="cb79-3"><a href="#cb79-3"></a>                 <span class="dt">backbone =</span> <span class="st">&#39;XXXXXXXXXXXXXX2&#39;</span>)</span>
+<span id="cb79-4"><a href="#cb79-4"></a>  </span>
+<span id="cb79-5"><a href="#cb79-5"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
 <pre><code>## [1] &quot;RNA1{[LR](G)[sP].[LR](A)[sP].[LR](G)[sP].[dR](T)[sP].[MOE](T)[sP].[dR](A)[sP].[dR](C)[sP].[dR](T)[sP].[dR](T)[sP].[dR](G)[sP].[dR](C)[sP].[dR](C)[sP].[dR](A)[sP].[LR](A)[sP].[LR]([5meC])[PS2].[LR](T)}$$$V2.0&quot;</code></pre>
 </div>
 <div id="example-2---double-stranded-molecule-base-is-dnastring" class="section level3">
 <h3><span class="header-section-number">6.0.2</span> Example 2 - double stranded molecule, base is DNAString</h3>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
-<span id="cb79-2"><a href="#cb79-2"></a>    <span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&quot;CCCC&quot;</span>, <span class="st">&quot;GGGG&quot;</span>)),</span>
-<span id="cb79-3"><a href="#cb79-3"></a>    <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&quot;OOFO&quot;</span>, <span class="st">&quot;FFOF&quot;</span>),</span>
-<span id="cb79-4"><a href="#cb79-4"></a>    <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&quot;OOO&quot;</span>, <span class="st">&quot;OOO&quot;</span>),</span>
-<span id="cb79-5"><a href="#cb79-5"></a>    <span class="dt">target =</span> <span class="st">&#39;&#39;</span>,</span>
-<span id="cb79-6"><a href="#cb79-6"></a>    <span class="dt">conjugate3 =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb79-7"><a href="#cb79-7"></a>    <span class="dt">conjugate5 =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb79-8"><a href="#cb79-8"></a>  </span>
-<span id="cb79-9"><a href="#cb79-9"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
+<span id="cb81-2"><a href="#cb81-2"></a>    <span class="dt">base =</span> Biostrings<span class="op">::</span><span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&quot;CCCC&quot;</span>, <span class="st">&quot;GGGG&quot;</span>)),</span>
+<span id="cb81-3"><a href="#cb81-3"></a>    <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&quot;OOFO&quot;</span>, <span class="st">&quot;FFOF&quot;</span>),</span>
+<span id="cb81-4"><a href="#cb81-4"></a>    <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&quot;OOO&quot;</span>, <span class="st">&quot;OOO&quot;</span>),</span>
+<span id="cb81-5"><a href="#cb81-5"></a>    <span class="dt">target =</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb81-6"><a href="#cb81-6"></a>    <span class="dt">conjugate3 =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb81-7"><a href="#cb81-7"></a>    <span class="dt">conjugate5 =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb81-8"><a href="#cb81-8"></a>  </span>
+<span id="cb81-9"><a href="#cb81-9"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
 <pre><code>## [1] &quot;RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)}|RNA2{[fR](G)P.[fR](G)P.[mR](G)P.[fR](G)}$RNA1,RNA2,2:pair-11:pair|RNA1,RNA2,5:pair-8:pair|RNA1,RNA2,8:pair-5:pair|RNA1,RNA2,11:pair-2:pair$$$V2.0&quot;</code></pre>
 </div>
 <div id="example-3---double-stranded-molecule---pairing-information-added" class="section level3">
 <h3><span class="header-section-number">6.0.3</span> Example 3 - double stranded molecule - pairing information added</h3>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
-<span id="cb81-2"><a href="#cb81-2"></a>    <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&quot;CCCCEGC&quot;</span>, <span class="st">&quot;UUAUGAT&quot;</span>),</span>
-<span id="cb81-3"><a href="#cb81-3"></a>    <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&quot;OOFOFOF&quot;</span>, <span class="st">&quot;FFOFOFO&quot;</span>),</span>
-<span id="cb81-4"><a href="#cb81-4"></a>    <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&quot;OOOOOO&quot;</span>, <span class="st">&quot;OOOOOO&quot;</span>),</span>
-<span id="cb81-5"><a href="#cb81-5"></a>    <span class="dt">target =</span> <span class="st">&#39;&#39;</span>,</span>
-<span id="cb81-6"><a href="#cb81-6"></a>    <span class="dt">conjugate3 =</span> <span class="st">&quot;[5gn2c6]&quot;</span>,</span>
-<span id="cb81-7"><a href="#cb81-7"></a>    <span class="dt">conjugate5 =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb81-8"><a href="#cb81-8"></a>  </span>
-<span id="cb81-9"><a href="#cb81-9"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
+<span id="cb83-2"><a href="#cb83-2"></a>    <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&quot;CCCCEGC&quot;</span>, <span class="st">&quot;UUAUGAT&quot;</span>),</span>
+<span id="cb83-3"><a href="#cb83-3"></a>    <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&quot;OOFOFOF&quot;</span>, <span class="st">&quot;FFOFOFO&quot;</span>),</span>
+<span id="cb83-4"><a href="#cb83-4"></a>    <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&quot;OOOOOO&quot;</span>, <span class="st">&quot;OOOOOO&quot;</span>),</span>
+<span id="cb83-5"><a href="#cb83-5"></a>    <span class="dt">target =</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb83-6"><a href="#cb83-6"></a>    <span class="dt">conjugate3 =</span> <span class="st">&quot;[5gn2c6]&quot;</span>,</span>
+<span id="cb83-7"><a href="#cb83-7"></a>    <span class="dt">conjugate5 =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb83-8"><a href="#cb83-8"></a>  </span>
+<span id="cb83-9"><a href="#cb83-9"></a><span class="kw">XNAStringToHelm</span>(obj)</span></code></pre></div>
 <pre><code>## [1] &quot;RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR]([5meC])P.[mR](G)P.[fR](C)}|CHEM1{[5gn2c6]}|RNA2{[fR](U)P.[fR](U)P.[mR](A)P.[fR](U)P.[mR](G)P.[fR](A)P.[mR](T)}$RNA1,RNA2,2:pair-20:pair|RNA1,RNA2,5:pair-17:pair|RNA1,RNA2,8:pair-14:pair|RNA1,RNA2,11:pair-11:pair|RNA1,RNA2,14:pair-8:pair|RNA1,RNA2,17:pair-5:pair|RNA1,RNA2,20:pair-2:pair$$$V2.0&quot;</code></pre>
 </div>
 </div>
@@ -1098,14 +1144,14 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 <pre><code>Target sequence is used as pattern.</code></pre>
 <div id="example-global-alignment" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Example: global alignment</h3>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCGATATATATACACATGTATGATG&#39;</span>,</span>
-<span id="cb85-2"><a href="#cb85-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;OOOODDDDDDDDDDDDDDDDDDDDDD&#39;</span>,</span>
-<span id="cb85-3"><a href="#cb85-3"></a>                 <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;TAGCTATATATATGTGTACATACTAC&#39;</span>, <span class="st">&#39;TAGCTAGATATATGTGTACATACTAC&#39;</span>)))</span>
-<span id="cb85-4"><a href="#cb85-4"></a></span>
-<span id="cb85-5"><a href="#cb85-5"></a>subject &lt;-<span class="st"> &#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span></span></code></pre></div>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>substitutionMatrix &lt;-<span class="st"> </span>Biostrings<span class="op">::</span><span class="kw">nucleotideSubstitutionMatrix</span>()</span>
-<span id="cb86-2"><a href="#cb86-2"></a></span>
-<span id="cb86-3"><a href="#cb86-3"></a>XNAString<span class="op">::</span><span class="kw">XNAPairwiseAlignment</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">substitutionMatrix =</span> substitutionMatrix)</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCGATATATATACACATGTATGATG&#39;</span>,</span>
+<span id="cb87-2"><a href="#cb87-2"></a>                 <span class="dt">sugar =</span> <span class="st">&#39;OOOODDDDDDDDDDDDDDDDDDDDDD&#39;</span>,</span>
+<span id="cb87-3"><a href="#cb87-3"></a>                 <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="kw">c</span>(<span class="st">&#39;TAGCTATATATATGTGTACATACTAC&#39;</span>, <span class="st">&#39;TAGCTAGATATATGTGTACATACTAC&#39;</span>)))</span>
+<span id="cb87-4"><a href="#cb87-4"></a></span>
+<span id="cb87-5"><a href="#cb87-5"></a>subject &lt;-<span class="st"> &#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>substitutionMatrix &lt;-<span class="st"> </span>Biostrings<span class="op">::</span><span class="kw">nucleotideSubstitutionMatrix</span>()</span>
+<span id="cb88-2"><a href="#cb88-2"></a></span>
+<span id="cb88-3"><a href="#cb88-3"></a>XNAString<span class="op">::</span><span class="kw">XNAPairwiseAlignment</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">substitutionMatrix =</span> substitutionMatrix)</span></code></pre></div>
 <pre><code>## Global PairwiseAlignmentsSingleSubject (1 of 2)
 ## pattern: --------------------------TAGCTATA...CATACTAC--------------------------
 ## subject: ATCGATATATATACACATGTATGATGTAGCTATA...CATACTACATCGATATATATACACATGTATGATG
@@ -1113,9 +1159,9 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 </div>
 <div id="example-local-alignment" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Example: local alignment</h3>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>substitutionMatrix &lt;-<span class="st"> </span>Biostrings<span class="op">::</span><span class="kw">nucleotideSubstitutionMatrix</span>()</span>
-<span id="cb88-2"><a href="#cb88-2"></a></span>
-<span id="cb88-3"><a href="#cb88-3"></a>XNAString<span class="op">::</span><span class="kw">XNAPairwiseAlignment</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">type =</span> <span class="st">&quot;local&quot;</span>, <span class="dt">substitutionMatrix =</span> substitutionMatrix)</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>substitutionMatrix &lt;-<span class="st"> </span>Biostrings<span class="op">::</span><span class="kw">nucleotideSubstitutionMatrix</span>()</span>
+<span id="cb90-2"><a href="#cb90-2"></a></span>
+<span id="cb90-3"><a href="#cb90-3"></a>XNAString<span class="op">::</span><span class="kw">XNAPairwiseAlignment</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">type =</span> <span class="st">&quot;local&quot;</span>, <span class="dt">substitutionMatrix =</span> substitutionMatrix)</span></code></pre></div>
 <pre><code>## Local PairwiseAlignmentsSingleSubject (1 of 2)
 ## pattern:  [1] TAGCTATATATATGTGTACATACTAC
 ## subject: [27] TAGCTATATATATGTGTACATACTAC
@@ -1127,7 +1173,7 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 <pre><code>Target sequence is used as pattern. If more then one target is present in XNAString object, first is used as default. User can specify which target sequence should be taken as pattern (target.number parameter).</code></pre>
 <div id="example-default-matching-of-first-target" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Example: default matching of first target</h3>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject)</span></code></pre></div>
 <pre><code>## Views on a 78-letter BString subject
 ## subject: ATCGATATATATACACATGTATGATGTAGCTATA...CATACTACATCGATATATATACACATGTATGATG
 ## views:
@@ -1136,14 +1182,14 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 </div>
 <div id="example-match-target-selected-by-user" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Example: match target selected by user</h3>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">target.number =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">target.number =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## Views on a 78-letter BString subject
 ## subject: ATCGATATATATACACATGTATGATGTAGCTATA...CATACTACATCGATATATATACACATGTATGATG
 ## views: NONE</code></pre>
 </div>
 <div id="example-match-pattern-selected-by-user-with-1-mismatch" class="section level3">
 <h3><span class="header-section-number">7.2.3</span> Example: match pattern selected by user with 1 mismatch</h3>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">target.number =</span> <span class="dv">2</span>, <span class="dt">max.mismatch =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPattern</span>(<span class="dt">pattern =</span> obj, <span class="dt">subject =</span> subject, <span class="dt">target.number =</span> <span class="dv">2</span>, <span class="dt">max.mismatch =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## Views on a 78-letter BString subject
 ## subject: ATCGATATATATACACATGTATGATGTAGCTATA...CATACTACATCGATATATATACACATGTATGATG
 ## views:
@@ -1153,9 +1199,9 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 </div>
 <div id="xnavmatchpattern-for-multiple-subjects" class="section level2">
 <h2><span class="header-section-number">7.3</span> XNAVmatchPattern for multiple subjects</h2>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>subject &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span>, <span class="st">&#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTGCGACTACATCGATATATATACACATGTATGATG&#39;</span>)</span>
-<span id="cb97-2"><a href="#cb97-2"></a></span>
-<span id="cb97-3"><a href="#cb97-3"></a>XNAString<span class="op">::</span><span class="kw">XNAVmatchPattern</span>(<span class="dt">pattern =</span> obj, subject)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>subject &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span>, <span class="st">&#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTGCGACTACATCGATATATATACACATGTATGATG&#39;</span>)</span>
+<span id="cb99-2"><a href="#cb99-2"></a></span>
+<span id="cb99-3"><a href="#cb99-3"></a>XNAString<span class="op">::</span><span class="kw">XNAVmatchPattern</span>(<span class="dt">pattern =</span> obj, subject)</span></code></pre></div>
 <pre><code>## MIndex object of length 2
 ## [[1]]
 ## IRanges object with 1 range and 0 metadata columns:
@@ -1171,9 +1217,9 @@ are available in XNAStrng package as well. XNAString package renamed these matho
 <div id="xnamatchpdict-for-multiple-targets" class="section level2">
 <h2><span class="header-section-number">7.4</span> XNAMatchPDict for multiple targets</h2>
 <pre><code>Only one subject is allowed. Results created for all targets.</code></pre>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a>subject &lt;-<span class="st"> &#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span></span>
-<span id="cb100-2"><a href="#cb100-2"></a></span>
-<span id="cb100-3"><a href="#cb100-3"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPDict</span>(<span class="dt">pdict =</span> obj, <span class="dt">subject =</span> subject)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a>subject &lt;-<span class="st"> &#39;ATCGATATATATACACATGTATGATGTAGCTATATATATGTGTACATACTACATCGATATATATACACATGTATGATG&#39;</span></span>
+<span id="cb102-2"><a href="#cb102-2"></a></span>
+<span id="cb102-3"><a href="#cb102-3"></a>XNAString<span class="op">::</span><span class="kw">XNAMatchPDict</span>(<span class="dt">pdict =</span> obj, <span class="dt">subject =</span> subject)</span></code></pre></div>
 <pre><code>## MIndex object of length 2
 ## [[1]]
 ## IRanges object with 1 range and 0 metadata columns:
@@ -1199,58 +1245,58 @@ There are 6 arguments:
 * base_only (default FALSE. If TRUE, &#39;A&#39;, &#39;C&#39;, &#39;G&#39;, &#39;T&#39;, &#39;other&#39; are tabulated)</code></pre>
 <div id="example-1-xnastring-object" class="section level3">
 <h3><span class="header-section-number">8.0.1</span> Example 1: XNAString object</h3>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
-<span id="cb103-2"><a href="#cb103-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AEEE&#39;</span>),</span>
-<span id="cb103-3"><a href="#cb103-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFOO&#39;</span>),</span>
-<span id="cb103-4"><a href="#cb103-4"></a>                           <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="st">&#39;TTT&#39;</span>))</span>
-<span id="cb103-5"><a href="#cb103-5"></a></span>
-<span id="cb103-6"><a href="#cb103-6"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
+<span id="cb105-2"><a href="#cb105-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AEEE&#39;</span>),</span>
+<span id="cb105-3"><a href="#cb105-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFOO&#39;</span>),</span>
+<span id="cb105-4"><a href="#cb105-4"></a>                           <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="st">&#39;TTT&#39;</span>))</span>
+<span id="cb105-5"><a href="#cb105-5"></a></span>
+<span id="cb105-6"><a href="#cb105-6"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
 <pre><code>##      A    C    E    G    T    U   
 ## [1,] 1.00 0.00 3.00 0.00 0.00 0.00</code></pre>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">as.prob =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">as.prob =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##      A    C    E    G    T    U   
 ## [1,] 0.25 0.00 0.75 0.00 0.00 0.00</code></pre>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">base_only =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">base_only =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##     A     C     G     T other 
 ##  1.00  0.00  0.00  0.00  3.00</code></pre>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">letters =</span> <span class="kw">c</span>(<span class="st">&#39;A&#39;</span>, <span class="st">&#39;C&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">letters =</span> <span class="kw">c</span>(<span class="st">&#39;A&#39;</span>, <span class="st">&#39;C&#39;</span>))</span></code></pre></div>
 <pre><code>##      A    C   
 ## [1,] 1.00 0.00</code></pre>
 </div>
 <div id="example-2-xnastring-object" class="section level3">
 <h3><span class="header-section-number">8.0.2</span> Example 2: XNAString object</h3>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
-<span id="cb111-2"><a href="#cb111-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AAEC&#39;</span>, <span class="st">&#39;ECTA&#39;</span>),</span>
-<span id="cb111-3"><a href="#cb111-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFOO&#39;</span>, <span class="st">&#39;DDLM&#39;</span>))</span>
-<span id="cb111-4"><a href="#cb111-4"></a></span>
-<span id="cb111-5"><a href="#cb111-5"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span>  <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
+<span id="cb113-2"><a href="#cb113-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AAEC&#39;</span>, <span class="st">&#39;ECTA&#39;</span>),</span>
+<span id="cb113-3"><a href="#cb113-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFOO&#39;</span>, <span class="st">&#39;DDLM&#39;</span>))</span>
+<span id="cb113-4"><a href="#cb113-4"></a></span>
+<span id="cb113-5"><a href="#cb113-5"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span>  <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      D    F    L    M    O    R   
 ## [1,] 2.00 0.00 1.00 1.00 0.00 0.00</code></pre>
 </div>
 <div id="example-3-xnastringset-object-single-base-sugar-and-backbone" class="section level3">
 <h3><span class="header-section-number">8.0.3</span> Example 3: XNAStringSet object, single base, sugar and backbone</h3>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
-<span id="cb113-2"><a href="#cb113-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
-<span id="cb113-3"><a href="#cb113-3"></a></span>
-<span id="cb113-4"><a href="#cb113-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb113-5"><a href="#cb113-5"></a></span>
-<span id="cb113-6"><a href="#cb113-6"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
+<span id="cb115-2"><a href="#cb115-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
+<span id="cb115-3"><a href="#cb115-3"></a></span>
+<span id="cb115-4"><a href="#cb115-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb115-5"><a href="#cb115-5"></a></span>
+<span id="cb115-6"><a href="#cb115-6"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
 <pre><code>##      A    C    E    G    T    U   
 ## [1,] 1.00 1.00 0.00 1.00 1.00 0.00
 ## [2,] 0.00 1.00 0.00 0.00 3.00 0.00</code></pre>
 </div>
 <div id="example-4-xnastringset-object-double-base-sugar-and-backbone" class="section level3">
 <h3><span class="header-section-number">8.0.4</span> Example 4: XNAStringSet object, double base, sugar and backbone</h3>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>),</span>
-<span id="cb115-2"><a href="#cb115-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OFOO&#39;</span>, <span class="st">&#39;ODDF&#39;</span>),</span>
-<span id="cb115-3"><a href="#cb115-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>))</span>
-<span id="cb115-4"><a href="#cb115-4"></a></span>
-<span id="cb115-5"><a href="#cb115-5"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>),</span>
-<span id="cb115-6"><a href="#cb115-6"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOFO&#39;</span>))</span>
-<span id="cb115-7"><a href="#cb115-7"></a></span>
-<span id="cb115-8"><a href="#cb115-8"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb115-9"><a href="#cb115-9"></a></span>
-<span id="cb115-10"><a href="#cb115-10"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>),</span>
+<span id="cb117-2"><a href="#cb117-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OFOO&#39;</span>, <span class="st">&#39;ODDF&#39;</span>),</span>
+<span id="cb117-3"><a href="#cb117-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>))</span>
+<span id="cb117-4"><a href="#cb117-4"></a></span>
+<span id="cb117-5"><a href="#cb117-5"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>),</span>
+<span id="cb117-6"><a href="#cb117-6"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOFO&#39;</span>))</span>
+<span id="cb117-7"><a href="#cb117-7"></a></span>
+<span id="cb117-8"><a href="#cb117-8"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb117-9"><a href="#cb117-9"></a></span>
+<span id="cb117-10"><a href="#cb117-10"></a>XNAString<span class="op">::</span><span class="kw">XNAAlphabetFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      D    F    L    M    O    R   
 ## [1,] 2.00 1.00 0.00 0.00 1.00 0.00
 ## [2,] 0.00 1.00 0.00 0.00 3.00 0.00</code></pre>
@@ -1268,62 +1314,62 @@ There are 6 arguments:
 * base_only (default FALSE. If TRUE, all possible double letters composed of: &#39;A&#39;, &#39;C&#39;, &#39;G&#39;, &#39;T&#39; are tabulated)</code></pre>
 <div id="example-1-xnastring-object-1" class="section level3">
 <h3><span class="header-section-number">9.0.1</span> Example 1: XNAString object</h3>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
-<span id="cb118-2"><a href="#cb118-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GCGC&#39;</span>),</span>
-<span id="cb118-3"><a href="#cb118-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FODL&#39;</span>),</span>
-<span id="cb118-4"><a href="#cb118-4"></a>                           <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="st">&#39;TTTT&#39;</span>))</span>
-<span id="cb118-5"><a href="#cb118-5"></a></span>
-<span id="cb118-6"><a href="#cb118-6"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a>xnastring_obj &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">name =</span> <span class="st">&#39;oligo1&#39;</span>,</span>
+<span id="cb120-2"><a href="#cb120-2"></a>                           <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GCGC&#39;</span>),</span>
+<span id="cb120-3"><a href="#cb120-3"></a>                           <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FODL&#39;</span>),</span>
+<span id="cb120-4"><a href="#cb120-4"></a>                           <span class="dt">target =</span> <span class="kw">DNAStringSet</span>(<span class="st">&#39;TTTT&#39;</span>))</span>
+<span id="cb120-5"><a href="#cb120-5"></a></span>
+<span id="cb120-6"><a href="#cb120-6"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
 <pre><code>##      AA   CA   EA   GA   TA   UA   AC   CC   EC   GC   TC   UC   AE   CE   EE  
 ## [1,] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 2.00 0.00 0.00 0.00 0.00 0.00
 ##      GE   TE   UE   AG   CG   EG   GG   TG   UG   AT   CT   ET   GT   TT   UT  
 ## [1,] 0.00 0.00 0.00 0.00 1.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
 ##      AU   CU   EU   GU   TU   UU  
 ## [1,] 0.00 0.00 0.00 0.00 0.00 0.00</code></pre>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">as.prob =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">as.prob =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##      AA   CA   EA   GA   TA   UA   AC   CC   EC   GC   TC   UC   AE   CE   EE  
 ## [1,] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.67 0.00 0.00 0.00 0.00 0.00
 ##      GE   TE   UE   AG   CG   EG   GG   TG   UG   AT   CT   ET   GT   TT   UT  
 ## [1,] 0.00 0.00 0.00 0.00 0.33 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
 ##      AU   CU   EU   GU   TU   UU  
 ## [1,] 0.00 0.00 0.00 0.00 0.00 0.00</code></pre>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">base_only =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">base_only =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##    AA    CA    GA    TA    AC    CC    GC    TC    AG    CG    GG    TG    AT 
 ##  0.00  0.00  0.00  0.00  0.00  0.00  2.00  0.00  0.00  1.00  0.00  0.00  0.00 
 ##    CT    GT    TT other 
 ##  0.00  0.00  0.00  0.00</code></pre>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">double_letters =</span> <span class="kw">c</span>(<span class="st">&#39;GC&#39;</span>, <span class="st">&#39;CU&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>, <span class="dt">double_letters =</span> <span class="kw">c</span>(<span class="st">&#39;GC&#39;</span>, <span class="st">&#39;CU&#39;</span>))</span></code></pre></div>
 <pre><code>##      GC   CU  
 ## [1,] 2.00 0.00</code></pre>
 </div>
 <div id="example-2-xnastring-object-with-custom-dictionary" class="section level3">
 <h3><span class="header-section-number">9.0.2</span> Example 2: XNAString object with custom dictionary</h3>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">type =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&#39;base&#39;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&#39;sugar&#39;</span>, <span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">&#39;backbone&#39;</span>, <span class="dv">2</span>)),</span>
-<span id="cb126-2"><a href="#cb126-2"></a>                                  <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;G&#39;</span>, <span class="st">&#39;E&#39;</span>, <span class="st">&#39;A&#39;</span>, <span class="st">&#39;F&#39;</span>, <span class="st">&#39;O&#39;</span>, <span class="st">&#39;S&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
-<span id="cb126-3"><a href="#cb126-3"></a></span>
-<span id="cb126-4"><a href="#cb126-4"></a>xnastring_obj &lt;-<span class="st">      </span>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
-<span id="cb126-5"><a href="#cb126-5"></a>  <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AGGE&#39;</span>, <span class="st">&#39;EEEA&#39;</span>),</span>
-<span id="cb126-6"><a href="#cb126-6"></a>  <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFFO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>),</span>
-<span id="cb126-7"><a href="#cb126-7"></a>  <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SBS&#39;</span>, <span class="st">&#39;SBS&#39;</span>),</span>
-<span id="cb126-8"><a href="#cb126-8"></a>  <span class="dt">dictionary =</span> my_dict</span>
-<span id="cb126-9"><a href="#cb126-9"></a>)</span>
-<span id="cb126-10"><a href="#cb126-10"></a></span>
-<span id="cb126-11"><a href="#cb126-11"></a></span>
-<span id="cb126-12"><a href="#cb126-12"></a></span>
-<span id="cb126-13"><a href="#cb126-13"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj,</span>
-<span id="cb126-14"><a href="#cb126-14"></a>                                    <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>,</span>
-<span id="cb126-15"><a href="#cb126-15"></a>                                    <span class="dt">matrix_nbr =</span>  <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">type =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&#39;base&#39;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&#39;sugar&#39;</span>, <span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">&#39;backbone&#39;</span>, <span class="dv">2</span>)),</span>
+<span id="cb128-2"><a href="#cb128-2"></a>                                  <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;G&#39;</span>, <span class="st">&#39;E&#39;</span>, <span class="st">&#39;A&#39;</span>, <span class="st">&#39;F&#39;</span>, <span class="st">&#39;O&#39;</span>, <span class="st">&#39;S&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb128-3"><a href="#cb128-3"></a></span>
+<span id="cb128-4"><a href="#cb128-4"></a>xnastring_obj &lt;-<span class="st">      </span>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(</span>
+<span id="cb128-5"><a href="#cb128-5"></a>  <span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;AGGE&#39;</span>, <span class="st">&#39;EEEA&#39;</span>),</span>
+<span id="cb128-6"><a href="#cb128-6"></a>  <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;FFFO&#39;</span>, <span class="st">&#39;OOOO&#39;</span>),</span>
+<span id="cb128-7"><a href="#cb128-7"></a>  <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SBS&#39;</span>, <span class="st">&#39;SBS&#39;</span>),</span>
+<span id="cb128-8"><a href="#cb128-8"></a>  <span class="dt">dictionary =</span> my_dict</span>
+<span id="cb128-9"><a href="#cb128-9"></a>)</span>
+<span id="cb128-10"><a href="#cb128-10"></a></span>
+<span id="cb128-11"><a href="#cb128-11"></a></span>
+<span id="cb128-12"><a href="#cb128-12"></a></span>
+<span id="cb128-13"><a href="#cb128-13"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> xnastring_obj,</span>
+<span id="cb128-14"><a href="#cb128-14"></a>                                    <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>,</span>
+<span id="cb128-15"><a href="#cb128-15"></a>                                    <span class="dt">matrix_nbr =</span>  <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      FF   OF   FO   OO  
 ## [1,] 0.00 0.00 0.00 3.00</code></pre>
 </div>
 <div id="example-3-xnastringset-object-single-base-sugar-and-backbone-1" class="section level3">
 <h3><span class="header-section-number">9.0.3</span> Example 3: XNAStringSet object, single base, sugar and backbone</h3>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
-<span id="cb128-2"><a href="#cb128-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
-<span id="cb128-3"><a href="#cb128-3"></a></span>
-<span id="cb128-4"><a href="#cb128-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb128-5"><a href="#cb128-5"></a></span>
-<span id="cb128-6"><a href="#cb128-6"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;ATCG&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FODD&#39;</span>)</span>
+<span id="cb130-2"><a href="#cb130-2"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="st">&#39;TTCT&#39;</span>, <span class="dt">sugar =</span> <span class="st">&#39;FOLL&#39;</span>)</span>
+<span id="cb130-3"><a href="#cb130-3"></a></span>
+<span id="cb130-4"><a href="#cb130-4"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb130-5"><a href="#cb130-5"></a></span>
+<span id="cb130-6"><a href="#cb130-6"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;base&#39;</span>)</span></code></pre></div>
 <pre><code>##      AA   CA   EA   GA   TA   UA   AC   CC   EC   GC   TC   UC   AE   CE   EE  
 ## [1,] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 1.00 0.00 0.00 0.00 0.00
 ## [2,] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 1.00 0.00 0.00 0.00 0.00
@@ -1336,16 +1382,16 @@ There are 6 arguments:
 </div>
 <div id="example-4-xnastringset-object-double-base-sugar-and-backbone-1" class="section level3">
 <h3><span class="header-section-number">9.0.4</span> Example 4: XNAStringSet object, double base, sugar and backbone</h3>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>),</span>
-<span id="cb130-2"><a href="#cb130-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OFOO&#39;</span>, <span class="st">&#39;ODDF&#39;</span>),</span>
-<span id="cb130-3"><a href="#cb130-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>))</span>
-<span id="cb130-4"><a href="#cb130-4"></a></span>
-<span id="cb130-5"><a href="#cb130-5"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>),</span>
-<span id="cb130-6"><a href="#cb130-6"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOFO&#39;</span>))</span>
-<span id="cb130-7"><a href="#cb130-7"></a></span>
-<span id="cb130-8"><a href="#cb130-8"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
-<span id="cb130-9"><a href="#cb130-9"></a></span>
-<span id="cb130-10"><a href="#cb130-10"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>XNAString_obj1 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;ATCG&#39;</span>, <span class="st">&#39;TAGC&#39;</span>),</span>
+<span id="cb132-2"><a href="#cb132-2"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OFOO&#39;</span>, <span class="st">&#39;ODDF&#39;</span>),</span>
+<span id="cb132-3"><a href="#cb132-3"></a>                 <span class="dt">backbone =</span> <span class="kw">c</span>(<span class="st">&#39;SOS&#39;</span>,<span class="st">&#39;SOS&#39;</span>))</span>
+<span id="cb132-4"><a href="#cb132-4"></a></span>
+<span id="cb132-5"><a href="#cb132-5"></a>XNAString_obj2 &lt;-<span class="st"> </span><span class="kw">XNAString</span>(<span class="dt">base =</span> <span class="kw">c</span>(<span class="st">&#39;GGCG&#39;</span>, <span class="st">&#39;TATC&#39;</span>),</span>
+<span id="cb132-6"><a href="#cb132-6"></a>                 <span class="dt">sugar =</span> <span class="kw">c</span>(<span class="st">&#39;OOOO&#39;</span>, <span class="st">&#39;OOFO&#39;</span>))</span>
+<span id="cb132-7"><a href="#cb132-7"></a></span>
+<span id="cb132-8"><a href="#cb132-8"></a>XNAStringSet_obj &lt;-<span class="st"> </span><span class="kw">XNAStringSet</span>(<span class="dt">objects =</span> <span class="kw">list</span>(XNAString_obj1, XNAString_obj2))</span>
+<span id="cb132-9"><a href="#cb132-9"></a></span>
+<span id="cb132-10"><a href="#cb132-10"></a>XNAString<span class="op">::</span><span class="kw">XNADinucleotideFrequency</span>(<span class="dt">obj =</span> XNAStringSet_obj, <span class="dt">slot =</span> <span class="st">&#39;sugar&#39;</span>, <span class="dt">matrix_nbr =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      DD   FD   LD   MD   OD   RD   DF   FF   LF   MF   OF   RF   DL   FL   LL  
 ## [1,] 1.00 0.00 0.00 0.00 1.00 0.00 1.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
 ## [2,] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 1.00 0.00 0.00 0.00 0.00
@@ -1361,16 +1407,16 @@ There are 6 arguments:
 <h1><span class="header-section-number">10</span> Other functions</h1>
 <div id="example-1-mimir2xnadict" class="section level3">
 <h3><span class="header-section-number">10.0.1</span> Example 1: mimir2XnaDict</h3>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>dt &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&quot;([PPG])&quot;</span>, <span class="st">&quot;[fR]&quot;</span>, <span class="st">&quot;[srP]&quot;</span>),</span>
-<span id="cb132-2"><a href="#cb132-2"></a>                  <span class="dt">TS_BASE_SEQ =</span> <span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</span>
-<span id="cb132-3"><a href="#cb132-3"></a>                  <span class="dt">TS_SUGAR_SEQ =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">&#39;F&#39;</span>),</span>
-<span id="cb132-4"><a href="#cb132-4"></a>                  <span class="dt">TS_BACKBONE_SEQ =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">&#39;S&#39;</span>, <span class="ot">NA</span>))</span>
-<span id="cb132-5"><a href="#cb132-5"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>dt &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&quot;([PPG])&quot;</span>, <span class="st">&quot;[fR]&quot;</span>, <span class="st">&quot;[srP]&quot;</span>),</span>
+<span id="cb134-2"><a href="#cb134-2"></a>                  <span class="dt">TS_BASE_SEQ =</span> <span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</span>
+<span id="cb134-3"><a href="#cb134-3"></a>                  <span class="dt">TS_SUGAR_SEQ =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">&#39;F&#39;</span>),</span>
+<span id="cb134-4"><a href="#cb134-4"></a>                  <span class="dt">TS_BACKBONE_SEQ =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">&#39;S&#39;</span>, <span class="ot">NA</span>))</span>
+<span id="cb134-5"><a href="#cb134-5"></a>dt</span></code></pre></div>
 <pre><code>##       HELM TS_BASE_SEQ TS_SUGAR_SEQ TS_BACKBONE_SEQ
 ## 1: ([PPG])           F         &lt;NA&gt;            &lt;NA&gt;
 ## 2:    [fR]        &lt;NA&gt;         &lt;NA&gt;               S
 ## 3:   [srP]        &lt;NA&gt;            F            &lt;NA&gt;</code></pre>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a><span class="kw">mimir2XnaDict</span>(dt, <span class="st">&#39;TS_BASE_SEQ&#39;</span>, <span class="st">&#39;TS_SUGAR_SEQ&#39;</span>, <span class="st">&#39;TS_BACKBONE_SEQ&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a><span class="kw">mimir2XnaDict</span>(dt, <span class="st">&#39;TS_BASE_SEQ&#39;</span>, <span class="st">&#39;TS_SUGAR_SEQ&#39;</span>, <span class="st">&#39;TS_BACKBONE_SEQ&#39;</span>)</span></code></pre></div>
 <pre><code>##       HELM     type symbol
 ## 1: ([PPG])     base      F
 ## 2:   [srP]    sugar      F
@@ -1378,10 +1424,10 @@ There are 6 arguments:
 </div>
 <div id="example-2-concatdict" class="section level3">
 <h3><span class="header-section-number">10.0.2</span> Example 2: concatDict</h3>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&#39;[[B]]&#39;</span>),</span>
-<span id="cb136-2"><a href="#cb136-2"></a>                                   <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&#39;base&#39;</span>),</span>
-<span id="cb136-3"><a href="#cb136-3"></a>                                   <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;B&#39;</span>))</span>
-<span id="cb136-4"><a href="#cb136-4"></a><span class="kw">concatDict</span>(my_dict)</span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&#39;[[B]]&#39;</span>),</span>
+<span id="cb138-2"><a href="#cb138-2"></a>                                   <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&#39;base&#39;</span>),</span>
+<span id="cb138-3"><a href="#cb138-3"></a>                                   <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;B&#39;</span>))</span>
+<span id="cb138-4"><a href="#cb138-4"></a><span class="kw">concatDict</span>(my_dict)</span></code></pre></div>
 <pre><code>##         HELM     type symbol
 ##  1:    [[B]]     base      B
 ##  2:        P backbone      O
@@ -1406,10 +1452,10 @@ There are 6 arguments:
 </div>
 <div id="example-3-concatdict-with-duplicates" class="section level3">
 <h3><span class="header-section-number">10.0.3</span> Example 3: concatDict with duplicates</h3>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&#39;[[U]]&#39;</span>),</span>
-<span id="cb138-2"><a href="#cb138-2"></a>                                   <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&#39;base&#39;</span>),</span>
-<span id="cb138-3"><a href="#cb138-3"></a>                                   <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;U&#39;</span>))</span>
-<span id="cb138-4"><a href="#cb138-4"></a><span class="kw">concatDict</span>(my_dict)</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>my_dict &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">data.table</span>(<span class="dt">HELM =</span> <span class="kw">c</span>(<span class="st">&#39;[[U]]&#39;</span>),</span>
+<span id="cb140-2"><a href="#cb140-2"></a>                                   <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&#39;base&#39;</span>),</span>
+<span id="cb140-3"><a href="#cb140-3"></a>                                   <span class="dt">symbol =</span> <span class="kw">c</span>(<span class="st">&#39;U&#39;</span>))</span>
+<span id="cb140-4"><a href="#cb140-4"></a><span class="kw">concatDict</span>(my_dict)</span></code></pre></div>
 <pre><code>## Error in concatDict(my_dict): There is at least one duplicated symbol for the same type.</code></pre>
 <!-- ```{r setup} -->
 <!-- library(XNAString) -->
