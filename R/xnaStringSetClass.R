@@ -134,6 +134,7 @@ set2Dt <- function(obj, slots) {
 #' @param col.base character (name of base column)
 #' @param col.sugar character (name of sugar column)
 #' @param col.backbone character (name of backbone column)
+#' @param col.target character (name of target column)
 #'
 #' @return XNAStringSet object
 #'
