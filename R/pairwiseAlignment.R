@@ -64,10 +64,14 @@ setMethod("XNAPairwiseAlignment", c("XNAString", "character"),
             if (subject_seqtype == "B")
               subject_seqtype <- pattern_seqtype
             
-            pattern <- Biostrings:::XStringSet(pattern_seqtype, pattern)
-            subject <- Biostrings:::XStringSet(subject_seqtype, subject)
+            XStringSet <- utils::getFromNamespace("XStringSet", "Biostrings")
             
-            Biostrings:::mpi.XStringSet.pairwiseAlignment(
+            pattern <- XStringSet(pattern_seqtype, pattern)
+            subject <- XStringSet(subject_seqtype, subject)
+            
+            mpi.XStringSet.pairwiseAlignment <- utils::getFromNamespace("mpi.XStringSet.pairwiseAlignment", "Biostrings")
+            
+            mpi.XStringSet.pairwiseAlignment(
               pattern,
               subject,
               type = type,

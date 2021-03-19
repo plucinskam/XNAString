@@ -58,7 +58,9 @@ setMethod("XNAMatchPDict", c("XNAString", "character"),
             pattern_dictionary <- Biostrings::PDict(pdict@target)
             subject <- Biostrings::DNAString(subject)
             
-            Biostrings:::.matchPDict(
+            matchPDict <- utils::getFromNamespace(".matchPDict", "Biostrings")
+            
+            matchPDict(
               pdict = pattern_dictionary,
               subject = subject,
               max.mismatch,
@@ -83,7 +85,9 @@ setMethod("XNAMatchPDict", c("XNAString", "XString"),
             pattern_dictionary <- Biostrings::PDict(pdict@target)
             subject <- Biostrings::DNAString(subject)
             
-            Biostrings:::.matchPDict(
+            matchPDict <- utils::getFromNamespace(".matchPDict", "Biostrings")
+            
+            matchPDict(
               pdict = pattern_dictionary,
               subject = subject,
               max.mismatch,

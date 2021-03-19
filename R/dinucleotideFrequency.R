@@ -109,7 +109,14 @@ XNADinucleotideFrequencyFun <-
     # base can be DNAString or DNAStringSet, change it to character with base methods
     # on the right side, base getter gets base slot and changes to character
     # on the left, base setter changes the base slot
-    base(obj) <- base(obj)
+    if (class(obj)[[1]] == "XNAString"){
+      base(obj) <- base(obj)
+    } else {
+      base(obj, 1) <- base(obj, 1)
+      if(!any(base(obj, 2) == "")){
+        base(obj, 2) <- base(obj, 2)
+      }
+    }
     
     # if object is "XNAString", change it to XNAStringSet
     if (class(obj)[[1]] == "XNAString")

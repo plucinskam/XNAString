@@ -31,6 +31,7 @@
 #' @include xnaStringClass.R
 #' @rdname XNAMatchPattern
 #' @name XNAMatchPattern
+#' 
 #' @export
 
 setGeneric("XNAMatchPattern", signature = c("pattern", "subject"),
@@ -67,7 +68,9 @@ setMethod("XNAMatchPattern", c("XNAString", "character"),
                 "Please use vmatchPattern."
               )
             
-            Biostrings:::.XString.matchPattern(
+            XString.matchPattern <- utils::getFromNamespace(".XString.matchPattern", "Biostrings")
+            
+            XString.matchPattern(
               as.character(pattern@target[target.number]),
               subject,
               max.mismatch,
@@ -101,7 +104,9 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
                 "Please use vmatchPattern."
               )
             
-            Biostrings:::.XString.matchPattern(
+            XString.matchPattern <- utils::getFromNamespace(".XString.matchPattern", "Biostrings")
+            
+            XString.matchPattern(
               pattern@target[[target.number]],
               subject,
               max.mismatch,
@@ -195,7 +200,9 @@ setMethod("XNAVmatchPattern", c("XNAString", "character"),
                 "string as a target for this algorithm"
               )
             
-            Biostrings:::.XStringSet.vmatchPattern(
+            XStringSet.vmatchPattern <- utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
+            
+            XStringSet.vmatchPattern(
               as.character(pattern@target[target.number]),
               subject,
               max.mismatch,
@@ -222,7 +229,9 @@ setMethod("XNAVmatchPattern", c("XNAString", "XStringSet"),
                 "string as a target for this algorithm"
               )
             
-            Biostrings:::.XStringSet.vmatchPattern(
+            XStringSet.vmatchPattern <- utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
+            
+            XStringSet.vmatchPattern(
               pattern@target[[target.number]],
               subject,
               max.mismatch,
@@ -308,26 +317,35 @@ setMethod("XNAVmatchPattern", c("XNAString", "BSgenome"),
             
             pattern <- pattern@target[[target.number]]
             
-            algorithm <- Biostrings:::normargAlgorithm(algorithm)
+            normargAlgorithm <- utils::getFromNamespace("normargAlgorithm", "Biostrings")
             
-            if (Biostrings:::isCharacterAlgo(algorithm))
+            algorithm <- normargAlgorithm(algorithm)
+            
+            isCharacterAlgo <- utils::getFromNamespace("isCharacterAlgo", "Biostrings")
+            
+            if (isCharacterAlgo(algorithm))
               stop("'subject' must be a single (non-empty) string ",
                    "for this algorithm")
             
+            normargPattern <- utils::getFromNamespace("normargPattern", "Biostrings")
             pattern <-
-              Biostrings:::normargPattern(pattern, Biostrings::DNAStringSet())
+              normargPattern(pattern, Biostrings::DNAStringSet())
             
+            normargMaxMismatch <- utils::getFromNamespace("normargMaxMismatch", "Biostrings")
             max.mismatch <-
-              Biostrings:::normargMaxMismatch(max.mismatch)
+              normargMaxMismatch(max.mismatch)
             
+            normargMinMismatch <- utils::getFromNamespace("normargMinMismatch", "Biostrings")
             min.mismatch <-
-              Biostrings:::normargMinMismatch(min.mismatch, max.mismatch)
-            
+              normargMinMismatch(min.mismatch, max.mismatch)
+           
+            normargWithIndels <- utils::getFromNamespace("normargWithIndels", "Biostrings") 
             with.indels <-
-              Biostrings:::normargWithIndels(with.indels)
+              normargWithIndels(with.indels)
             
+            normargFixed <- utils::getFromNamespace("normargFixed", "Biostrings") 
             fixed <-
-              Biostrings:::normargFixed(fixed, Biostrings::DNAStringSet())
+              normargFixed(fixed, Biostrings::DNAStringSet())
             
             posPattern <- pattern
             

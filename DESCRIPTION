@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version:  0.99.4
+Version:  0.99.5
 Authors@R:c(person(given = "Anna",
                   family = "Górska",
                   role = "aut",
@@ -41,8 +41,7 @@ Imports:
     future.apply,
     stringr,
     formattable,
-    stats,
-    testthat
+    stats
 Suggests:
     BSgenome.Hsapiens.UCSC.hg38,
     pander,
