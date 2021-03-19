@@ -51,7 +51,7 @@ vrna_cstr(size_t  size,
   buf         = (struct vrna_cstr_s *)vrna_alloc(sizeof(struct vrna_cstr_s));
   buf->string = (char *)vrna_alloc(sizeof(char) * size);
   buf->size   = size;
-  buf->output = (output) ? output : stdout;
+  buf->output = (output) ? output : output;
   buf->istty  = isatty(fileno(buf->output));
 
   if (buf->string == NULL) {
@@ -84,7 +84,6 @@ vrna_cstr_close(struct vrna_cstr_s *buf)
 
     free(buf->string);
 
-    if ((buf->output != stdout) && (buf->output != stderr))
       fclose(buf->output);
 
     free(buf);

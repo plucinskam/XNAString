@@ -747,8 +747,6 @@ get_array1(char   **content,
         r = sscanf(buf, "%d", &p);
         if (r != 1) {
           return line + pos;
-          vrna_message_error("can't interpret `%s' in get_array1", buf);
-          exit(1);
         }
 
         last = i;
@@ -784,11 +782,6 @@ rd_1dim_slice(char    **content,
   char *cp;
 
   cp = get_array1(content, line_no, array + shift, dim - shift - post);
-
-  if (cp) {
-    vrna_message_error("\nrd_1dim: %s", cp);
-    exit(1);
-  }
 
   return;
 }
@@ -1793,10 +1786,8 @@ write_parameter_file(const char fname[])
   outfp = fopen(fname, "w");
   if (!outfp) {
     vrna_message_error("can't open file %s", fname);
-    exit(1);
   }
 
-  fprintf(outfp, "## RNAfold parameter file v2.0\n");
 
   fprintf(outfp, "\n# %s\n", settype(S));
   fprintf(outfp, "/*  CG    GC    GU    UG    AU    UA    @  */\n");

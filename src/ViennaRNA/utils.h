@@ -23,7 +23,13 @@ extern "C" {
 #include <ViennaRNA/alphabet.h>
 #endif
 
-  
+void
+    vrna_message_verror(const char  *format,
+                        va_list     args)  
+void
+    vrna_message_error(const char *format,
+                       ...)
+
   
 #ifdef __cplusplus
 }

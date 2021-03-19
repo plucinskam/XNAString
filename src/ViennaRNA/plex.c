@@ -324,7 +324,6 @@ duplexfold_XS(const char  *s1,
   j     = 1 + j_flag;
   type  = pair[S1[i]][S2[j]];
   if (!type) {
-    printf("Error during initialization of the duplex in duplexfold_XS\n");
     mfe.structure = NULL;
     mfe.energy    = INF;
     return mfe;
@@ -2381,10 +2380,6 @@ find_max_XS(const int   *position,
         max_pos_j = position_j[pos + delta];
         int max;
         max = position[pos + delta];
-        printf("target upper bound %d: query lower bound %d  (%5.2f) \n",
-               pos - 10,
-               max_pos_j - 10,
-               ((double)max) / 100);
         pos = MAX2(10, pos + temp_min - delta);
       }
     }
@@ -2437,21 +2432,6 @@ find_max_XS(const int   *position,
                               b_b);
         if (test.energy * 100 < threshold) {
           int l1 = strchr(test.structure, '&') - test.structure;
-          printf(
-            " %s %3d,%-3d : %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f) [%5.2f] i:%d,j:%d <%5.2f>\n",
-            test.structure,
-            begin_t - 10 + test.i - l1 - 10,
-            begin_t - 10 + test.i - 1 - 10,
-            begin_q - 10 + test.j - 1 - 10,
-            (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2 - 10,
-            test.ddG,
-            test.energy,
-            test.opening_backtrack_x,
-            test.opening_backtrack_y,
-            test.energy_backtrack,
-            pos - 10,
-            max_pos_j - 10,
-            ((double)position[pos + delta]) / 100);
           pos = MAX2(10, pos + temp_min - delta);
           free(test.structure);
         }
@@ -2492,19 +2472,6 @@ find_max_XS(const int   *position,
         test =
           duplexfold_XS(s3, s4, access_s1, access_s2, pos, max_pos_j, threshold, i_flag, j_flag);
         if (test.energy * 100 < threshold) {
-          printf("%s %3d,%-3d : %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f) i:%d,j:%d <%5.2f>\n",
-                 test.structure,
-                 test.tb,
-                 test.te,
-                 test.qb,
-                 test.qe,
-                 test.ddG,
-                 test.energy,
-                 test.dG1,
-                 test.dG2,
-                 pos - 10,
-                 max_pos_j - 10,
-                 ((double)position[pos + delta]) / 100);
           pos = MAX2(10, pos + temp_min - delta);
         }
 
@@ -2556,8 +2523,6 @@ plot_max_XS(const int   max,
             const int   b_b)
 {
   if (fast == 1) {
-    printf("target upper bound %d: query lower bound %d (%5.2f)\n", max_pos - 3, max_pos_j,
-           ((double)max) / 100);
   } else if (fast == 2) {
     int   alignment_length2;
     alignment_length2 = MIN2(n1, n2);
@@ -2578,20 +2543,6 @@ plot_max_XS(const int   max,
     duplexT test;
     test = fduplexfold_XS(s3, s4, access_s1, access_s2, end_t, begin_q, INF, il_a, il_b, b_a, b_b);
     int     l1 = strchr(test.structure, '&') - test.structure;
-    printf("%s %3d,%-3d : %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f) [%5.2f] i:%d,j:%d <%5.2f>\n",
-           test.structure,
-           begin_t - 10 + test.i - l1 - 10,
-           begin_t - 10 + test.i - 1 - 10,
-           begin_q - 10 + test.j - 1 - 10,
-           (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2 - 10,
-           test.ddG,
-           test.energy,
-           test.opening_backtrack_x,
-           test.opening_backtrack_y,
-           test.energy_backtrack,
-           max_pos - 10,
-           max_pos_j - 10,
-           (double)max / 100);
 
     free(s3);
     free(s4);
@@ -2614,19 +2565,6 @@ plot_max_XS(const int   max,
     s4[end_q - begin_q + 1] = '\0';
     duplexT test;
     test = duplexfold_XS(s3, s4, access_s1, access_s2, max_pos, max_pos_j, INF, i_flag, j_flag);
-    printf("%s %3d,%-3d : %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f) i:%d,j:%d <%5.2f>\n",
-           test.structure,
-           test.tb,
-           test.te,
-           test.qb,
-           test.qe,
-           test.ddG,
-           test.energy,
-           test.dG1,
-           test.dG2,
-           max_pos - 10,
-           max_pos_j - 10,
-           (double)max / 100);
     free(s3);
     free(s4);
     free(test.structure);
@@ -4136,11 +4074,6 @@ find_max(const int  *position,
         max_pos_j = position_j[pos + delta];
         int max;
         max = position[pos + delta];
-        printf("target upper bound %d: query lower bound %d  (%5.2f) \n",
-               pos - 10,
-               max_pos_j - 10,
-               ((double)max) / 100);
-        pos = MAX2(10, pos + temp_min - delta);
       }
     }
   } else if (fast == 2) {
@@ -4182,14 +4115,6 @@ find_max(const int  *position,
         test = fduplexfold(s3, s4, extension_cost, il_a, il_b, b_a, b_b);
         if (test.energy * 100 < threshold) {
           int l1 = strchr(test.structure, '&') - test.structure;
-          printf("%s %3d,%-3d : %3d,%-3d (%5.2f) [%5.2f]  i:%d,j:%d <%5.2f>\n", test.structure,
-                 begin_t - 10 + test.i - l1 - 10,
-                 begin_t - 10 + test.i - 1 - 10,
-                 begin_q - 10 + test.j - 1 - 10,
-                 (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2 - 10,
-                 test.energy, test.energy_backtrack, pos - 10, max_pos_j - 10,
-                 ((double)position[pos + delta]) / 100);
-          pos = MAX2(10, pos + temp_min - delta);
         }
 
         free(s3);
@@ -4267,19 +4192,6 @@ find_max(const int  *position,
           }
           reverseStructure[structureLength] = '\0';
           //          l1=strchr(reverse.structure, '&')-test.structure;
-
-
-          printf("%s %3d,%-3d : %3d,%-3d (%5.2f) [%5.2f] i:%d,j:%d <%5.2f>\n",
-                 reverseStructure,
-                 begin_t - 10 + test.j - 1 - 10,
-                 (begin_t - 11) + test.j + strlen(test.structure) - l1 - 2 - 10,
-                 begin_q - 10 + test.i - l1 - 10,
-                 begin_q - 10 + test.i - 1 - 10,
-                 test.energy,
-                 test.energy_backtrack,
-                 pos,
-                 max_pos_j,
-                 ((double)position[pos + delta]) / 100);
           pos = MAX2(10, pos + temp_min - delta);
         }
 
@@ -4325,12 +4237,6 @@ find_max(const int  *position,
         test = duplexfold(s3, s4, extension_cost);
         if (test.energy * 100 < threshold) {
           int l1 = strchr(test.structure, '&') - test.structure;
-          printf("%s %3d,%-3d : %3d,%-3d (%5.2f)  i:%d,j:%d <%5.2f>\n", test.structure,
-                 begin_t - 10 + test.i - l1,
-                 begin_t - 10 + test.i - 1,
-                 begin_q - 10 + test.j - 1,
-                 (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2,
-                 test.energy, pos - 10, max_pos_j - 10, ((double)position[pos + delta]) / 100);
           pos = MAX2(10, pos + temp_min - delta);
         }
 
@@ -4358,8 +4264,7 @@ plot_max(const int  max,
          const int  b_b)
 {
   if (fast == 1) {
-    printf("target upper bound %d: query lower bound %d (%5.2f)\n", max_pos - 10, max_pos_j - 10,
-           ((double)max) / 100);
+
   } else if (fast == 2) {
     int   alignment_length2;
     alignment_length2 = MIN2(n1, n2);
@@ -4380,12 +4285,6 @@ plot_max(const int  max,
     duplexT test;
     test = fduplexfold(s3, s4, extension_cost, il_a, il_b, b_a, b_b);
     int     l1 = strchr(test.structure, '&') - test.structure;
-    printf("%s %3d,%-3d : %3d,%-3d (%5.2f) [%5.2f] i:%d,j:%d <%5.2f>\n", test.structure,
-           begin_t - 10 + test.i - l1 - 10,
-           begin_t - 10 + test.i - 1 - 10,
-           begin_q - 10 + test.j - 1 - 10,
-           (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2 - 10,
-           test.energy, test.energy_backtrack, max_pos - 10, max_pos_j - 10, ((double)max) / 100);
     free(s3);
     free(s4);
     free(test.structure);
@@ -4405,12 +4304,6 @@ plot_max(const int  max,
     s4[end_q - begin_q + 1] = '\0';
     test                    = duplexfold(s3, s4, extension_cost);
     int l1 = strchr(test.structure, '&') - test.structure;
-    printf("%s %3d,%-3d : %3d,%-3d (%5.2f) i:%d,j:%d <%5.2f>\n", test.structure,
-           begin_t - 10 + test.i - l1,
-           begin_t - 10 + test.i - 1,
-           begin_q - 10 + test.j - 1,
-           (begin_q - 11) + test.j + (int)strlen(test.structure) - l1 - 2,
-           test.energy, max_pos - 10, max_pos_j - 10, ((double)max) / 100);
     free(s3);
     free(s4);
     free(test.structure);
