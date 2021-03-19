@@ -84,8 +84,11 @@ PUBLIC void
     uint32_t seed = rj_mix(clock(), time(NULL), getpid());
     
     xsubi[0]  = xsubi[1] = xsubi[2] = (unsigned short)seed;  /* lower 16 bit */
-    xsubi[1]  += (unsigned short)((unsigned)seed >> 6);
-    xsubi[2]  += (unsigned short)((unsigned)seed >> 12);
+xsubi[1]  += (unsigned short)((unsigned)seed >> 6);
+xsubi[2]  += (unsigned short)((unsigned)seed >> 12);
+#ifndef HAVE_ERAND48
+srand((unsigned int)seed);
+#endif
   }
 
 
@@ -97,10 +100,14 @@ PUBLIC void
 PUBLIC double
   vrna_urn(void)
   {
+#ifdef HAVE_ERAND48
     extern double erand48(unsigned short[]);
+    
     return erand48(xsubi);
+#else
+    return ((double)rand()) / RAND_MAX;
+#endif
   }
-
 
 /*------------------------------------------------------------------------*/
 
@@ -111,8 +118,6 @@ PUBLIC int
     return ((int)(vrna_urn() * (to - from + 1))) + from;
   }
 
-
-/*------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------*/
 
