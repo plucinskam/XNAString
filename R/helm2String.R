@@ -13,7 +13,8 @@
 #' @param remove_linker logical defines if linker should be clipped from RNA
 #' @return named list of strings with following elements: base, sugar, backbone,
 #'   conjugate5, conjugate3
-#' @examples helm2String("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0")
+#' @examples
+#' helm2String("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0")
 #' @importFrom data.table is.data.table
 #' @importFrom stringi stri_length stri_sub
 #'
@@ -39,8 +40,8 @@ helm2String <-
       stop("There is no RNA component in HELM notation.")
     
     is_conjugate <- startsWith(helm_components, "CHEM")
-    conjugate5 = ''
-    conjugate3 = ''
+    conjugate5 <- ""
+    conjugate3 <- ""
     
     if (any(is_conjugate)) {
       if (is_conjugate[1]) {
@@ -69,8 +70,9 @@ helm2String <-
     helm_rna_monomers <- strsplit(helm_rna, split = "[.]")
     
     rna_multistring <-
-      lapply(helm_rna_monomers, function(rna_monomer)
-        parseRnaHelmComponent(rna_monomer, dictionary = dictionary))
+      lapply(helm_rna_monomers, function(rna_monomer) {
+        parseRnaHelmComponent(rna_monomer, dictionary = dictionary)
+      })
     
     rna_multistring <- listOflists2Dt(rna_multistring)
     base <- rna_multistring$base
@@ -88,7 +90,8 @@ helm2String <-
       }
       
       if (conjugate3 != "") {
-        while (stringi::stri_sub(backbone, stringi::stri_length(backbone)) == "O"
+        while (stringi::stri_sub(backbone, 
+                                 stringi::stri_length(backbone)) == "O"
                &
                stringi::stri_sub(sugar, stringi::stri_length(sugar)) != "L") {
           sugar <-
@@ -124,7 +127,8 @@ helm2String <-
 #' @importFrom stringi stri_extract
 #' @importFrom data.table as.data.table
 #'
-#' @examples parseRnaHelmComponent(c("[dR](A)P","[dR](A)P","[dR](A)"))
+#' @examples
+#' parseRnaHelmComponent(c("[dR](A)P", "[dR](A)P", "[dR](A)"))
 #' @author Marianna Plucinska
 #' @export
 parseRnaHelmComponent <-
@@ -142,14 +146,16 @@ parseRnaHelmComponent <-
           stop(sprintf("Base %s is not present in dictionary.", base_seq))
         }
         
-        if (!any(sugar_seq == dictionary[dictionary$type == "sugar"][["HELM"]]) &
-            !is.na(sugar_seq)) {
+        if (!any(sugar_seq == dictionary[dictionary$type == "sugar"][["HELM"]])
+            & !is.na(sugar_seq)) {
           stop(sprintf("Sugar %s is not present in dictionary.", sugar_seq))
         }
         
-        if (!any(backbone_seq == dictionary[dictionary$type == "backbone"][["HELM"]]) &
+        if (!any(backbone_seq == 
+                 dictionary[dictionary$type == "backbone"][["HELM"]]) &
             !is.na(backbone_seq) & backbone_seq != "") {
-          stop(sprintf("Backbone %s is not present in dictionary.", backbone_seq))
+          stop(
+            sprintf("Backbone %s is not present in dictionary.", backbone_seq))
         }
         
         base_symbol <-
@@ -172,11 +178,11 @@ parseRnaHelmComponent <-
     rna_multistring <-
       data.table::as.data.table(do.call(rbind, rna_multistring))
     
-    base <- paste(unlist(rna_multistring[["base"]]), collapse = '')
+    base <- paste(unlist(rna_multistring[["base"]]), collapse = "")
     sugar <-
-      paste(unlist(rna_multistring[["sugar"]]), collapse = '')
+      paste(unlist(rna_multistring[["sugar"]]), collapse = "")
     backbone <-
-      paste(unlist(rna_multistring[["backbone"]]), collapse = '')
+      paste(unlist(rna_multistring[["backbone"]]), collapse = "")
     
     return(list(
       base = base,

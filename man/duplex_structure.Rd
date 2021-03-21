@@ -21,12 +21,14 @@ duplex_structure(x, ...) <- value
 \arguments{
 \item{x}{XNAString/XNAStringSet object}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support
+additional methods}
 
 \item{value}{character vector applied only for setter method}
 }
 \value{
-vector in getter method, XNAStringSet object (with replaced name slot) in setter method
+vector in getter method, XNAStringSet object
+(with replaced name slot) in setter method
 }
 \description{
 Getter methods enable extraction of single slots from XNAString
@@ -38,4 +40,22 @@ object.
 Setter methods enable overwriting single slots from XNAString
 and XNAStringSet objects.
 E.g. name<- method overwrites existing name slot
+}
+\examples{
+
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
+duplex_structure(obj)
 }

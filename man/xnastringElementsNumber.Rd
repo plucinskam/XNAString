@@ -39,17 +39,19 @@ logical
 Function which checks if XNAString object satisfies predefined slots length
 }
 \examples{
-obj <- XNAString(base = c('EAA', 'AAA'), 
-                 sugar = c('FFO', 'OOO'), 
-                 name = c('a'), 
-                 conjugate5 = c('TTT'))
-xnastringElementsNumber(obj, 
-                        cond_name = '==1', 
-                        cond_base = '\%in\% c(1,2)', 
-                        cond_sugar = '\%in\% c(1,2)', 
-                        cond_backbone = '\%in\% c(1,2)',
-                        cond_target = '>0', 
-                        cond_conj5 = '==1', 
-                        cond_conj = '==1')
-
+obj <- XNAString(
+  base = c("EAA", "AAA"),
+  sugar = c("FFO", "OOO"),
+  name = c("a"),
+  conjugate5 = c("TTT")
+)
+xnastringElementsNumber(obj,
+  cond_name = "==1",
+  cond_base = "\%in\% c(1,2)",
+  cond_sugar = "\%in\% c(1,2)",
+  cond_backbone = "\%in\% c(1,2)",
+  cond_target = ">0",
+  cond_conj5 = "==1",
+  cond_conj = "==1"
+)
 }

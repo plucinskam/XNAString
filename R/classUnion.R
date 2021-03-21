@@ -1,10 +1,10 @@
 #' @title setClassUnion definitions
-#' 
+#'
 #' @description setClassUnion definitions used in XNAString class.
-#' charOrDNAOrRNA consists of character, DNAString, RNAString, DNAStringSet, 
+#' charOrDNAOrRNA consists of character, DNAString, RNAString, DNAStringSet,
 #' RNAStringSet.
 #' charOrDNA consists of character, DNAString, DNAStringSet
-#'  
+#'
 #' @rdname xnastringClassUnions
 #' @name xnastringClassUnions
 setClassUnion(
@@ -19,10 +19,11 @@ setClassUnion(
 )
 
 #' @rdname xnastringClassUnions
-setClassUnion("charOrDNA", 
-              c("character", 
-                "DNAString", 
-                "DNAStringSet"))
-
-
-
+setClassUnion(
+  "charOrDNA",
+  c(
+    "character",
+    "DNAString",
+    "DNAStringSet"
+  )
+)

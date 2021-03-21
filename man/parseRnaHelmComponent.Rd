@@ -20,7 +20,7 @@ list of three strings: base, sugar, backbone
 Parse monomers from HELM to multi-string notation
 }
 \examples{
-parseRnaHelmComponent(c("[dR](A)P","[dR](A)P","[dR](A)"))
+parseRnaHelmComponent(c("[dR](A)P", "[dR](A)P", "[dR](A)"))
 }
 \author{
 Marianna Plucinska

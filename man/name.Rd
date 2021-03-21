@@ -24,7 +24,8 @@ name(x, ...) <- value
 \arguments{
 \item{x}{XNAString/XNAStringSet object}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support
+additional methods}
 
 \item{i}{numeric - possibilities: 1 or 2. If 1 - 1st slots elements printed
 out, 2nd otherwise. In case the second element is not in the object, empty
@@ -33,7 +34,8 @@ char created. This parameter is only available for XNAStringSet objects.}
 \item{value}{character vector applied only for setter method}
 }
 \value{
-vector in getter method, XNAStringSet object (with replaced name slot) in setter method
+vector in getter method, XNAStringSet object
+(with replaced name slot) in setter method
 }
 \description{
 Getter methods enable extraction of single slots from XNAString
@@ -48,50 +50,78 @@ E.g. name<- method overwrites existing name slot
 }
 \examples{
 
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj <- XNAString(name = 'b',
-                  base = 'GGE',
-                  sugar = 'FFO',
-                  dictionary = my_dic)
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
 name(obj)
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj1 <- XNAString(name = 'b',
-                  base = 'GGE',
-                  sugar = 'FFO',
-                  dictionary = my_dic)
-obj2 <- XNAString(name = 'b',
-                  base = c('GGE','EEE'),
-                  sugar = c('FFO', 'OOO'),
-                  dictionary = my_dic)
-XNAStringSetObj <- XNAStringSet(objects=list(obj1, obj2))
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj1 <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
+obj2 <- XNAString(
+  name = "b",
+  base = c("GGE", "EEE"),
+  sugar = c("FFO", "OOO"),
+  dictionary = my_dic
+)
+XNAStringSetObj <- XNAStringSet(objects = list(obj1, obj2))
 name(XNAStringSetObj)
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj <- XNAString(name = 'b',
-                  base = 'GGE',
-                  sugar = 'FFO',
-                  dictionary = my_dic)
-name(obj) <- 'new_name'
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj1 <- XNAString(name = 'b',
-                  base = 'GGE',
-                  sugar = 'FFO',
-                  dictionary = my_dic)
-obj2 <- XNAString(name = 'b',
-                  base = c('GGE','EEE'),
-                  sugar = c('FFO', 'OOO'),
-                  dictionary = my_dic)
-XNAStringSetObj <- XNAStringSet(objects=list(obj1, obj2))
-name(XNAStringSetObj, 1) <- c('new1', 'new2')
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
+name(obj) <- "new_name"
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj1 <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
+obj2 <- XNAString(
+  name = "b",
+  base = c("GGE", "EEE"),
+  sugar = c("FFO", "OOO"),
+  dictionary = my_dic
+)
+XNAStringSetObj <- XNAStringSet(objects = list(obj1, obj2))
+name(XNAStringSetObj, 1) <- c("new1", "new2")
 }

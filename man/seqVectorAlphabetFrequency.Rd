@@ -22,8 +22,8 @@ matrix - each row denotes frequency for a specific string of vector
 seqVectorAlphabetFrequency function calculates frequency for strings vector
 }
 \examples{
-seqVectorAlphabetFrequency(c('A', 'B', 'C'),
-                                     c('AABA', 'BBBCCC'),
-                                     as.prob=FALSE)
-
+seqVectorAlphabetFrequency(c("A", "B", "C"),
+  c("AABA", "BBBCCC"),
+  as.prob = FALSE
+)
 }

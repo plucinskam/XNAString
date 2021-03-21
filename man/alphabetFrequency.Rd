@@ -62,7 +62,8 @@ occurence}
 \item{base_only}{logical - if TRUE, frequency checked for
 'A', 'C', 'G', 'T', other}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support
+additional methods}
 }
 \value{
 matrix (frequency matrix for a given slot)
@@ -78,20 +79,27 @@ Letters can be given as argument, otherwise unique letters in
 object's dictionary are in use.
 }
 \examples{
-xnastring_obj <- XNAString(name = 'b',
-                  base = c('AACC', 'GGEE'),
-                  sugar = c('FFOO', 'OODD'))
-XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base')
-XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', as.prob = TRUE)
-XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', base_only = TRUE)
-XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', letters = c('A', 'C'))
-XNAAlphabetFrequency(obj = xnastring_obj, slot = 'base', matrix_nbr = 2)
+xnastring_obj <- XNAString(
+  name = "b",
+  base = c("AACC", "GGEE"),
+  sugar = c("FFOO", "OODD")
+)
+XNAAlphabetFrequency(obj = xnastring_obj, slot = "base")
+XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", as.prob = TRUE)
+XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", base_only = TRUE)
+XNAAlphabetFrequency(obj = xnastring_obj,
+                    slot = "base",
+                    letters = c("A", "C"))
+XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", matrix_nbr = 2)
 
-xnastring_obj_2 <- XNAString(base = c('ATCG'),
-                             sugar = c('FODD'),
-                             backbone = c('SBB'))
-XNAStringSet_obj <- XNAStringSet(objects=list(xnastring_obj,
-                                              xnastring_obj_2))
-XNAAlphabetFrequency(XNAStringSet_obj, 'sugar')
-
+xnastring_obj_2 <- XNAString(
+  base = c("ATCG"),
+  sugar = c("FODD"),
+  backbone = c("SBB")
+)
+XNAStringSet_obj <- XNAStringSet(objects = list(
+  xnastring_obj,
+  xnastring_obj_2
+))
+XNAAlphabetFrequency(XNAStringSet_obj, "sugar")
 }

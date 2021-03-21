@@ -12,7 +12,8 @@ XNAReverseComplement(obj, ...)
 \arguments{
 \item{obj}{XNAString object}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support
+additional methods}
 }
 \value{
 string with reverse complement sequence
@@ -21,14 +22,19 @@ string with reverse complement sequence
 Reverse complement sequence based on dictionary
 }
 \examples{
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj <- XNAString(name = 'b',
-                  base = 'GGE',
-                  sugar = 'FFO',
-                  dictionary = my_dic)
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj <- XNAString(
+  name = "b",
+  base = "GGE",
+  sugar = "FFO",
+  dictionary = my_dic
+)
 XNAReverseComplement(obj)
-
 }
