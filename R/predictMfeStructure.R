@@ -7,61 +7,69 @@
 #'
 #' @rawNamespace useDynLib(XNAString)
 #' @import Rcpp
-#' 
+#'
 #' @rdname mfeStructure
 #' @name predictMfeStructure
-#' 
+#'
 predictMfeStructureFun <- function(obj) {
   # for now DNAStringSet and RNASTringSet not allowed
 
-  any((is(obj@base, "DNAString") |  is(obj@base, "RNAString")) |
-    (is(obj@base, 'character') & length(obj@base) == 1)) ||
+  any((is(obj@base, "DNAString") | is(obj@base, "RNAString")) |
+    (is(obj@base, "character") & length(obj@base) == 1)) ||
     stop("sequence parameter must 1-element character vector, DNAString or RNAString type")
-  
-  if(class(obj@base)[[1]] == 'character'){
+
+  if (class(obj@base)[[1]] == "character") {
     # check if each base has non-empty corresponding compl_target
     # if change_base(obj$compl_dictionary, obj@base) empty , then predict results ''
-    if(all(strsplit(obj@base, "")[[1]] %in% c('A', 'C', 'G', 'T', 'U'))){
+    if (all(strsplit(obj@base, "")[[1]] %in% c("A", "C", "G", "T", "U"))) {
       base <- obj@base
     } else {
       # if other letters than from basic complementary_bases dictionary
       base <- changeBase(obj@compl_dictionary, obj@base)
     }
-    
-    if(base != ''){
+
+    if (base != "") {
       prediction_results <- RNAfold_MFE(base)
     } else {
-      prediction_results <- ''
+      prediction_results <- ""
     }
   } else {
     prediction_results <- RNAfold_MFE(as.character(obj@base))
   }
-  
+
   result <- list(
     structure = prediction_results[1],
     mfe = as.numeric(prediction_results[2])
   )
-  
+
   return(result)
 }
 
 
 
 #' @rdname mfeStructure
+#' @examples
+#' obj1 <- XNAString(
+#'   base = "ATCG",
+#'   sugar = "FODD",
+#'   conjugate3 = "TAG"
+#' )
+#' predictMfeStructure(obj1)
+#' 
+#' @return character, secondary structure in dot-bracket notation
 #' @export
-setGeneric("predictMfeStructure", signature = "obj",
-           function(obj,
-                    ...)
-             standardGeneric("predictMfeStructure"))
+setGeneric("predictMfeStructure",
+  signature = "obj",
+  function(obj,
+           ...) {
+    standardGeneric("predictMfeStructure")
+  }
+)
 
 #' @rdname mfeStructure
-#' @examples 
-#'  obj1 <- XNAString(base = 'ATCG',
-#'                    sugar = 'FODD',
-#'                    conjugate3 = 'TAG')
-#'  predictMfeStructure(obj1) 
-setMethod("predictMfeStructure", c("XNAString"),
-          function(obj)
-            predictMfeStructureFun(obj))
-
-
+setMethod(
+  "predictMfeStructure", c("XNAString"),
+  function(obj) {
+    predictMfeStructureFun(obj)
+  }
+)

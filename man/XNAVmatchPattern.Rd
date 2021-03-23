@@ -5,8 +5,8 @@
 \alias{XNAVmatchPattern,XNAString,character-method}
 \alias{XNAVmatchPattern,XNAString,XStringSet-method}
 \alias{XNAVmatchPattern,XNAString,BSgenome-method}
-\title{This is function finding all the occurrences of a given pattern (typically short)
-in a (typically long) set of reference sequences.}
+\title{This is function finding all the occurrences of a given pattern
+(typically short) in a (typically long) set of reference sequences.}
 \usage{
 XNAVmatchPattern(
   pattern,
@@ -63,7 +63,8 @@ XNAVmatchPattern(
 \arguments{
 \item{pattern}{XNAString object with non-empty target slot}
 
-\item{subject}{string, string vector or DNAString / DNAStringSet / chromosome from BSgenome  object}
+\item{subject}{string, string vector or
+DNAString / DNAStringSet / chromosome from BSgenome  object}
 
 \item{target.number}{numeric - if target is a multi-element vector,
 then specify which element in use. 1 is the default}
@@ -97,11 +98,25 @@ if subject is a chromosome object from BSgenome}
 a BSGenome object. When using the bsapply function, the masks will be set to
 the states in this vector.}
 
-\item{userMask}{An IntegerRangesList, containing a mask to be applied to each chromosome.}
+\item{userMask}{An IntegerRangesList, containing a mask to be applied
+to each chromosome.}
 
 \item{invertUserMask}{Whether the userMask should be inverted.}
 }
+\value{
+An \link{MIndex} object for \code{vmatchPattern}.
+}
 \description{
-This is function finding all the occurrences of a given pattern (typically short)
-in a (typically long) set of reference sequences.
+This is function finding all the occurrences of a given pattern
+(typically short) in a (typically long) set of reference sequences.
+}
+\examples{
+s3 <-
+XNAString::XNAString(
+ base = "GCGGAGAGAGCACAGATACA",
+ sugar = "FODDDDDDDDDDDDDDDDDD",
+ target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+)
+chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
+result <- XNAString::XNAMatchPattern(s3, chrom)
 }

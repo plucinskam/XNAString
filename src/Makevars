@@ -1,5 +1,5 @@
 CXX_STD = CXX11
-PKG_CPPFLAGS= -Dlibcaf_core_shared_EXPORTS -Wall -pedantic -pthread -fPIC -O2 -g -fPIC -I../inst -I../inst/include
+PKG_CPPFLAGS= -Dlibcaf_core_shared_EXPORTS -I../inst -I../inst/include
 PKG_LIBS=-L../inst
 LIBS=-L./libs -L../inst
 
@@ -17,7 +17,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/constraints/hard.c  \
 ./ViennaRNA/constraints/ligand.c  \
 ./ViennaRNA/datastructures/basic_datastructures.c  \
-./ViennaRNA/datastructures/hash_tables.c  \
 ./ViennaRNA/datastructures/lists.c \
 ./ViennaRNA/datastructures/char_stream.c  \
 ./ViennaRNA/datastructures/heap.c  \
@@ -25,7 +24,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/io/file_formats.c  \
 ./ViennaRNA/landscape/findpath.c  \
 ./ViennaRNA/landscape/move.c  \
-./ViennaRNA/landscape/walk.c \
 ./ViennaRNA/landscape/neighbor.c \
 ./ViennaRNA/io/io_utils.c  \
 ./ViennaRNA/loops/external.c  \
@@ -40,7 +38,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/loops/hairpin_bt.c  \
 ./ViennaRNA/loops/internal_pf.c  \
 ./ViennaRNA/loops/multibranch_bt.c  \
-./ViennaRNA/params/convert.c  \
 ./ViennaRNA/params/default.c  \
 ./ViennaRNA/params/io.c  \
 ./ViennaRNA/params/params.c  \
@@ -55,7 +52,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/grammar.c  \
 ./ViennaRNA/boltzmann_sampling.c  \
 ./ViennaRNA/dist_vars.c  \
-./ViennaRNA/inverse.c  \
 ./ViennaRNA/part_func_up.c  \
 ./ViennaRNA/special_const.c \
 ./ViennaRNA/Lfold.c  \
@@ -73,8 +69,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/equilibrium_probs.c  \
 ./ViennaRNA/mfe_window_wrappers.c  \
 ./ViennaRNA/pf_fold.c  \
-./ViennaRNA/treedist.c \
-./ViennaRNA/ProfileDist.c  \
 ./ViennaRNA/cofold.c  \
 ./ViennaRNA/eval.c  \
 ./ViennaRNA/mfe_wrappers.c  \
@@ -91,7 +85,6 @@ SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \
 ./ViennaRNA/ribo.c  \
 ./ViennaRNA/commands.c  \
 ./ViennaRNA/fold_compound.c  \
-./ViennaRNA/move_set.c  \
 ./ViennaRNA/sequence.c \
 ./ViennaRNA/unstructured_domains.c \
 

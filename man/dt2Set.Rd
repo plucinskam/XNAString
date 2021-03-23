@@ -33,9 +33,10 @@ Function which creates XNAstringSet object from table with
 base, sugar and backbone columns.
 }
 \examples{
-dt <- data.table::data.table(base= c('TT', 'GG'), 
-                 sugar = c('FF', 'FO'), 
-                 backbone =c('S', 'S'))
+dt <- data.table::data.table(
+  base = c("TT", "GG"),
+  sugar = c("FF", "FO"),
+  backbone = c("S", "S")
+)
 dt2Set(dt)
-
 }

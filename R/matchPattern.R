@@ -1,39 +1,53 @@
 
+
 ### =========================================================================
 ### The XNAMatchPattern() generic & related functions
 ### -------------------------------------------------------------------------
 #' Finds pattern in reference sequence
 #'
-#' This is function finding all the occurrences of a given pattern (typically short)
-#' in a (typically long) reference sequence
-#' 
+#' This is function finding all the occurrences of a given pattern
+#'  (typically short) in a (typically long) reference sequence
+#'
 #' @param pattern XNAString object with non-empty target slot
 #' @param subject string or DNAString object
-#' @param target.number numeric - if target is a multi-element vector, 
+#' @param target.number numeric - if target is a multi-element vector,
 #' then specify which element in use. 1 is the default
-#' @param max.mismatch The maximum number of mismatching letters allowed. 
+#' @param max.mismatch The maximum number of mismatching letters allowed.
 #' If non-zero, an algorithm that supports inexact matching is used.
-#' @param min.mismatch The minimum number of mismatching letters allowed. 
+#' @param min.mismatch The minimum number of mismatching letters allowed.
 #' If non-zero, an algorithm that supports inexact matching is used.
-#' @param with.indels If TRUE then indels are allowed. In that case, 
-#' min.mismatch must be 0 and max.mismatch is interpreted as the maximum 
-#' "edit distance" allowed between the pattern and a match. Note that in order 
-#' to avoid pollution by redundant matches, only the "best local matches" are 
-#' returned. Roughly speaking, a "best local match" is a match that is locally 
-#' both the closest (to the pattern P) and the shortest. 
-#' @param fixed If TRUE (the default), an IUPAC ambiguity code in the pattern 
-#' can only match the same code in the subject, and vice versa. If FALSE, an 
-#' IUPAC ambiguity code in the pattern can match any letter in the subject that 
-#' is associated with the code, and vice versa. 
-#' @param algorithm One of the following: "auto", "naive-exact", 
+#' @param with.indels If TRUE then indels are allowed. In that case,
+#' min.mismatch must be 0 and max.mismatch is interpreted as the maximum
+#' "edit distance" allowed between the pattern and a match. Note that in order
+#' to avoid pollution by redundant matches, only the "best local matches" are
+#' returned. Roughly speaking, a "best local match" is a match that is locally
+#' both the closest (to the pattern P) and the shortest.
+#' @param fixed If TRUE (the default), an IUPAC ambiguity code in the pattern
+#' can only match the same code in the subject, and vice versa. If FALSE, an
+#' IUPAC ambiguity code in the pattern can match any letter in the subject that
+#' is associated with the code, and vice versa.
+#' @param algorithm One of the following: "auto", "naive-exact",
 #' "naive-inexact", "boyer-moore", "shift-or" or "indels".
 #'
 #' @include xnaStringClass.R
 #' @rdname XNAMatchPattern
 #' @name XNAMatchPattern
+#' @examples 
+#' s1 <-
+#' XNAString::XNAString(
+#'  base = Biostrings::DNAString("GCGGAGAGAGCACAGATACA"),
+#'  sugar = "FODDDDDDDDDDDDDDDDDD",
+#'  target = Biostrings::DNAStringSet("GGCGGAGAGAGCACAGATACA")
+#' )
+#' XNAString::XNAMatchPattern(
+#' s1,
+#' "GGCGGAGAGAGCACAGATACAGGCGGAGAGAGCACAGATACA"
+#' )
+#' @return an \link{XStringViews} object for \code{matchPattern}.
 #' @export
 
-setGeneric("XNAMatchPattern", signature = c("pattern", "subject"),
+setGeneric("XNAMatchPattern",
+           signature = c("pattern", "subject"),
            function(pattern,
                     subject,
                     target.number = 1,
@@ -41,8 +55,9 @@ setGeneric("XNAMatchPattern", signature = c("pattern", "subject"),
                     min.mismatch = 0,
                     with.indels = FALSE,
                     fixed = TRUE,
-                    algorithm = "auto")
-             standardGeneric("XNAMatchPattern"))
+                    algorithm = "auto") {
+             standardGeneric("XNAMatchPattern")
+           })
 
 #' @rdname XNAMatchPattern
 setMethod("XNAMatchPattern", c("XNAString", "character"),
@@ -54,20 +69,25 @@ setMethod("XNAMatchPattern", c("XNAString", "character"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (any(nchar(as.character(pattern@target)) == 0))
+            if (any(nchar(as.character(pattern@target)) == 0)) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "DNAStringSet as a target for this algorithm"
               )
+            }
             
-            if (length(subject) > 1 || nchar(subject) == 0)
+            if (length(subject) > 1 || nchar(subject) == 0) {
               stop(
                 "subject must be a single (non-empty) ",
                 "string as a target for this algorithm. ",
                 "Please use vmatchPattern."
               )
+            }
             
-            Biostrings:::.XString.matchPattern(
+            XString.matchPattern <-
+              utils::getFromNamespace(".XString.matchPattern", "Biostrings")
+            
+            XString.matchPattern(
               as.character(pattern@target[target.number]),
               subject,
               max.mismatch,
@@ -88,20 +108,25 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0)
+            if (nchar(as.character(pattern@target[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "DNAString as a target for this algorithm"
               )
+            }
             
-            if (subject@length == 0)
+            if (subject@length == 0) {
               stop(
                 "subject must be a single (non-empty) ",
                 "string as a target for this algorithm. ",
                 "Please use vmatchPattern."
               )
+            }
             
-            Biostrings:::.XString.matchPattern(
+            XString.matchPattern <-
+              utils::getFromNamespace(".XString.matchPattern", "Biostrings")
+            
+            XString.matchPattern(
               pattern@target[[target.number]],
               subject,
               max.mismatch,
@@ -120,8 +145,8 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
 ### The XNAVmatchPattern() generic & related functions
 ### -------------------------------------------------------------------------
 
-#' This is function finding all the occurrences of a given pattern (typically short)
-#' in a (typically long) set of reference sequences.
+#' This is function finding all the occurrences of a given pattern
+#'  (typically short) in a (typically long) set of reference sequences.
 #' @importClassesFrom BSgenome BSgenome
 #' @importFrom BSgenome bsapply seqnames seqinfo
 #' @importFrom IRanges IRangesList
@@ -129,42 +154,54 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
 #' @importFrom S4Vectors runValue
 #' @importFrom GenomicRanges GRanges
 #' @include xnaStringClass.R
-#' 
+#'
 #' @param pattern XNAString object with non-empty target slot
-#' @param subject string, string vector or DNAString / DNAStringSet / chromosome from BSgenome  object
-#' @param target.number numeric - if target is a multi-element vector, 
+#' @param subject string, string vector or
+#'  DNAString / DNAStringSet / chromosome from BSgenome  object
+#' @param target.number numeric - if target is a multi-element vector,
 #' then specify which element in use. 1 is the default
-#' @param max.mismatch The maximum number of mismatching letters allowed. 
+#' @param max.mismatch The maximum number of mismatching letters allowed.
 #' If non-zero, an algorithm that supports inexact matching is used.
-#' @param min.mismatch The minimum number of mismatching letters allowed. 
+#' @param min.mismatch The minimum number of mismatching letters allowed.
 #' If non-zero, an algorithm that supports inexact matching is used.
-#' @param with.indels If TRUE then indels are allowed. In that case, 
-#' min.mismatch must be 0 and max.mismatch is interpreted as the maximum 
-#' "edit distance" allowed between the pattern and a match. Note that in order 
-#' to avoid pollution by redundant matches, only the "best local matches" are 
-#' returned. Roughly speaking, a "best local match" is a match that is locally 
-#' both the closest (to the pattern P) and the shortest. 
-#' @param fixed If TRUE (the default), an IUPAC ambiguity code in the pattern 
-#' can only match the same code in the subject, and vice versa. If FALSE, an 
-#' IUPAC ambiguity code in the pattern can match any letter in the subject that 
-#' is associated with the code, and vice versa. 
-#' @param algorithm One of the following: "auto", "naive-exact", 
+#' @param with.indels If TRUE then indels are allowed. In that case,
+#' min.mismatch must be 0 and max.mismatch is interpreted as the maximum
+#' "edit distance" allowed between the pattern and a match. Note that in order
+#' to avoid pollution by redundant matches, only the "best local matches" are
+#' returned. Roughly speaking, a "best local match" is a match that is locally
+#' both the closest (to the pattern P) and the shortest.
+#' @param fixed If TRUE (the default), an IUPAC ambiguity code in the pattern
+#' can only match the same code in the subject, and vice versa. If FALSE, an
+#' IUPAC ambiguity code in the pattern can match any letter in the subject that
+#' is associated with the code, and vice versa.
+#' @param algorithm One of the following: "auto", "naive-exact",
 #' "naive-inexact", "boyer-moore", "shift-or" or "indels".
-#' @param exclude A character vector with strings that will be used to filter 
-#' out chromosomes whose names match these strings. Needed for BSParams object 
+#' @param exclude A character vector with strings that will be used to filter
+#' out chromosomes whose names match these strings. Needed for BSParams object
 #' if subject is a chromosome object from BSgenome
-#' @param maskList A named logical vector of maskStates preferred when used with 
-#' a BSGenome object. When using the bsapply function, the masks will be set to 
+#' @param maskList A named logical vector of maskStates preferred when used with
+#' a BSGenome object. When using the bsapply function, the masks will be set to
 #' the states in this vector.
-#' @param userMask An IntegerRangesList, containing a mask to be applied to each chromosome.
+#' @param userMask An IntegerRangesList, containing a mask to be applied
+#'  to each chromosome.
 #' @param invertUserMask Whether the userMask should be inverted.
 #'
+#' @return An \link{MIndex} object for \code{vmatchPattern}.
 #' @rdname XNAVmatchPattern
 #' @name XNAVmatchPattern
-#' 
+#' @examples 
+#' s3 <-
+#' XNAString::XNAString(
+#'  base = "GCGGAGAGAGCACAGATACA",
+#'  sugar = "FODDDDDDDDDDDDDDDDDD",
+#'  target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+#' )
+#' chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
+#' result <- XNAString::XNAMatchPattern(s3, chrom)
 #' @export
 
-setGeneric("XNAVmatchPattern", signature = c("pattern", "subject"),
+setGeneric("XNAVmatchPattern",
+           signature = c("pattern", "subject"),
            function(pattern,
                     subject,
                     target.number = 1,
@@ -176,8 +213,9 @@ setGeneric("XNAVmatchPattern", signature = c("pattern", "subject"),
                     exclude = "",
                     maskList = logical(0),
                     userMask = IRanges::IRangesList(),
-                    invertUserMask = FALSE)
-           standardGeneric("XNAVmatchPattern"))
+                    invertUserMask = FALSE) {
+             standardGeneric("XNAVmatchPattern")
+           })
 
 #' @rdname XNAVmatchPattern
 setMethod("XNAVmatchPattern", c("XNAString", "character"),
@@ -189,13 +227,17 @@ setMethod("XNAVmatchPattern", c("XNAString", "character"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0)
+            if (nchar(as.character(pattern@target[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
               )
+            }
             
-            Biostrings:::.XStringSet.vmatchPattern(
+            XStringSet.vmatchPattern <-
+              utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
+            
+            XStringSet.vmatchPattern(
               as.character(pattern@target[target.number]),
               subject,
               max.mismatch,
@@ -216,13 +258,17 @@ setMethod("XNAVmatchPattern", c("XNAString", "XStringSet"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0)
+            if (nchar(as.character(pattern@target[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
               )
+            }
             
-            Biostrings:::.XStringSet.vmatchPattern(
+            XStringSet.vmatchPattern <-
+              utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
+            
+            XStringSet.vmatchPattern(
               pattern@target[[target.number]],
               subject,
               max.mismatch,
@@ -247,8 +293,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "BSgenome"),
                    exclude = "",
                    maskList = logical(0),
                    userMask = IRanges::IRangesList(),
-                   invertUserMask = FALSE)
-          {
+                   invertUserMask = FALSE) {
             matchFUN <- function(posPattern,
                                  negPattern,
                                  chr,
@@ -300,34 +345,52 @@ setMethod("XNAVmatchPattern", c("XNAString", "BSgenome"),
               )
             }
             
-            if (nchar(as.character(pattern@target[[target.number]])) == 0)
+            if (nchar(as.character(pattern@target[[target.number]])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
               )
+            }
             
             pattern <- pattern@target[[target.number]]
             
-            algorithm <- Biostrings:::normargAlgorithm(algorithm)
+            normargAlgorithm <-
+              utils::getFromNamespace("normargAlgorithm", "Biostrings")
             
-            if (Biostrings:::isCharacterAlgo(algorithm))
+            algorithm <- normargAlgorithm(algorithm)
+            
+            isCharacterAlgo <-
+              utils::getFromNamespace("isCharacterAlgo", "Biostrings")
+            
+            if (isCharacterAlgo(algorithm)) {
               stop("'subject' must be a single (non-empty) string ",
                    "for this algorithm")
+            }
             
+            normargPattern <-
+              utils::getFromNamespace("normargPattern", "Biostrings")
             pattern <-
-              Biostrings:::normargPattern(pattern, Biostrings::DNAStringSet())
+              normargPattern(pattern, Biostrings::DNAStringSet())
             
+            normargMaxMismatch <-
+              utils::getFromNamespace("normargMaxMismatch", "Biostrings")
             max.mismatch <-
-              Biostrings:::normargMaxMismatch(max.mismatch)
+              normargMaxMismatch(max.mismatch)
             
+            normargMinMismatch <-
+              utils::getFromNamespace("normargMinMismatch", "Biostrings")
             min.mismatch <-
-              Biostrings:::normargMinMismatch(min.mismatch, max.mismatch)
+              normargMinMismatch(min.mismatch, max.mismatch)
             
+            normargWithIndels <-
+              utils::getFromNamespace("normargWithIndels", "Biostrings")
             with.indels <-
-              Biostrings:::normargWithIndels(with.indels)
+              normargWithIndels(with.indels)
             
+            normargFixed <-
+              utils::getFromNamespace("normargFixed", "Biostrings")
             fixed <-
-              Biostrings:::normargFixed(fixed, Biostrings::DNAStringSet())
+              normargFixed(fixed, Biostrings::DNAStringSet())
             
             posPattern <- pattern
             

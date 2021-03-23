@@ -101,33 +101,44 @@ XNAString can read and write a HELM notation, compute alphabet frequency,
 align and match targets.
 }
 \examples{
-obj1 <- XNAString(base = 'ATCG',
-                  sugar = 'FODD',
-                  conjugate3 = 'TAG')
-obj2 <- XNAString(base = 'ATCG',
-                  sugar = 'FODD',
-                  backbone = 'SBB')
+obj1 <- XNAString(
+  base = "ATCG",
+  sugar = "FODD",
+  conjugate3 = "TAG"
+)
+obj2 <- XNAString(
+  base = "ATCG",
+  sugar = "FODD",
+  backbone = "SBB"
+)
 str(obj2)
-name(obj2) <- 'a'
-base(obj2) <- 'ATTT'
-sugar(obj2) <- 'LMFF'
-backbone(obj2) <- 'BAB'
-conjugate5(obj2) <- 'TFJSJG'
-conjugate3(obj2) <- 'ARTSS'
-my_dic <- data.table::data.table(type = c(rep('base',3),
-                                          rep('sugar',2),
-                                          rep('backbone',3)),
-                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-obj1 <- XNAString(base = 'AAE',
-                  sugar = 'FFO',
-                  backbone='SB',
-                  dictionary = my_dic)
-obj2 <- XNAString(base = c('EAA', 'AAAA'),
-                  sugar = c('FFO', 'OOOO'),
-                  name = c('a'),
-                  conjugate5 = c('TTT'),
-                  dictionary = my_dic)
-
+name(obj2) <- "a"
+base(obj2) <- "ATTT"
+sugar(obj2) <- "LMFF"
+backbone(obj2) <- "BAB"
+conjugate5(obj2) <- "TFJSJG"
+conjugate3(obj2) <- "ARTSS"
+my_dic <- data.table::data.table(
+  type = c(
+    rep("base", 3),
+    rep("sugar", 2),
+    rep("backbone", 3)
+  ),
+  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+)
+obj1 <- XNAString(
+  base = "AAE",
+  sugar = "FFO",
+  backbone = "SB",
+  dictionary = my_dic
+)
+obj2 <- XNAString(
+  base = c("EAA", "AAAA"),
+  sugar = c("FFO", "OOOO"),
+  name = c("a"),
+  conjugate5 = c("TTT"),
+  dictionary = my_dic
+)
 }
 \author{
 Anna Gorska

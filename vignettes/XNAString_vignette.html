@@ -12,7 +12,7 @@
 
 <meta name="author" content="Anna Gorska &amp; Marianna Plucinska" />
 
-<meta name="date" content="2021-02-17" />
+<meta name="date" content="2021-03-23" />
 
 <title>XNAString_vignette</title>
 
@@ -32,15 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -131,7 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
-
 
 
 
@@ -330,7 +320,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">XNAString_vignette</h1>
 <h3 class="subtitle">Methods overview and classes description</h3>
 <h4 class="author">Anna Gorska &amp; Marianna Plucinska</h4>
-<h4 class="date">2021-02-17</h4>
+<h4 class="date">2021-03-23</h4>
 
 
 <div id="TOC">
@@ -987,11 +977,11 @@ Validation procedure checks if all objects are of XNAString class.</code></pre>
 </div>
 <div id="example-4---public-slots-getter-and-setter" class="section level3">
 <h3><span class="header-section-number">4.2.4</span> Example 4 - public slots getter and setter</h3>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">base</span>(XNAStringSet_siRNA)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ATCG&quot; &quot;GGCG&quot;</code></pre>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;TAGC&quot; &quot;TATC&quot;</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">base</span>(XNAStringSet_siRNA) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;CTGA&#39;</span>, <span class="st">&#39;CCCC&#39;</span>)</span>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">1</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;CTGA&#39;</span>, <span class="st">&#39;CCCC&#39;</span>)</span>
 <span id="cb63-2"><a href="#cb63-2"></a><span class="kw">base</span>(XNAStringSet_siRNA, <span class="dv">2</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;TTTT&#39;</span>, <span class="st">&#39;TTTT&#39;</span>)</span>
 <span id="cb63-3"><a href="#cb63-3"></a>XNAStringSet_siRNA</span></code></pre></div>
 <pre><code>## XNAStringSet object

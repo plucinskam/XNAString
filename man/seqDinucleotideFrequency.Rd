@@ -25,7 +25,5 @@ base, sugar and backbone slots
 }
 \examples{
 seqDinucleotideFrequency(c("AB", "BA", "CD"), "ABABAB", as.prob = FALSE)
-          seqDinucleotideFrequency(c("GC", "CG", "CC"), "GCCG", as.prob = FALSE)
-
-
+seqDinucleotideFrequency(c("GC", "CG", "CC"), "GCCG", as.prob = FALSE)
 }

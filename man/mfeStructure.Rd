@@ -17,12 +17,18 @@ predictMfeStructure(obj, ...)
 
 \item{...}{optional arguments to generic function to support additional methods}
 }
+\value{
+character, secondary structure in dot-bracket notation
+}
 \description{
 This function is a wrapper for RNAfold from ViennaRNA package.
 }
 \examples{
- obj1 <- XNAString(base = 'ATCG',
-                   sugar = 'FODD',
-                   conjugate3 = 'TAG')
- predictMfeStructure(obj1) 
+obj1 <- XNAString(
+  base = "ATCG",
+  sugar = "FODD",
+  conjugate3 = "TAG"
+)
+predictMfeStructure(obj1)
+
 }

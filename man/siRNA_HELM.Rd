@@ -18,11 +18,12 @@ siRNA_HELM function takes XNAString object and returns pairing information
 for base slot. Works only for double stranded molecules.
 }
 \examples{
- obj1 <- XNAString(base =  c("CCCCUGCCGUGGUUCAUAA", "UUAUGAACCACGGCAGGGGCG"), 
-                   sugar = c("OOFOFOFOFOFOFOFOFOF", "FFOFOFOFOFOFOFOFOFOFO"),
-                   backbone = c("OOOOOOOOOOOOOOOOOO", "OOOOOOOOOOOOOOOOOOOO"),
-                   conjugate3 = c(''))
-                   
- siRNA_HELM(obj1)
- 
+obj1 <- XNAString(
+  base = c("CCCCUGCCGUGGUUCAUAA", "UUAUGAACCACGGCAGGGGCG"),
+  sugar = c("OOFOFOFOFOFOFOFOFOF", "FFOFOFOFOFOFOFOFOFOFO"),
+  backbone = c("OOOOOOOOOOOOOOOOOO", "OOOOOOOOOOOOOOOOOOOO"),
+  conjugate3 = c("")
+)
+
+siRNA_HELM(obj1)
 }

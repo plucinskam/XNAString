@@ -25,8 +25,10 @@ list (structure and mfe)
 This function is a wrapper for RNAcofold from ViennaRNA package.
 }
 \examples{
- obj1 <- XNAString(base = 'ATCG',
-                   sugar = 'FODD',
-                   conjugate3 = 'TAG')
- predictDuplexStructure(obj1) 
+obj1 <- XNAString(
+  base = "ATCG",
+  sugar = "FODD",
+  conjugate3 = "TAG"
+)
+predictDuplexStructure(obj1)
 }
