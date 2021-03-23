@@ -76,7 +76,7 @@ vrna_constraints_add_SHAPE(vrna_fold_compound_t *vc,
 
   sequence  = vrna_alloc(sizeof(char) * (length + 1));
   values    = vrna_alloc(sizeof(double) * (length + 1));
-  vrna_file_SHAPE_read(shape_file, length, method == 'W' ? 0 : -1, sequence, values);
+  //vrna_file_SHAPE_read(shape_file, length, method == 'W' ? 0 : -1, sequence, values);
 
   if (method == 'D') {
     (void)vrna_sc_add_SHAPE_deigan(vc, (const double *)values, p1, p2, constraint_type);
