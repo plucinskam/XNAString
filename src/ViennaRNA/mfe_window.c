@@ -1,4 +1,5 @@
- /*                minimum free energy
+/*
+ *                minimum free energy
  *                RNA secondary structure prediction
  *                with sliding window approach
  *
@@ -197,7 +198,7 @@ vrna_mfe_window(vrna_fold_compound_t  *vc,
 {
   hit_data data;
 
-  data.output       = (file) ? file : file;
+  data.output       = (file) ? file : stdout;
   data.dangle_model = vc->params->model_details.dangles;
   data.csv          = 0; /* csv output is for backward-compatibility only */
 
@@ -258,7 +259,7 @@ vrna_mfe_window_zscore(vrna_fold_compound_t *vc,
 {
   hit_data data;
 
-  data.output       = (file) ? file : file;
+  data.output       = (file) ? file : stdout;
   data.dangle_model = vc->params->model_details.dangles;
 
   return vrna_mfe_window_zscore_cb(vc, min_z, &default_callback_z, (void *)&data);

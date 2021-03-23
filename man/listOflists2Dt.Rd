@@ -16,9 +16,8 @@ data.table
 Save list of lists as data.table
 }
 \examples{
-nested_list <- list(
-  list(base = c("T"), sugar = c("G")),
-  list(base = c("U"), sugar = c("G"))
-)
+nested_list <- list(list(base = c('T'), sugar = c('G')), 
+                    list(base = c('U'), sugar = c('G')))
 listOflists2Dt(nested_list)
+
 }

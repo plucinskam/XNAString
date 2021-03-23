@@ -44,34 +44,25 @@ Method to extract a single row (either by row index or by 'name' slot)
 XNAString object is returned.
 }
 \examples{
-my_dic <- data.table::data.table(
-  type = c(
-    rep("base", 3),
-    rep("sugar", 2),
-    rep("backbone", 3)
-  ),
-  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
-)
-obj1 <- XNAString(
-  name = "a",
-  base = "GGE",
-  sugar = "FFO",
-  backbone = "SB",
-  dictionary = my_dic
-)
-obj2 <- XNAString(
-  name = "b",
-  base = "GGE",
-  sugar = "FFO",
-  dictionary = my_dic
-)
-obj3 <- XNAString(
-  name = "b",
-  base = c("GGE", "EEE"),
-  sugar = c("FFO", "OOO"),
-  dictionary = my_dic
-)
-XNAStringSetObj <- XNAStringSet(objects = list(obj1, obj2, obj3))
+my_dic <- data.table::data.table(type = c(rep('base',3),
+                                          rep('sugar',2),
+                                          rep('backbone',3)),
+                               symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
+obj1 <- XNAString(name = 'a',
+                  base = 'GGE',
+                  sugar = 'FFO',
+                  backbone ='SB',
+                  dictionary = my_dic)
+obj2 <- XNAString(name = 'b',
+                  base = 'GGE',
+                  sugar = 'FFO',
+                  dictionary = my_dic)
+obj3 <- XNAString(name = 'b',
+                  base = c('GGE','EEE'),
+                  sugar = c('FFO', 'OOO'),
+                  dictionary = my_dic)
+XNAStringSetObj <- XNAStringSet(objects=list(obj1, obj2, obj3))
+
 }
 \author{
 Anna Gorska

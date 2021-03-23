@@ -83,12 +83,20 @@ vrna_file_helixlist(const char *seq,
   FILE *out;
 
   if(strlen(seq) != strlen(db)) {
+    vrna_message_warning("vrna_file_helixlist: "
+                         "sequence and structure have unequal length (%d vs. %d)!",
+                         strlen(seq),
+                         strlen(db));
     return;
   }
-  out   = (file) ? file : file;
+  out   = (file) ? file : stdout;
   pt    = vrna_ptable(db);
   list  = vrna_hx_from_ptable(pt);
 
+  fprintf(out, "%s\t%6.2f\n", seq, energy);
+  for(s = 0; list[s].length > 0; s++){
+    fprintf(out, "%d\t%d\t%d\n", list[s].start, list[s].end, list[s].length);
+  }
 
   free(pt);
   free(list);
@@ -102,9 +110,13 @@ vrna_file_connect(const char *seq,
                   FILE *file){
 
   int i, power_d;
-  FILE *out = (file) ? file : file;
+  FILE *out = (file) ? file : stdout;
 
   if(strlen(seq) != strlen(db)) {
+    vrna_message_warning("vrna_file_connect: "
+                         "sequence and structure have unequal length (%d vs. %d)!",
+                         strlen(seq),
+                         strlen(db));
     return;
   }
 
@@ -128,6 +140,30 @@ vrna_file_connect(const char *seq,
     6. Natural numbering.
   */
 
+  /* print header */
+  fprintf(out, "%d  ENERGY = %6.2f", (int)strlen(seq), energy);
+  if(identifier)
+    fprintf(out, "  %s\n", identifier);
+
+  /* print structure information except for last line */
+  /* TODO: modify the structure information for cofold */
+  for(i = 0; i < strlen(seq) - 1; i++){
+    fprintf(out, "%*d %c %*d %*d %*d %*d\n",
+                  power_d, i+1,           /* nucleotide index */
+                  (char)toupper(seq[i]),  /* nucleotide char */
+                  power_d, i,             /* nucleotide predecessor index */
+                  power_d, i+2,           /* nucleotide successor index */
+                  power_d, pt[i+1],       /* pairing partner index */
+                  power_d, i+1);          /* nucleotide natural numbering */
+  }
+  /* print last line */
+  fprintf(out, "%*d %c %*d %*d %*d %*d\n",
+                power_d, i+1,
+                (char)toupper(seq[i]),
+                power_d, i,
+                power_d, 0,
+                power_d, pt[i+1],
+                power_d, i+1);
 
   /* clean up */
   free(pt);
@@ -140,13 +176,21 @@ vrna_file_bpseq(const char *seq,
                 FILE *file){
 
   int i;
-  FILE *out = (file) ? file : file;
+  FILE *out = (file) ? file : stdout;
 
   if(strlen(seq) != strlen(db)) {
+    vrna_message_warning("vrna_file_bpseq: "
+                         "sequence and structure have unequal length (%d vs. %d)!",
+                         strlen(seq),
+                         strlen(db));
     return;
   }
 
   short *pt = vrna_ptable(db);
+
+  for(i = 1; i <= pt[0]; i++){
+    fprintf(out, "%d %c %d\n", i, (char)toupper(seq[i-1]), pt[i]);
+  }
 
   /* clean up */
   free(pt);
@@ -162,7 +206,7 @@ vrna_file_json( const char *seq,
                 const char *identifier,
                 FILE *file){
 
-  FILE *out = (file) ? file : file;
+  FILE *out = (file) ? file : stdout;
 
   JsonNode *data  = json_mkobject();
   JsonNode *value;
@@ -181,6 +225,8 @@ vrna_file_json( const char *seq,
   value = json_mkstring(db);
   json_append_member(data, "structure", value);
 
+  
+  fprintf(out, "%s\n", json_stringify(data, "\t"));
 
   fflush(out);
 }
@@ -196,7 +242,7 @@ read_multiple_input_lines(char **string,
   int   i, l;
   int   state = 0;
   int   str_length = 0;
-  FILE  *in = (file) ? file : file;
+  FILE  *in = (file) ? file : stdin;
 
   line = (inbuf2) ? inbuf2 : vrna_read_line(in);
   inbuf2 = NULL;
@@ -379,6 +425,8 @@ vrna_file_fasta_read_record( char **header,
     *sequence     = input_string;
     input_string  = NULL;
   } else {
+    vrna_message_warning("vrna_file_fasta_read_record: "
+                         "sequence input missing!");
     return VRNA_INPUT_ERROR;
   }
 
@@ -469,6 +517,7 @@ vrna_file_SHAPE_read( const char *file_name,
     return 0;
 
   if(!(fp = fopen(file_name, "r"))){
+    vrna_message_warning("SHAPE data file could not be opened");
     return 0;
   }
 
@@ -496,6 +545,7 @@ vrna_file_SHAPE_read( const char *file_name,
 
     if(position <= 0 || position > length)
     {
+      vrna_message_warning("Provided SHAPE data outside of sequence scope");
       fclose(fp);
       free(line);
       return 0;
@@ -531,6 +581,7 @@ vrna_file_SHAPE_read( const char *file_name,
 
   if(!count)
   {
+      vrna_message_warning("SHAPE data file is empty");
       return 0;
   }
 

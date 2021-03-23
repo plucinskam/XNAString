@@ -137,6 +137,7 @@ evaluate_perturbation_vector_score(vrna_fold_compound_t *vc,
                                                        objective_function) / sigma_squared;
   }
 
+  vrna_message_info(stderr, "Score: pertubation: %g\tdiscrepancy: %g", ret, ret2);
   free(p_prob_unpaired);
 
   return ret + ret2;

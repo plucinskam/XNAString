@@ -18,5 +18,6 @@ logical information. TRUE if \code{object} class equals \code{type}
 Check on an object type
 }
 \examples{
-instanceOf(1, "numeric")
+instanceOf(1, 'numeric')
+
 }

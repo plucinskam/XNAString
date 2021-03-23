@@ -849,6 +849,10 @@ alifind_max(const int   *position,
         max_pos_j = position_j[pos + delta];
         int max;
         max = position[pos + delta];
+        printf("target upper bound %d: query lower bound %d  (%5.2f) \n",
+               pos - 10,
+               max_pos_j - 10,
+               ((double)max) / (n_seq * 100));
         pos = MAX2(10, pos + temp_min - delta);
       }
     }
@@ -889,6 +893,11 @@ alifind_max(const int   *position,
         /* printf("test %d threshold %d",test.energy*100,(threshold/n_seq)); */
         if (test.energy * 100 < (int)(threshold / n_seq)) {
           int l1 = strchr(test.structure, '&') - test.structure;
+          printf("%s %3d,%-3d : %3d,%-3d (%5.2f)\n", test.structure,
+                 begin_t - 10 + test.i - l1,
+                 begin_t - 10 + test.i - 1,
+                 begin_q - 10 + test.j - 1,
+                 begin_q - 11 + test.j + (int)strlen(test.structure) - l1 - 2, test.energy);
           pos = MAX2(10, pos + temp_min - delta);
         }
 
@@ -921,6 +930,8 @@ aliplot_max(const int   max,
   n1  = strlen(s1[0]);  /* get length of alignment */
   n2  = strlen(s2[0]);  /* get length of alignment */
   if (fast == 1) {
+    printf("target upper bound %d: query lower bound %d (%5.2f)\n",
+           max_pos - 10, max_pos_j - 10, (double)((double)max) / (100 * n_seq));
   } else {
     int   begin_t = MAX2(11, max_pos - alignment_length + 1);
     int   end_t = MIN2(n1 - 10, max_pos + 1);
@@ -942,6 +953,13 @@ aliplot_max(const int   max,
     s3[n_seq] = s4[n_seq] = NULL;
     test      = aliduplexfold((const char **)s3, (const char **)s4, extension_cost);
     int     l1 = strchr(test.structure, '&') - test.structure;
+    printf("%s %3d,%-3d : %3d,%-3d (%5.2f)\n",
+           test.structure,
+           begin_t - 10 + test.i - l1,
+           begin_t - 10 + test.i - 1,
+           begin_q - 10 + test.j - 1,
+           begin_q - 11 + test.j + (int)strlen(test.structure) - l1 - 2,
+           test.energy);
     for (i = 0; i < n_seq; i++) {
       free(s3[i]);
       free(s4[i]);
@@ -1728,6 +1746,16 @@ alifind_max_XS(const int  *position,
                                 j_flag);
         /*         printf("position %d approximation %d test %d threshold %d\n", pos, position[pos+delta], (int)test.energy,(int)(threshold/n_seq)); */
         if (test.energy * 100 < (int)(threshold / n_seq)) {
+          printf("%s %3d,%-3d: %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f)\n",
+                 test.structure,
+                 test.tb,
+                 test.te,
+                 test.qb,
+                 test.qe,
+                 test.ddG / n_seq,
+                 test.energy / n_seq,
+                 test.dG1 / n_seq,
+                 test.dG2 / n_seq);
           free(test.structure);
           pos = MAX2(10, pos + temp_min - delta);
         }
@@ -1763,6 +1791,8 @@ aliplot_max_XS(const int  max,
   n2  = strlen(s2[0]);  /* get length of alignme */
 
   if (fast) {
+    printf("target upper bound %d: query lower bound %d (%5.2f)\n",
+           max_pos - 10, max_pos_j - 10, (double)((double)max) / (100 * n_seq));
   } else {
     int   begin_t = MAX2(11, max_pos - alignment_length); /* only get the position that binds.. */
     int   end_t   = MIN2(n1 - 10, max_pos + 1);           /* ..no dangles */
@@ -1794,7 +1824,16 @@ aliplot_max_XS(const int  max,
                             INF,
                             i_flag,
                             j_flag);
-
+    printf("%s %3d,%-3d: %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f)\n",
+           test.structure,
+           test.tb,
+           test.te,
+           test.qb,
+           test.qe,
+           test.ddG / n_seq,
+           test.energy / n_seq,
+           test.dG1 / n_seq,
+           test.dG2 / n_seq);
     free(test.structure);
     for (i = 0; i < n_seq; i++) {
       free(s3[i]);

@@ -20,10 +20,8 @@ XNAStringToHelmFun function takes XNAString object and translates
 base, sugar and backbone to HELM notation
 }
 \examples{
-obj <- XNAString(
-  base = "AAA",
-  sugar = "DDD",
-  backbone = "OO"
-)
-XNAStringToHelm(obj)
+ obj <- XNAString(base = 'AAA',
+                  sugar = 'DDD',
+                  backbone = 'OO')
+ XNAStringToHelm(obj)
 }

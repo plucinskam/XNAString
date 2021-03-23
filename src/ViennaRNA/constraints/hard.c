@@ -127,6 +127,22 @@ vrna_message_constraint_options_all(void)
 PUBLIC void
 vrna_message_constraint_options(unsigned int option)
 {
+  printf("Input structure constraints using the following notation:\n");
+  if (option & VRNA_CONSTRAINT_DB_PIPE)
+    printf("| : paired with another base\n");
+
+  if (option & VRNA_CONSTRAINT_DB_DOT)
+    printf(". : no constraint at all\n");
+
+  if (option & VRNA_CONSTRAINT_DB_X)
+    printf("x : base must not pair\n");
+
+  if (option & VRNA_CONSTRAINT_DB_ANG_BRACK)
+    printf("< : base i is paired downstream with a base i < j\n"
+           "> : base i is paired upstream with a base j < i\n");
+
+  if (option & VRNA_CONSTRAINT_DB_RND_BRACK)
+    printf("matching brackets ( ): base i pairs base j\n");
 }
 
 

@@ -23,4 +23,5 @@ seqVectorDinucleotideFrequency function calculates frequency for strings vector
 }
 \examples{
 seqVectorDinucleotideFrequency(c("AB", "BA", "CD"), c("ABABAB", "ABABCD"), as.prob = FALSE)
+
 }

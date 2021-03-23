@@ -68,22 +68,7 @@ is associated with the code, and vice versa.}
 \item{algorithm}{One of the following: "auto", "naive-exact",
 "naive-inexact", "boyer-moore", "shift-or" or "indels".}
 }
-\value{
-an \link{XStringViews} object for \code{matchPattern}.
-}
 \description{
-This is function finding all the occurrences of a given pattern
-(typically short) in a (typically long) reference sequence
-}
-\examples{
-s1 <-
-XNAString::XNAString(
- base = Biostrings::DNAString("GCGGAGAGAGCACAGATACA"),
- sugar = "FODDDDDDDDDDDDDDDDDD",
- target = Biostrings::DNAStringSet("GGCGGAGAGAGCACAGATACA")
-)
-XNAString::XNAMatchPattern(
-s1,
-"GGCGGAGAGAGCACAGATACAGGCGGAGAGAGCACAGATACA"
-)
+This is function finding all the occurrences of a given pattern (typically short)
+in a (typically long) reference sequence
 }

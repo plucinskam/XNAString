@@ -77,6 +77,7 @@ dinucleotide frequency for the first elements in the slot is returned.
 Double letters can be given as argument, otherwise unique double letters in
 object's dictionary are in use.
 }
+
 \examples{
   my_dic <-
 data.table::data.table(

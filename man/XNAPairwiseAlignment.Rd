@@ -24,8 +24,7 @@ XNAPairwiseAlignment(pattern, subject, ...)
 \item{subject}{a character vector of length 1, an XString, or an XStringSet
 object of length 1.}
 
-\item{...}{optional arguments to generic function to support
-additional methods}
+\item{...}{optional arguments to generic function to support additional methods}
 
 \item{type}{type of alignment. One of "global", "local", "overlap",
 "global-local", and "local-global" where "global" = align whole strings
@@ -51,30 +50,7 @@ gap in the alignment.}
 \item{scoreOnly}{logical to denote whether or not to return just the scores
 of the optimal pairwise alignment.}
 }
-\value{
-an instance of class \code{\link{PairwiseAlignments}}
-}
 \description{
 This function performs pairwise alignment for sequences stored in target slot
 of XNAString object with subject
-}
-\examples{
-mat <-
- Biostrings::nucleotideSubstitutionMatrix(
-   match = 1,
-   mismatch = -3,
-   baseOnly = TRUE
-)
-s1 <-
-  XNAString::XNAString(
-    base = "GCGGAGAGAGCACAGATACA",
-    sugar = "FODDDDDDDDDDDDDDDDDD",
-    target = Biostrings::DNAStringSet("GGCGGAGAGAGCACAGATACA")
-  )
-  
-  XNAString::XNAPairwiseAlignment(s1,
-                                  "ACCCACACACACACACACACAC",
-                                  "global",
-                                  substitutionMatrix = mat
-  )
 }

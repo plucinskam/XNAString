@@ -32,10 +32,9 @@ Concatenate HELM-symbol custom dictionary with built-in HELM-symbol
 dictionary (xna_dictionary)
 }
 \examples{
-my_dict <- data.table::data.table(
-  HELM = c("[[B]]"),
-  type = c("base"),
-  symbol = c("B")
-)
+my_dict <- data.table::data.table(HELM = c('[[B]]'),
+                                  type = c('base'),
+                                  symbol = c('B'))
 concatDict(my_dict)
+
 }

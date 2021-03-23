@@ -221,6 +221,18 @@ duplexfold_XS(const char  *s1,
 
       /* output: */
       if (PlexHits[NumberOfHits].energy * 100 < threshold) {
+        if (verbose) {
+          printf("%s %3d,%-3d : %3d,%-3d (%5.2f = %5.2f + %5.2f + %5.2f)\n",
+                 PlexHits[NumberOfHits].structure,
+                 PlexHits[NumberOfHits].tb,
+                 PlexHits[NumberOfHits].te,
+                 PlexHits[NumberOfHits].qb,
+                 PlexHits[NumberOfHits].qe,
+                 PlexHits[NumberOfHits].ddG,
+                 PlexHits[NumberOfHits].energy,
+                 PlexHits[NumberOfHits].dG1,
+                 PlexHits[NumberOfHits].dG2);
+        }
 
         NumberOfHits++;
         if (NumberOfHits == PlexHitsArrayLength - 1) {
