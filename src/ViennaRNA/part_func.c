@@ -83,7 +83,6 @@ vrna_pf(vrna_fold_compound_t  *fc,
   if (fc) {
     /* make sure, everything is set up properly to start partition function computations */
     if (!vrna_fold_compound_prepare(fc, VRNA_OPTION_PF)) {
-      vrna_message_warning("vrna_pf@part_func.c: Failed to prepare vrna_fold_compound");
       return free_energy;
     }
 
@@ -262,7 +261,6 @@ vrna_pf_dimer(vrna_fold_compound_t  *fc,
   free_energy = (-log(Q) - n * log(params->pf_scale)) * params->kT / 1000.0;
   /* in case we abort because of floating point errors */
   if (n > 1600)
-    vrna_message_info(stderr, "free energy = %8.2f", free_energy);
 
   /* probability of molecules being bound together */
 

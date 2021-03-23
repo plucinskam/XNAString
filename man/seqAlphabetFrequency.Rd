@@ -24,7 +24,5 @@ Create set of functions and methods to calculate alphabet frequency in
 base, sugar and backbone slots
 }
 \examples{
-seqAlphabetFrequency(c('A', 'B', 'C'), c('AABA'), as.prob=FALSE)
-
-
+seqAlphabetFrequency(c("A", "B", "C"), c("AABA"), as.prob = FALSE)
 }

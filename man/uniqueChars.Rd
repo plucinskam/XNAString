@@ -16,7 +16,6 @@ A list of vectors with unique characters found in \code{x} string
 Utility functions useful when programming and developing XNAString class
 }
 \examples{
-uniqueChars('TRGFFTR')
-uniqueChars(c('TRGFFTR', 'AATGRC'))
-
+uniqueChars("TRGFFTR")
+uniqueChars(c("TRGFFTR", "AATGRC"))
 }

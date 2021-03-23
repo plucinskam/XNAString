@@ -437,9 +437,9 @@ set2Dt(XNAStringSet_obj, slots =c('name', 'base', 'sugar', 'backbone', 'target',
 ### Example 4 - public slots getter and setter
 ```{r, include=TRUE, echo=TRUE}
 
-base(XNAStringSet_siRNA)
+base(XNAStringSet_siRNA, 1)
 base(XNAStringSet_siRNA, 2)
-base(XNAStringSet_siRNA) <- c('CTGA', 'CCCC')
+base(XNAStringSet_siRNA, 1) <- c('CTGA', 'CCCC')
 base(XNAStringSet_siRNA, 2) <- c('TTTT', 'TTTT')
 XNAStringSet_siRNA
 ```

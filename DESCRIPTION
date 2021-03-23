@@ -1,7 +1,7 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version:  0.99.4
-Authors@R:c(person(given = "Anna",
+Version: 0.99.6
+Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut",
                   email = "anna.gorska@contractors.roche.com"),
@@ -25,7 +25,16 @@ Authors@R:c(person(given = "Anna",
                    family = "Hagedorn",
                    role = "aut"))
 Date: 17.02.2020
-Description: Package for efficient manipulation of modified oligonucleotide sequences.
+Description: The XNAString package allows for description of base sequences and 
+    associated chemical modifications in a single object. XNAString is able to 
+    capture single stranded, as well as double stranded molecules. Chemical 
+    modifications are represented as independent strings associated with different 
+    features of the molecules (base sequence, sugar sequence, backbone sequence,
+    modifications) and can be read or written to a HELM notation. It also enables
+    secondary structure prediction using RNAfold from ViennaRNA. XNAString is 
+    designed to be efficient representation of nucleic-acid based therapeutics, 
+    therefore it stores information about target sequences and provides interface
+    for matching and alignment functions from Biostrings package. 
 biocViews: SequenceMatching, Alignment, Sequencing, Genetics
 Depends: R (>= 4.0)
 Imports:
@@ -41,8 +50,7 @@ Imports:
     future.apply,
     stringr,
     formattable,
-    stats,
-    testthat
+    stats
 Suggests:
     BSgenome.Hsapiens.UCSC.hg38,
     pander,

@@ -7,10 +7,9 @@
 #' @return logical information. TRUE if \code{object} class equals \code{type}
 #'
 #' @examples
-#' instanceOf(1, 'numeric')
-#'
+#' instanceOf(1, "numeric")
 #' @export
-instanceOf = function(object, type) {
+instanceOf <- function(object, type) {
   class(object)[[1]] == type
 }
 
@@ -27,22 +26,29 @@ instanceOf = function(object, type) {
 #'
 #' @export
 #'
-#' @examples 
-#' my_dic <- data.table::data.table(type = c(rep('base',3),
-#'                                           rep('sugar',2),
-#'                                           rep('backbone',3)),
-#'                                symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-#' obj2 <- XNAString(name = 'b',
-#'                   base = 'GGE',
-#'                   sugar = 'FFO',
-#'                   dictionary = my_dic)
-#' obj3 <- XNAString(name = 'b',
-#'                   base = c('GGE','EEE'),
-#'                   sugar = c('FFO', 'OOO'),
-#'                   dictionary = my_dic)
-#' XNAStringSetObj <- XNAStringSet(objects=list(obj2, obj3))
+#' @examples
+#' my_dic <- data.table::data.table(
+#'   type = c(
+#'     rep("base", 3),
+#'     rep("sugar", 2),
+#'     rep("backbone", 3)
+#'   ),
+#'   symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+#' )
+#' obj2 <- XNAString(
+#'   name = "b",
+#'   base = "GGE",
+#'   sugar = "FFO",
+#'   dictionary = my_dic
+#' )
+#' obj3 <- XNAString(
+#'   name = "b",
+#'   base = c("GGE", "EEE"),
+#'   sugar = c("FFO", "OOO"),
+#'   dictionary = my_dic
+#' )
+#' XNAStringSetObj <- XNAStringSet(objects = list(obj2, obj3))
 #' typedListCheck(XNAStringSetObj)
-#' 
 typedListCheck <- function(object) {
   errors <- character()
   is_correct_object_type <- vector()
@@ -52,7 +58,7 @@ typedListCheck <- function(object) {
   
   for (i in seq_len(length(object@objects))) {
     obj <- object@objects[[i]]
-    is_correct_object_type[[i]] <- instanceOf(obj, 'XNAString')
+    is_correct_object_type[[i]] <- instanceOf(obj, "XNAString")
     # check if the 1st dictionary equals to all the rest
     equal_dict[[i]] <-
       all.equal(
@@ -75,10 +81,11 @@ typedListCheck <- function(object) {
     errors <- c(errors, msg)
   }
   
-  if (length(errors) == 0)
+  if (length(errors) == 0) {
     TRUE
-  else
+  } else {
     errors
+  }
 }
 
 
@@ -94,9 +101,8 @@ typedListCheck <- function(object) {
 #' @return A list of vectors with unique characters found in \code{x} string
 #'
 #' @examples
-#' uniqueChars('TRGFFTR')
-#' uniqueChars(c('TRGFFTR', 'AATGRC'))
-#'
+#' uniqueChars("TRGFFTR")
+#' uniqueChars(c("TRGFFTR", "AATGRC"))
 #' @export
 uniqueChars <- function(x) {
   stopifnot(is.character(x))
@@ -106,18 +112,19 @@ uniqueChars <- function(x) {
 }
 
 
-#' 
+#'
 #' Save list of lists as data.table
-#' 
+#'
 #' @param list_of_lists list of lists that will be saved as data.table.
 #'
 #' @return data.table
 #'
 #' @examples
-#' nested_list <- list(list(base = c('T'), sugar = c('G')), 
-#'                     list(base = c('U'), sugar = c('G')))
+#' nested_list <- list(
+#'   list(base = c("T"), sugar = c("G")),
+#'   list(base = c("U"), sugar = c("G"))
+#' )
 #' listOflists2Dt(nested_list)
-#'
 #' @export
 #'
 listOflists2Dt <- function(list_of_lists) {
@@ -132,9 +139,9 @@ listOflists2Dt <- function(list_of_lists) {
 
 
 
-#' 
+#'
 #' Function which checks if XNAString object satisfies predefined slots length
-#' 
+#'
 #' @param xnastring_obj XNAString object
 #' @param cond_base allowed base elements in object
 #' @param cond_sugar allowed sugar elements in object
@@ -147,30 +154,32 @@ listOflists2Dt <- function(list_of_lists) {
 #' @return logical
 #'
 #' @examples
-#' obj <- XNAString(base = c('EAA', 'AAA'), 
-#'                  sugar = c('FFO', 'OOO'), 
-#'                  name = c('a'), 
-#'                  conjugate5 = c('TTT'))
-#' xnastringElementsNumber(obj, 
-#'                         cond_name = '==1', 
-#'                         cond_base = '%in% c(1,2)', 
-#'                         cond_sugar = '%in% c(1,2)', 
-#'                         cond_backbone = '%in% c(1,2)',
-#'                         cond_target = '>0', 
-#'                         cond_conj5 = '==1', 
-#'                         cond_conj = '==1')
-#'
+#' obj <- XNAString(
+#'   base = c("EAA", "AAA"),
+#'   sugar = c("FFO", "OOO"),
+#'   name = c("a"),
+#'   conjugate5 = c("TTT")
+#' )
+#' xnastringElementsNumber(obj,
+#'   cond_name = "==1",
+#'   cond_base = "%in% c(1,2)",
+#'   cond_sugar = "%in% c(1,2)",
+#'   cond_backbone = "%in% c(1,2)",
+#'   cond_target = ">0",
+#'   cond_conj5 = "==1",
+#'   cond_conj = "==1"
+#' )
 #' @export
 #'
 xnastringElementsNumber <-
   function(xnastring_obj,
-           cond_name = '==1',
+           cond_name = "==1",
            cond_base,
            cond_sugar,
            cond_backbone,
-           cond_target = '>0',
-           cond_conj5 = '==1',
-           cond_conj3 = '==1') {
+           cond_target = ">0",
+           cond_conj5 = "==1",
+           cond_conj3 = "==1") {
     res <- FALSE
     
     if (eval(parse(
@@ -201,41 +210,44 @@ xnastringElementsNumber <-
 
 
 
-#' 
-#' Concatenate HELM-symbol custom dictionary with built-in HELM-symbol 
+#'
+#' Concatenate HELM-symbol custom dictionary with built-in HELM-symbol
 #' dictionary (xna_dictionary)
-#' 
+#'
 #' @param custom_dict custom HELM-symbol dictionary
 #' @param default_dict built-in HELM-symbol dictionary (xna_dictionary)
 #' @param helm_colname helm column name in custom dictionary
 #' @param type_colname type column name in custom dictionary
 #' @param symbol_colname symbol column name in custom dictionary
-#' 
-#' @return data.table 
+#'
+#' @return data.table
 #'
 #' @examples
-#' my_dict <- data.table::data.table(HELM = c('[[B]]'),
-#'                                   type = c('base'),
-#'                                   symbol = c('B'))
+#' my_dict <- data.table::data.table(
+#'   HELM = c("[[B]]"),
+#'   type = c("base"),
+#'   symbol = c("B")
+#' )
 #' concatDict(my_dict)
-#'
 #' @export
 #'
 concatDict <- function(custom_dict,
-                        default_dict = xna_dictionary,
-                        helm_colname = "HELM",
-                        type_colname = "type",
-                        symbol_colname = "symbol") {
-  all(c(helm_colname, type_colname, symbol_colname) %in% colnames(custom_dict)) ||
-    stop("HELM, type and symbol columns are required in custom HELM-symbol dictionary")
+                       default_dict = xna_dictionary,
+                       helm_colname = "HELM",
+                       type_colname = "type",
+                       symbol_colname = "symbol") {
+  all(
+    c(helm_colname, type_colname, symbol_colname) %in% colnames(custom_dict)) ||
+    stop("HELM, type and symbol columns are
+         required in custom HELM-symbol dictionary")
   
   dict <- rbind(custom_dict,
                 xna_dictionary)
   
-  !(any(duplicated(dict[,c('type', 'symbol')]))) || 
+  ! (any(duplicated(dict[, c("type", "symbol")]))) ||
     stop("There is at least one duplicated symbol for the same type.")
   
-  !(any(duplicated(dict[,c('type', 'HELM')]))) || 
+  ! (any(duplicated(dict[, c("type", "HELM")]))) ||
     stop("There is at least one duplicated HELM for the same type.")
   
   return(dict)
@@ -245,35 +257,32 @@ concatDict <- function(custom_dict,
 
 
 
-#' 
+#'
 #' Translate base slot based on complementary bases dictionary.
 #' Base sequence in transformed using compl_target column.
-#' 
+#'
 #' @param compl_dict complementary bases dictionary
 #' @param bases string, one or two-elements vector
-#' @return string 
+#' @return string
 #'
 changeBase <- function(compl_dict, bases) {
   all(c("base", "target", "compl_target") %in% colnames(compl_dict)) ||
-    stop("Complementary bases dictionary must include base, target and compl_target columns")
+    stop("Complementary bases dictionary must include base,
+         target and compl_target columns")
   
   if (all(unlist(strsplit(bases, "")) %in% compl_dict$base) &
       !any(is.na(compl_dict$compl_target)) &
-      !any(compl_dict$compl_target == '')) {
-    complement <- sapply(bases, function(base) {
+      !any(compl_dict$compl_target == "")) {
+    complement <- vapply(bases, function(base) {
       chartr(
-        paste(compl_dict$base, collapse = ''),
-        paste(compl_dict$compl_target, collapse = ''),
+        paste(compl_dict$base, collapse = ""),
+        paste(compl_dict$compl_target, collapse = ""),
         base
       )
     })
-    
   } else {
-    complement <- ''
+    complement <- ""
   }
   
   return(unname(complement))
 }
-
-
-

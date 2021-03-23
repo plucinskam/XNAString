@@ -2,16 +2,16 @@
 #' @importMethodsFrom  Biostrings reverseComplement
 #'
 #' @param obj XNAString object
-#' 
+#'
 #' @return string with reverse complement sequence
 #' @importFrom stringi stri_reverse
-#' 
+#'
 reverseComplementFun <-
   function(obj) {
     iupac_dict <-
       data.table::data.table(
-        symbol = c("W", "S", "M", "K", "R", "Y","B", "D", "H", "V", "N"),
-        bases  = list(
+        symbol = c("W", "S", "M", "K", "R", "Y", "B", "D", "H", "V", "N"),
+        bases = list(
           list("A", "T"),
           list("G", "C"),
           list("A", "C"),
@@ -28,7 +28,7 @@ reverseComplementFun <-
     base <- obj@base
     
     # BASE CHARACTER
-    if (class(base)[[1]] == 'character') {
+    if (class(base)[[1]] == "character") {
       dictionary <- obj@compl_dictionary
       
       target_dict <- paste(dictionary[["target"]], collapse = "")
@@ -42,10 +42,12 @@ reverseComplementFun <-
       iupac_in_string <- iupac_dict[iupac_in_string_idx, ]
       
       reverse_complement <-
-        generateAllCombinations(str = reverse_complement, iupac_dict = iupac_in_string)
+        generateAllCombinations(str = reverse_complement,
+                                iupac_dict = iupac_in_string)
       
-    # BASE DNASTRING OR RNASTRING
-    } else if (class(base)[[1]] %in% c('DNAString', 'DNAStringSet', 'RNAString', 'RNAStringSet')) {
+      # BASE DNASTRING OR RNASTRING
+    } else if (class(base)[[1]] %in% c("DNAString", "DNAStringSet",
+                                       "RNAString", "RNAStringSet")) {
       reverse_complement <- Biostrings::reverseComplement(base)
     }
     
@@ -56,12 +58,14 @@ reverseComplementFun <-
 #'
 #' @param str character string of bases with IUPAC symbols
 #' @param iupac_dict data.table mapping IUPAC symbols to bases
+#' @noRd
 generateAllCombinations <- function(str,
                                     iupac_dict) {
   splited_str <- as.list(strsplit(str, split = "")[[1]])
   
   symbol <- NULL
-  any(colnames(iupac_dict) == 'symbol') || stop("Iupac dict must include symbol column.")
+  any(colnames(iupac_dict) == "symbol") ||
+    stop("Iupac dict must include symbol column.")
   
   for (iupac_symbol in iupac_dict[["symbol"]]) {
     coded_bases <- iupac_dict[symbol == iupac_symbol][["bases"]]
@@ -79,29 +83,38 @@ generateAllCombinations <- function(str,
 
 #' Reverse complement sequence based on dictionary
 #' @param obj XNAString object
-#' @param ... optional arguments to generic function to support additional methods
-#' 
+#' @param ... optional arguments to generic function to support
+#'  additional methods
+#'
 #' @return string with reverse complement sequence
 #' @rdname reverseComplement
 #'
 #' @export
-#' @examples 
-#' my_dic <- data.table::data.table(type = c(rep('base',3),
-#'                                           rep('sugar',2),
-#'                                           rep('backbone',3)),
-#'                                symbol = c('G', 'E', 'A', 'F', 'O', 'S', 'B', 'X'))
-#' obj <- XNAString(name = 'b',
-#'                   base = 'GGE',
-#'                   sugar = 'FFO',
-#'                   dictionary = my_dic)
+#' @examples
+#' my_dic <- data.table::data.table(
+#'   type = c(
+#'     rep("base", 3),
+#'     rep("sugar", 2),
+#'     rep("backbone", 3)
+#'   ),
+#'   symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+#' )
+#' obj <- XNAString(
+#'   name = "b",
+#'   base = "GGE",
+#'   sugar = "FFO",
+#'   dictionary = my_dic
+#' )
 #' XNAReverseComplement(obj)
-#' 
-setGeneric("XNAReverseComplement", signature = "obj",
+setGeneric("XNAReverseComplement",
+           signature = "obj",
            function(obj,
-                    ...)
-             standardGeneric("XNAReverseComplement"))
+                    ...) {
+             standardGeneric("XNAReverseComplement")
+           })
 
 #' @rdname reverseComplement
 setMethod("XNAReverseComplement", c("XNAString"),
-          function(obj)
-            reverseComplementFun(obj))
+          function(obj) {
+            reverseComplementFun(obj)
+          })

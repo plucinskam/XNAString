@@ -7,7 +7,8 @@
 mimir2XnaDict(table, base.col, sugar.col, backbone.col)
 }
 \arguments{
-\item{table}{data.table or data.frame (must incluse "HELM", "TS_BASE_SEQ", "TS_SUGAR_SEQ" and "TS_BACKBONE_SEQ" columns)}
+\item{table}{data.table or data.frame (must incluse "HELM", "TS_BASE_SEQ",
+"TS_SUGAR_SEQ" and "TS_BACKBONE_SEQ" columns)}
 
 \item{base.col}{character (base column name)}
 
@@ -22,10 +23,11 @@ data.table (written in the xna_dictionary format)
 Reformat mimir table to XNA dictionary standards
 }
 \examples{
-dt <- data.table::data.table(HELM = c("([PPG])", "[fR]", "[srP]"), 
-                 TS_BASE_SEQ = c("F", NA, NA), 
-                 TS_SUGAR_SEQ = c(NA, NA, 'F'), 
-                 TS_BACKBONE_SEQ = c(NA, 'S', NA))
-mimir2XnaDict(dt, 'TS_BASE_SEQ', 'TS_SUGAR_SEQ', 'TS_BACKBONE_SEQ')     
-
+dt <- data.table::data.table(
+  HELM = c("([PPG])", "[fR]", "[srP]"),
+  TS_BASE_SEQ = c("F", NA, NA),
+  TS_SUGAR_SEQ = c(NA, NA, "F"),
+  TS_BACKBONE_SEQ = c(NA, "S", NA)
+)
+mimir2XnaDict(dt, "TS_BASE_SEQ", "TS_SUGAR_SEQ", "TS_BACKBONE_SEQ")
 }
