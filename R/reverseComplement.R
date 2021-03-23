@@ -26,31 +26,29 @@ reverseComplementFun <-
         )
       )
     base <- obj@base
-    
+
     # BASE CHARACTER
     if (class(base)[[1]] == "character") {
       dictionary <- obj@compl_dictionary
-      
+
       target_dict <- paste(dictionary[["target"]], collapse = "")
       base_dict <- paste(dictionary[["base"]], collapse = "")
-      
+
       complement <- chartr(base_dict, target_dict, base)
       reverse_complement <- stringi::stri_reverse(complement)
-      
+
       iupac_in_string_idx <-
         iupac_dict$symbol %in% strsplit(reverse_complement, split = "")[[1]]
       iupac_in_string <- iupac_dict[iupac_in_string_idx, ]
-      
+
       reverse_complement <-
-        generateAllCombinations(str = reverse_complement,
-                                iupac_dict = iupac_in_string)
-      
+        generateAllCombinations(str = reverse_complement, iupac_dict = iupac_in_string)
+
       # BASE DNASTRING OR RNASTRING
-    } else if (class(base)[[1]] %in% c("DNAString", "DNAStringSet",
-                                       "RNAString", "RNAStringSet")) {
+    } else if (class(base)[[1]] %in% c("DNAString", "DNAStringSet", "RNAString", "RNAStringSet")) {
       reverse_complement <- Biostrings::reverseComplement(base)
     }
-    
+
     return(reverse_complement)
   }
 
@@ -62,29 +60,27 @@ reverseComplementFun <-
 generateAllCombinations <- function(str,
                                     iupac_dict) {
   splited_str <- as.list(strsplit(str, split = "")[[1]])
-  
+
   symbol <- NULL
-  any(colnames(iupac_dict) == "symbol") ||
-    stop("Iupac dict must include symbol column.")
-  
+  any(colnames(iupac_dict) == "symbol") || stop("Iupac dict must include symbol column.")
+
   for (iupac_symbol in iupac_dict[["symbol"]]) {
     coded_bases <- iupac_dict[symbol == iupac_symbol][["bases"]]
     splited_str[splited_str == iupac_symbol] <- coded_bases
   }
-  
+
   all_combinations_df <- expand.grid(splited_str)
-  
+
   all_combinations <- apply(all_combinations_df, 1, function(x) {
     paste0(x, collapse = "")
   })
-  
+
   return(all_combinations)
 }
 
 #' Reverse complement sequence based on dictionary
 #' @param obj XNAString object
-#' @param ... optional arguments to generic function to support
-#'  additional methods
+#' @param ... optional arguments to generic function to support additional methods
 #'
 #' @return string with reverse complement sequence
 #' @rdname reverseComplement
@@ -107,14 +103,17 @@ generateAllCombinations <- function(str,
 #' )
 #' XNAReverseComplement(obj)
 setGeneric("XNAReverseComplement",
-           signature = "obj",
-           function(obj,
-                    ...) {
-             standardGeneric("XNAReverseComplement")
-           })
+  signature = "obj",
+  function(obj,
+           ...) {
+    standardGeneric("XNAReverseComplement")
+  }
+)
 
 #' @rdname reverseComplement
-setMethod("XNAReverseComplement", c("XNAString"),
-          function(obj) {
-            reverseComplementFun(obj)
-          })
+setMethod(
+  "XNAReverseComplement", c("XNAString"),
+  function(obj) {
+    reverseComplementFun(obj)
+  }
+)

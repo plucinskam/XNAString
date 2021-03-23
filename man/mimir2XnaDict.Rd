@@ -7,8 +7,7 @@
 mimir2XnaDict(table, base.col, sugar.col, backbone.col)
 }
 \arguments{
-\item{table}{data.table or data.frame (must incluse "HELM", "TS_BASE_SEQ",
-"TS_SUGAR_SEQ" and "TS_BACKBONE_SEQ" columns)}
+\item{table}{data.table or data.frame (must incluse "HELM", "TS_BASE_SEQ", "TS_SUGAR_SEQ" and "TS_BACKBONE_SEQ" columns)}
 
 \item{base.col}{character (base column name)}
 

@@ -62,8 +62,7 @@ occurence}
 \item{base_only}{logical - if TRUE, frequency checked for
 'A', 'C', 'G', 'T', other}
 
-\item{...}{optional arguments to generic function to support
-additional methods}
+\item{...}{optional arguments to generic function to support additional methods}
 }
 \value{
 matrix (frequency matrix for a given slot)
@@ -72,14 +71,12 @@ matrix (frequency matrix for a given slot)
 XNADinucleotideFrequencyFun returns double letters frequency for a given
 object in base, sugar or backbone slot
 
-XNADinucleotideFrequency method returns dinucleotide frequency
-for a given object.
+XNADinucleotideFrequency method returns dinucleotide frequency for a given object.
 It works for 3 slots: base, sugar and backbone. If matrix_nbr equals 1,
 dinucleotide frequency for the first elements in the slot is returned.
 Double letters can be given as argument, otherwise unique double letters in
 object's dictionary are in use.
 }
-
 \examples{
   my_dic <-
 data.table::data.table(

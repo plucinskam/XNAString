@@ -12,8 +12,7 @@ XNAReverseComplement(obj, ...)
 \arguments{
 \item{obj}{XNAString object}
 
-\item{...}{optional arguments to generic function to support
-additional methods}
+\item{...}{optional arguments to generic function to support additional methods}
 }
 \value{
 string with reverse complement sequence

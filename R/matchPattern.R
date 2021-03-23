@@ -32,6 +32,17 @@
 #' @include xnaStringClass.R
 #' @rdname XNAMatchPattern
 #' @name XNAMatchPattern
+#' @examples 
+#' s1 <-
+#' XNAString::XNAString(
+#'  base = Biostrings::DNAString("GCGGAGAGAGCACAGATACA"),
+#'  sugar = "FODDDDDDDDDDDDDDDDDD",
+#'  target = Biostrings::DNAStringSet("GGCGGAGAGAGCACAGATACA")
+#' )
+#' XNAString::XNAMatchPattern(
+#' s1,
+#' "GGCGGAGAGAGCACAGATACAGGCGGAGAGAGCACAGATACA"
+#' )
 #' @return an \link{XStringViews} object for \code{matchPattern}.
 #' @export
 
@@ -178,7 +189,15 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
 #' @return An \link{MIndex} object for \code{vmatchPattern}.
 #' @rdname XNAVmatchPattern
 #' @name XNAVmatchPattern
-#'
+#' @examples 
+#' s3 <-
+#' XNAString::XNAString(
+#'  base = "GCGGAGAGAGCACAGATACA",
+#'  sugar = "FODDDDDDDDDDDDDDDDDD",
+#'  target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+#' )
+#' chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
+#' result <- XNAString::XNAMatchPattern(s3, chrom)
 #' @export
 
 setGeneric("XNAVmatchPattern",

@@ -2,14 +2,12 @@
 % Please edit documentation in R/dinucleotideFrequency.R
 \name{seqVectorDinucleotideFrequency}
 \alias{seqVectorDinucleotideFrequency}
-\title{seqVectorDinucleotideFrequency function calculates frequency for
-strings vector}
+\title{seqVectorDinucleotideFrequency function calculates frequency for strings vector}
 \usage{
 seqVectorDinucleotideFrequency(unique_sets, seq_vec, as.prob)
 }
 \arguments{
-\item{unique_sets}{string vector of double letters -these letters pose
-column names}
+\item{unique_sets}{string vector of double letters -these letters pose column names}
 
 \item{seq_vec}{vector of strings (or characters) - frequency will be
 calculated for this vector}
@@ -21,10 +19,8 @@ occurence}
 matrix - each row denotes frequency for a specific string of vector
 }
 \description{
-seqVectorDinucleotideFrequency function calculates frequency for
-strings vector
+seqVectorDinucleotideFrequency function calculates frequency for strings vector
 }
 \examples{
-seqVectorDinucleotideFrequency(c("AB", "BA", "CD"), c("ABABAB", "ABABCD"), 
-as.prob = FALSE)
+seqVectorDinucleotideFrequency(c("AB", "BA", "CD"), c("ABABAB", "ABABCD"), as.prob = FALSE)
 }

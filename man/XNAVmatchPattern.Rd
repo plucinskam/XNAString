@@ -110,3 +110,13 @@ An \link{MIndex} object for \code{vmatchPattern}.
 This is function finding all the occurrences of a given pattern
 (typically short) in a (typically long) set of reference sequences.
 }
+\examples{
+s3 <-
+XNAString::XNAString(
+ base = "GCGGAGAGAGCACAGATACA",
+ sugar = "FODDDDDDDDDDDDDDDDDD",
+ target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+)
+chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
+result <- XNAString::XNAMatchPattern(s3, chrom)
+}

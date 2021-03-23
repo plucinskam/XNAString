@@ -8,8 +8,7 @@ base, sugar and backbone slots}
 seqDinucleotideFrequency(unique_sets, seq, as.prob)
 }
 \arguments{
-\item{unique_sets}{string vector of double letters -these letters pose column
-names}
+\item{unique_sets}{string vector of double letters -these letters pose column names}
 
 \item{seq}{string (or character) - frequency is calculated for
 this string}

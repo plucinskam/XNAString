@@ -40,8 +40,7 @@ XNAMatchPDict(
 )
 }
 \arguments{
-\item{pdict}{XNAString object, target slot taken as pdict
-object from Biostrings}
+\item{pdict}{XNAString object, target slot taken as pdict object from Biostrings}
 
 \item{subject}{string containing sequence}
 
@@ -73,6 +72,21 @@ an \link{MIndex} object of length \code{M}, and \code{countPDict}
 an integer vector of length \code{M}.
 }
 \description{
-This is function finding all the occurrences of a given set of patterns
-(typically short) in a (typically long) reference sequence
+This is function finding all the occurrences of a given set of patterns (typically short)
+in a (typically long) reference sequence
+}
+\examples{
+ 
+s2 <-
+XNAString::XNAString(
+ base = "GCGGAGAGAGCACAGATACA",
+ sugar = "FODDDDDDDDDDDDDDDDDD",
+ target = Biostrings::DNAStringSet(c(
+   "GGCGGAGAGAGCACAGATACA", "GGCGGAGAGAGCACAGATACA"
+ ))
+)
+o <- XNAString::XNAMatchPDict(
+ s2,
+ "GGCGGAGAGAGCACAGATACAGGGGCGGAGAGAGCACAGATACACGGAGAGAGCACAGATACA"
+)
 }

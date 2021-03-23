@@ -8,30 +8,28 @@
 #'                          occurrence
 #'
 #' @return numeric - named numeric vector
-#' @examples
-#' seqAlphabetFrequency(c("A", "B", "C"), c("AABA"), as.prob = FALSE)
+#'
+#' @examples seqAlphabetFrequency(c("A", "B", "C"), c("AABA"), as.prob = FALSE)
 #' @export
-seqAlphabetFrequency <- function(unique_letters,
-                                 seq,
-                                 as.prob) {
+seqAlphabetFrequency <- function(unique_letters, seq, as.prob) {
   # split sequence to single characters
-  ąseq <- strsplit(seq, "")[[1]]
-  
+  seq <- strsplit(seq, "")[[1]]
+
   # return frequency
   freq <- base::table(seq)
   if (as.prob == TRUE) {
     freq <- base::prop.table(freq)
   }
-  
+
   # table function returns frequency for letters existing in sequence,
   # let's extend it to the possible letters in unique_letters
   extended_freq <- vapply(unique_letters, function(letter) {
     freq[letter]
-  })
+  }, 1.0)
   # if na -> 0 occurence
   extended_freq[is.na(extended_freq)] <- 0
   names(extended_freq) <- unique_letters
-  
+
   return(extended_freq)
 }
 
@@ -48,8 +46,7 @@ seqAlphabetFrequency <- function(unique_letters,
 #'
 #' @return matrix - each row denotes frequency for a specific string of vector
 #'
-#' @examples
-#' seqVectorAlphabetFrequency(c("A", "B", "C"),
+#' @examples seqVectorAlphabetFrequency(c("A", "B", "C"),
 #'   c("AABA", "BBBCCC"),
 #'   as.prob = FALSE
 #' )
@@ -59,11 +56,12 @@ seqVectorAlphabetFrequency <-
     # # create matrix M to store frequency for each element in seq_vec
     M <-
       matrix(,
-             nrow = length(seq_vec),
-             ncol = length(unique_letters))
-    
-    M <- vapply(seq(1, length(seq_vec)), function(i) {
-      M[i,] <- seqAlphabetFrequency(unique_letters, seq_vec[i], as.prob)
+        nrow = length(seq_vec),
+        ncol = length(unique_letters)
+      )
+
+    M <- sapply(seq(1, length(seq_vec)), function(i) {
+      M[i, ] <- seqAlphabetFrequency(unique_letters, seq_vec[i], as.prob)
     })
     M <- t(M)
     return(M)
@@ -87,12 +85,17 @@ XNAAlphabetFrequencyFun <-
            base_only = FALSE) {
     (is(obj, "XNAString") | is(obj, "XNAStringSet")) ||
       stop("An object must be of XNAString or XNAStringSet class")
-    
-    stop("If base_only is TRUE, letters argument must be ommited")
-    
+
+    # ifelse(base_only == TRUE & !is.na(letters), FALSE, TRUE) ||
+    !(base_only == TRUE & !all(is.na(letters))) ||
+      stop("If base_only is TRUE, letters argument must be ommited")
+
     matrix_nbr %in% c(1, 2) ||
       stop("The matrix_nbr must be either 1 or 2")
-    
+
+    # base can be DNAString or DNAStringSet, change it to character with base methods
+    # on the right side, base getter gets base slot and changes to character
+    # on the left, base setter changes the base slot
     if (class(obj)[[1]] == "XNAString") {
       base(obj) <- base(obj)
     } else {
@@ -101,30 +104,28 @@ XNAAlphabetFrequencyFun <-
         base(obj, 2) <- base(obj, 2)
       }
     }
-    
+
     # if object is "XNAString", change it to XNAStringSet
     if (class(obj)[[1]] == "XNAString") {
       obj <- XNAString2XNAStringSet(obj)
     }
-    
+
     obj_dt <- set2Dt(obj, slots = c(slot))
-    
+
     # if letters missing, check on the possible letters in dictionary
     if (any(is.na(letters))) {
       dictionary <- obj@objects[[1]]@dictionary
       letters <-
         sort(unique(dictionary[dictionary$type == slot][["symbol"]]))
     }
-    
+
     # if base_only TRUE and A,C,G, or T not in dictionary -> warning
     base_letters <- c("A", "C", "G", "T")
-    ! (base_only == TRUE & !all(base_letters %in% letters)) ||
-      stop(
-        "base_only parameter set as TRUE, but the objet's dictionary or
+    !(base_only == TRUE & !all(base_letters %in% letters)) ||
+      stop("base_only parameter set as TRUE, but the objet's dictionary or
            letters parameter does not include at least one of the base
-           letters: A, C, G or T"
-      )
-    
+           letters: A, C, G or T")
+
     eval(parse(
       text = paste(
         "freq <- lapply(obj_dt$",
@@ -137,14 +138,15 @@ XNAAlphabetFrequencyFun <-
         sep = ""
       )
     ))
-    
+
     cols <- colnames(freq[[1]])
     freq <-
       matrix(unlist(freq),
-             nrow = length(freq),
-             byrow = TRUE)
+        nrow = length(freq),
+        byrow = TRUE
+      )
     colnames(freq) <- cols
-    
+
     # if base_only TRUE, frequency for A, C, G, T and other
     if (base_only == TRUE) {
       other_letters <-
@@ -160,9 +162,9 @@ XNAAlphabetFrequencyFun <-
         names(freq)[length(freq)] <- "other"
       }
     }
-    
+
     freq <- formattable(freq, digits = 2, format = "f")
-    
+
     return(freq)
   }
 
@@ -180,8 +182,7 @@ XNAAlphabetFrequencyFun <-
 #'                          occurence
 #' @param base_only logical - if TRUE, frequency checked for
 #'                            'A', 'C', 'G', 'T', other
-#' @param ... optional arguments to generic function to support
-#'  additional methods
+#' @param ... optional arguments to generic function to support additional methods
 #'
 #' @return matrix (frequency matrix for a given slot)
 #'
@@ -194,9 +195,7 @@ XNAAlphabetFrequencyFun <-
 #' XNAAlphabetFrequency(obj = xnastring_obj, slot = "base")
 #' XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", as.prob = TRUE)
 #' XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", base_only = TRUE)
-#' XNAAlphabetFrequency(obj = xnastring_obj,
-#'                     slot = "base",
-#'                     letters = c("A", "C"))
+#' XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", letters = c("A", "C"))
 #' XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", matrix_nbr = 2)
 #'
 #' xnastring_obj_2 <- XNAString(
@@ -214,45 +213,54 @@ XNAAlphabetFrequencyFun <-
 #' @rdname alphabetFrequency
 #' @export
 setGeneric("XNAAlphabetFrequency",
-           signature = "obj",
-           function(obj,
-                    slot,
-                    letters = NA,
-                    matrix_nbr = 1,
-                    as.prob = FALSE,
-                    base_only = FALSE,
-                    ...) {
-             standardGeneric("XNAAlphabetFrequency")
-           })
+  signature = "obj",
+  function(obj,
+           slot,
+           letters = NA,
+           matrix_nbr = 1,
+           as.prob = FALSE,
+           base_only = FALSE,
+           ...) {
+    standardGeneric("XNAAlphabetFrequency")
+  }
+)
 
 #' @rdname alphabetFrequency
-setMethod("XNAAlphabetFrequency", c("XNAString"),
-          function(obj,
-                   slot,
-                   letters = NA,
-                   matrix_nbr = 1,
-                   as.prob = FALSE,
-                   base_only = FALSE) {
-            XNAAlphabetFrequencyFun(obj,
-                                    slot,
-                                    letters,
-                                    matrix_nbr,
-                                    as.prob,
-                                    base_only)
-          })
+setMethod(
+  "XNAAlphabetFrequency", c("XNAString"),
+  function(obj,
+           slot,
+           letters = NA,
+           matrix_nbr = 1,
+           as.prob = FALSE,
+           base_only = FALSE) {
+    XNAAlphabetFrequencyFun(
+      obj,
+      slot,
+      letters,
+      matrix_nbr,
+      as.prob,
+      base_only
+    )
+  }
+)
 
 #' @rdname alphabetFrequency
-setMethod("XNAAlphabetFrequency", c("XNAStringSet"),
-          function(obj,
-                   slot,
-                   letters = NA,
-                   matrix_nbr = 1,
-                   as.prob = FALSE,
-                   base_only = FALSE) {
-            XNAAlphabetFrequencyFun(obj,
-                                    slot,
-                                    letters,
-                                    matrix_nbr,
-                                    as.prob,
-                                    base_only)
-          })
+setMethod(
+  "XNAAlphabetFrequency", c("XNAStringSet"),
+  function(obj,
+           slot,
+           letters = NA,
+           matrix_nbr = 1,
+           as.prob = FALSE,
+           base_only = FALSE) {
+    XNAAlphabetFrequencyFun(
+      obj,
+      slot,
+      letters,
+      matrix_nbr,
+      as.prob,
+      base_only
+    )
+  }
+)

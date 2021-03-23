@@ -56,8 +56,7 @@ seqtype(x)
 \arguments{
 \item{name}{string (or character)}
 
-\item{base}{string (or character), RNAString, RNAStringSet,
-DNAString or DNAStringSet}
+\item{base}{string (or character), RNAString, RNAStringSet, DNAString or DNAStringSet}
 
 \item{sugar}{string (or character)}
 
@@ -119,6 +118,7 @@ sugar(obj2) <- "LMFF"
 backbone(obj2) <- "BAB"
 conjugate5(obj2) <- "TFJSJG"
 conjugate3(obj2) <- "ARTSS"
+
 my_dic <- data.table::data.table(
   type = c(
     rep("base", 3),

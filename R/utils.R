@@ -53,9 +53,9 @@ typedListCheck <- function(object) {
   errors <- character()
   is_correct_object_type <- vector()
   equal_dict <- vector()
-  
+
   stopifnot(length(object@objects) >= 1)
-  
+
   for (i in seq_len(length(object@objects))) {
     obj <- object@objects[[i]]
     is_correct_object_type[[i]] <- instanceOf(obj, "XNAString")
@@ -68,19 +68,19 @@ typedListCheck <- function(object) {
         ignore.row.order = TRUE
       )
   }
-  
+
   if (any(!is_correct_object_type)) {
     msg <-
       "At least one object is not of XNAString type."
     errors <- c(errors, msg)
   }
-  
+
   if (any(equal_dict != TRUE)) {
     msg <-
       "Dictionary slot is not equal for all XNAString objects"
     errors <- c(errors, msg)
   }
-  
+
   if (length(errors) == 0) {
     TRUE
   } else {
@@ -107,7 +107,7 @@ typedListCheck <- function(object) {
 uniqueChars <- function(x) {
   stopifnot(is.character(x))
   list_of_unique <- lapply(strsplit(x, ""), unique)
-  
+
   return(list_of_unique)
 }
 
@@ -132,7 +132,7 @@ listOflists2Dt <- function(list_of_lists) {
     t(matrix(unlist(list_of_lists), nrow = length(unlist(list_of_lists[1]))))
   matrix_2_dt <- data.table::data.table(matrix_t)
   names(matrix_2_dt) <- names(list_of_lists[[1]])
-  
+
   return(matrix_2_dt)
 }
 
@@ -181,7 +181,7 @@ xnastringElementsNumber <-
            cond_conj5 = "==1",
            cond_conj3 = "==1") {
     res <- FALSE
-    
+
     if (eval(parse(
       text = paste(
         "length(xnastring_obj@name)",
@@ -203,7 +203,7 @@ xnastringElementsNumber <-
     ))) {
       res <- TRUE
     }
-    
+
     return(res)
   }
 
@@ -236,20 +236,20 @@ concatDict <- function(custom_dict,
                        helm_colname = "HELM",
                        type_colname = "type",
                        symbol_colname = "symbol") {
-  all(
-    c(helm_colname, type_colname, symbol_colname) %in% colnames(custom_dict)) ||
-    stop("HELM, type and symbol columns are
-         required in custom HELM-symbol dictionary")
-  
-  dict <- rbind(custom_dict,
-                xna_dictionary)
-  
-  ! (any(duplicated(dict[, c("type", "symbol")]))) ||
+  all(c(helm_colname, type_colname, symbol_colname) %in% colnames(custom_dict)) ||
+    stop("HELM, type and symbol columns are required in custom HELM-symbol dictionary")
+
+  dict <- rbind(
+    custom_dict,
+    xna_dictionary
+  )
+
+  !(any(duplicated(dict[, c("type", "symbol")]))) ||
     stop("There is at least one duplicated symbol for the same type.")
-  
-  ! (any(duplicated(dict[, c("type", "HELM")]))) ||
+
+  !(any(duplicated(dict[, c("type", "HELM")]))) ||
     stop("There is at least one duplicated HELM for the same type.")
-  
+
   return(dict)
 }
 
@@ -267,13 +267,12 @@ concatDict <- function(custom_dict,
 #'
 changeBase <- function(compl_dict, bases) {
   all(c("base", "target", "compl_target") %in% colnames(compl_dict)) ||
-    stop("Complementary bases dictionary must include base,
-         target and compl_target columns")
-  
+    stop("Complementary bases dictionary must include base, target and compl_target columns")
+
   if (all(unlist(strsplit(bases, "")) %in% compl_dict$base) &
-      !any(is.na(compl_dict$compl_target)) &
-      !any(compl_dict$compl_target == "")) {
-    complement <- vapply(bases, function(base) {
+    !any(is.na(compl_dict$compl_target)) &
+    !any(compl_dict$compl_target == "")) {
+    complement <- sapply(bases, function(base) {
       chartr(
         paste(compl_dict$base, collapse = ""),
         paste(compl_dict$compl_target, collapse = ""),
@@ -283,6 +282,6 @@ changeBase <- function(compl_dict, bases) {
   } else {
     complement <- ""
   }
-  
+
   return(unname(complement))
 }

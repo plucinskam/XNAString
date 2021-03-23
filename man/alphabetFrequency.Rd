@@ -62,8 +62,7 @@ occurence}
 \item{base_only}{logical - if TRUE, frequency checked for
 'A', 'C', 'G', 'T', other}
 
-\item{...}{optional arguments to generic function to support
-additional methods}
+\item{...}{optional arguments to generic function to support additional methods}
 }
 \value{
 matrix (frequency matrix for a given slot)
@@ -87,9 +86,7 @@ xnastring_obj <- XNAString(
 XNAAlphabetFrequency(obj = xnastring_obj, slot = "base")
 XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", as.prob = TRUE)
 XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", base_only = TRUE)
-XNAAlphabetFrequency(obj = xnastring_obj,
-                    slot = "base",
-                    letters = c("A", "C"))
+XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", letters = c("A", "C"))
 XNAAlphabetFrequency(obj = xnastring_obj, slot = "base", matrix_nbr = 2)
 
 xnastring_obj_2 <- XNAString(

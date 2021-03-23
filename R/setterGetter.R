@@ -77,7 +77,7 @@ setMethod("name", "XNAString", function(x) {
 #' name(XNAStringSetObj)
 setMethod("name", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@name)
   })
@@ -94,7 +94,7 @@ setMethod("name", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -158,18 +158,18 @@ setMethod("name<-", "XNAString", function(x, value) {
 #' name(XNAStringSetObj, 1) <- c("new1", "new2")
 setMethod("name<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@name <- as.character(x[[j]]@name)
     x[[j]]@name[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -229,7 +229,7 @@ setMethod("base", "XNAString", function(x) {
 #' @rdname base
 setMethod("base", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@base)
   })
@@ -246,7 +246,7 @@ setMethod("base", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -269,18 +269,18 @@ setMethod("base<-", "XNAString", function(x, value) {
 #' @rdname base
 setMethod("base<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@base <- as.character(x[[j]]@base)
     x[[j]]@base[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -341,7 +341,7 @@ setMethod("sugar", "XNAString", function(x) {
 #' @rdname sugar
 setMethod("sugar", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@sugar)
   })
@@ -358,7 +358,7 @@ setMethod("sugar", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -382,18 +382,18 @@ setMethod("sugar<-", "XNAString", function(x, value) {
 #' @rdname sugar
 setMethod("sugar<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@sugar <- as.character(x[[j]]@sugar)
     x[[j]]@sugar[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -459,7 +459,7 @@ setMethod("backbone", "XNAString", function(x) {
 #' @rdname backbone
 setMethod("backbone", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@backbone)
   })
@@ -476,7 +476,7 @@ setMethod("backbone", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -498,18 +498,18 @@ setMethod("backbone<-", "XNAString", function(x, value) {
 #' @rdname backbone
 setMethod("backbone<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@backbone <- as.character(x[[j]]@backbone)
     x[[j]]@backbone[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -575,7 +575,7 @@ setMethod("target", "XNAString", function(x) {
 #' @rdname target
 setMethod("target", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@target)
   })
@@ -592,7 +592,7 @@ setMethod("target", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -615,18 +615,18 @@ setMethod("target<-", "XNAString", function(x, value) {
 #' @rdname target
 setMethod("target<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@target <- as.character(x[[j]]@target)
     x[[j]]@target[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -689,7 +689,7 @@ setMethod("conjugate5", "XNAString", function(x) {
 #' @rdname conjugate5
 setMethod("conjugate5", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@conjugate5)
   })
@@ -706,7 +706,7 @@ setMethod("conjugate5", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -730,18 +730,18 @@ setMethod("conjugate5<-", "XNAString", function(x, value) {
 #' @rdname conjugate5
 setMethod("conjugate5<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@conjugate5 <- as.character(x[[j]]@conjugate5)
     x[[j]]@conjugate5[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -806,7 +806,7 @@ setMethod("conjugate3", "XNAString", function(x) {
 #' @rdname conjugate3
 setMethod("conjugate3", "XNAStringSet", function(x, i = 1) {
   stopifnot(i %in% c(1, 2))
-
+  
   ls <- lapply(x@objects, function(y) {
     as.character(y@conjugate3)
   })
@@ -823,7 +823,7 @@ setMethod("conjugate3", "XNAStringSet", function(x, i = 1) {
   }
   # extract i'th element of vector in ls list
   ls <- lapply(ls, `[[`, i)
-
+  
   unlist(ls)
 })
 
@@ -846,18 +846,18 @@ setMethod("conjugate3<-", "XNAString", function(x, value) {
 #' @rdname conjugate3
 setMethod("conjugate3<-", "XNAStringSet", function(x, i = 1, value) {
   stopifnot(i %in% c(1, 2))
-
+  
   x <- x@objects
-
+  
   for (j in seq_len(length(x))) {
     x[[j]]@conjugate3 <- as.character(x[[j]]@conjugate3)
     x[[j]]@conjugate3[i] <- value[j]
     validObject(x[[j]])
   }
-
+  
   y <- XNAStringSet(objects = x)
   validObject(y)
-
+  
   return(y)
 })
 
@@ -990,7 +990,7 @@ setMethod("secondary_structure", "XNAStringSet", function(x) {
   ls <- lapply(x@objects, function(y) {
     paste(y@secondary_structure, collapse = ", ")
   })
-
+  
   unlist(ls)
 })
 
@@ -1135,7 +1135,7 @@ setMethod("duplex_structure", "XNAStringSet", function(x) {
   ls <- lapply(x@objects, function(y) {
     paste(y@duplex_structure, collapse = ", ")
   })
-
+  
   unlist(ls)
 })
 

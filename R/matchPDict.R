@@ -1,16 +1,14 @@
 
-
-
 ### =========================================================================
 ### The XNAMatchPDict() generic & related functions
 ### -------------------------------------------------------------------------
 #' Find set of patterns in reference sequence
 #'
-#' This is function finding all the occurrences of a given set of patterns
-#'  (typically short) in a (typically long) reference sequence
+#' This is function finding all the occurrences of a given set of patterns (typically short)
+#' in a (typically long) reference sequence
 #'
-#' @param pdict	XNAString object, target slot taken as pdict
-#'  object from Biostrings
+
+#' @param pdict	XNAString object, target slot taken as pdict object from Biostrings
 #' @param subject	string containing sequence
 #' @param max.mismatch The maximum number of mismatching letters allowed.
 #' If non-zero, an algorithm that supports inexact matching is used.
@@ -35,8 +33,20 @@
 #'  an integer vector of length \code{M}.
 #' @rdname XNAMatchPDict
 #' @name XNAMatchPDict
+#' @examples  
+#' s2 <-
+#' XNAString::XNAString(
+#'  base = "GCGGAGAGAGCACAGATACA",
+#'  sugar = "FODDDDDDDDDDDDDDDDDD",
+#'  target = Biostrings::DNAStringSet(c(
+#'    "GGCGGAGAGAGCACAGATACA", "GGCGGAGAGAGCACAGATACA"
+#'  ))
+#' )
+#' o <- XNAString::XNAMatchPDict(
+#'  s2,
+#'  "GGCGGAGAGAGCACAGATACAGGGGCGGAGAGAGCACAGATACACGGAGAGAGCACAGATACA"
+#' )
 #' @export
-
 setGeneric("XNAMatchPDict",
   signature = c("pdict", "subject"),
   function(pdict,
@@ -65,8 +75,7 @@ setMethod(
     pattern_dictionary <- Biostrings::PDict(pdict@target)
     subject <- Biostrings::DNAString(subject)
 
-    matchPDict <-
-      utils::getFromNamespace(".matchPDict", "Biostrings")
+    matchPDict <- utils::getFromNamespace(".matchPDict", "Biostrings")
 
     matchPDict(
       pdict = pattern_dictionary,
@@ -95,8 +104,7 @@ setMethod(
     pattern_dictionary <- Biostrings::PDict(pdict@target)
     subject <- Biostrings::DNAString(subject)
 
-    matchPDict <-
-      utils::getFromNamespace(".matchPDict", "Biostrings")
+    matchPDict <- utils::getFromNamespace(".matchPDict", "Biostrings")
 
     matchPDict(
       pdict = pattern_dictionary,

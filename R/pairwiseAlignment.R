@@ -40,6 +40,26 @@
 #'
 #' @rdname XNAPairwiseAlignment
 #' @name XNAPairwiseAlignment
+#' 
+#' @examples 
+#' mat <-
+#'  Biostrings::nucleotideSubstitutionMatrix(
+#'    match = 1,
+#'    mismatch = -3,
+#'    baseOnly = TRUE
+#' )
+#' s1 <-
+#'   XNAString::XNAString(
+#'     base = "GCGGAGAGAGCACAGATACA",
+#'     sugar = "FODDDDDDDDDDDDDDDDDD",
+#'     target = Biostrings::DNAStringSet("GGCGGAGAGAGCACAGATACA")
+#'   )
+#'   
+#'   XNAString::XNAPairwiseAlignment(s1,
+#'                                   "ACCCACACACACACACACACAC",
+#'                                   "global",
+#'                                   substitutionMatrix = mat
+#'   )
 #' @export
 
 setGeneric("XNAPairwiseAlignment",

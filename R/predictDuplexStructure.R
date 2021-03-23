@@ -4,8 +4,7 @@
 #' This function is a wrapper for RNAcofold from ViennaRNA package.
 #'
 #' @param obj XNAString object
-#' @param ... optional arguments to generic function to support
-#'  additional methods
+#' @param ... optional arguments to generic function to support additional methods
 #' @return list (structure and mfe)
 #'
 #' @rawNamespace useDynLib(XNAString)
@@ -21,17 +20,15 @@ predictDuplexStructureFun <- function(obj) {
   ((any(
     class(base_sl)[[1]] == c("DNAStringSet", "RNAStringSet")
   ) & length(base_sl) <= 2) |
-      (any(
-        class(base_sl)[[1]] == c("DNAString", "RNAString")
-      )) |
-      (class(base_sl)[[1]] == "character" &
-         length(base_sl) <= 2)) ||
+    (any(
+      class(base_sl)[[1]] == c("DNAString", "RNAString")
+    )) |
+    (class(base_sl)[[1]] == "character" &
+      length(base_sl) <= 2)) ||
     stop(
-      "Base must either 2-elements character vector / DNAStringSet /
-
-RNAStringSet or 1-element character vector / DNAString / RNAString."
+      "Base must either 2-elements character vector / DNAStringSet / RNAStringSet or 1-element character vector / DNAString / RNAString."
     )
-  
+
   # find length of first sequence (needed to add ampersand in between)
   seq1_length <- nchar(as.character(base_sl)[1])
   # if 2nd base empty - the same length as 1st base
@@ -41,7 +38,7 @@ RNAStringSet or 1-element character vector / DNAString / RNAString."
     } else {
       nchar(as.character(base_sl)[2])
     }
-  
+
   if (class(base_sl)[[1]] == "character") {
     if (all(unlist(strsplit(base_sl, "")) %in% c("A", "C", "G", "T", "U"))) {
       base_new <- base_sl
@@ -69,7 +66,7 @@ RNAStringSet or 1-element character vector / DNAString / RNAString."
         base_sl
       }, collapse = "&"))
   }
-  
+
   result <- list(
     # structure = prediction_results[1],
     structure = paste0(
@@ -84,7 +81,7 @@ RNAStringSet or 1-element character vector / DNAString / RNAString."
     ),
     mfe = as.numeric(prediction_results[2])
   )
-  
+
   return(result)
 }
 
@@ -93,11 +90,12 @@ RNAStringSet or 1-element character vector / DNAString / RNAString."
 #' @rdname duplexStructure
 #' @export
 setGeneric("predictDuplexStructure",
-           signature = "obj",
-           function(obj,
-                    ...) {
-             standardGeneric("predictDuplexStructure")
-           })
+  signature = "obj",
+  function(obj,
+           ...) {
+    standardGeneric("predictDuplexStructure")
+  }
+)
 
 #' @rdname duplexStructure
 #' @examples
@@ -107,7 +105,9 @@ setGeneric("predictDuplexStructure",
 #'   conjugate3 = "TAG"
 #' )
 #' predictDuplexStructure(obj1)
-setMethod("predictDuplexStructure", c("XNAString"),
-          function(obj) {
-            predictDuplexStructureFun(obj)
-          })
+setMethod(
+  "predictDuplexStructure", c("XNAString"),
+  function(obj) {
+    predictDuplexStructureFun(obj)
+  }
+)

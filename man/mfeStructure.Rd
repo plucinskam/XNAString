@@ -15,11 +15,10 @@ predictMfeStructure(obj, ...)
 \arguments{
 \item{obj}{XNAString object}
 
-\item{...}{optional arguments to generic function to support
-additional methods}
+\item{...}{optional arguments to generic function to support additional methods}
 }
 \value{
-list with mfe and structure
+character, secondary structure in dot-bracket notation
 }
 \description{
 This function is a wrapper for RNAfold from ViennaRNA package.
@@ -31,4 +30,5 @@ obj1 <- XNAString(
   conjugate3 = "TAG"
 )
 predictMfeStructure(obj1)
+
 }

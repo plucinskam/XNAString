@@ -73,7 +73,7 @@ XNAStringSet <- function(objects) {
 #'
 xnaObj2Dt <- function(obj, slots) {
   dt <- data.table::data.table()
-  dt <- data.table::setDT(as.list(vapply(slots, function(x) {
+  dt <- data.table::setDT(as.list(sapply(slots, function(x) {
     eval(
       parse(
         text = paste("dt[ ,'", x, "'] <- list(list(obj@", x, "))",
@@ -127,7 +127,7 @@ xnaObj2Dt <- function(obj, slots) {
 #' XNAStringSetObj <- XNAStringSet(objects = list(obj2, obj3))
 #' set2Dt(XNAStringSetObj, c("base", "sugar"))
 set2Dt <- function(obj, slots) {
-  M <- vapply(seq(1, length(obj@objects)), function(i) {
+  M <- sapply(seq(1, length(obj@objects)), function(i) {
     xnaObj2Dt(obj@objects[i][[1]], slots)
   })
   # if there is just slot, list returned instead of matrix
@@ -162,7 +162,7 @@ set2Dt <- function(obj, slots) {
 #'   backbone = c("S", "S")
 #' )
 #' dt2Set(dt)
-#' @importFrom future.apply future_vapply
+#' @importFrom future.apply future_sapply
 #'
 #' @export
 dt2Set <- function(table,
@@ -178,7 +178,7 @@ dt2Set <- function(table,
   obj_ls <- list()
   if (!col.target %in% colnames(table)) {
     # create list of xnastring objects and check validity
-    obj_ls <- future.apply::future_vapply(seq(1, nrow(table)), function(i) {
+    obj_ls <- future.apply::future_sapply(seq(1, nrow(table)), function(i) {
       eval(parse(
         text = paste(
           "XNAString(base = unlist(table$",
@@ -193,7 +193,7 @@ dt2Set <- function(table,
       ))
     }, future.globals = structure(FALSE, add = "XNAString"))
   } else {
-    obj_ls <- future.apply::future_vapply(seq(1, nrow(table)), function(i) {
+    obj_ls <- future.apply::future_sapply(seq(1, nrow(table)), function(i) {
       eval(parse(
         text = paste(
           "XNAString(base = unlist(table$",
@@ -387,7 +387,7 @@ setMethod(
     ls <- list()
     obj_len <- length(obj@objects)
 
-    ls <- vapply(seq(1, obj_len), function(i) obj[i])
+    ls <- sapply(seq(1, obj_len), function(i) obj[i])
     return(ls)
   }
 )
