@@ -79,6 +79,11 @@ seqVectorDinucleotideFrequency <-
 #' @importFrom formattable formattable
 #' 
 #' @examples 
+#'   my_dic <-
+#' data.table::data.table(
+#'  type = c(rep("base", 3), rep("sugar", 2), rep("backbone", 3)),
+#'  symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+#' )
 #' xnastring_obj <- XNAString(
 #'  name = "b",
 #'  base = c("GGEG"),
