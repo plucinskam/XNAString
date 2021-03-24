@@ -545,9 +545,9 @@ get_scaled_params(vrna_md_t *md)
                                                            tempf);
         }
 
-  strncpy(params->Tetraloops, Tetraloops, 281);
-  strncpy(params->Triloops, Triloops, 241);
-  strncpy(params->Hexaloops, Hexaloops, 361);
+  strncpy(params->Tetraloops, Tetraloops, 280);
+  strncpy(params->Triloops, Triloops, 240);
+  strncpy(params->Hexaloops, Hexaloops, 360);
 
   params->id = ++id;
   return params;
@@ -729,9 +729,9 @@ get_scaled_exp_params(vrna_md_t *md,
             }
         }
 
-  strncpy(pf->Tetraloops, Tetraloops, 281);
+  strncpy(pf->Tetraloops, Tetraloops, 280);
   strncpy(pf->Triloops, Triloops, 240);
-  strncpy(pf->Hexaloops, Hexaloops, 361);
+  strncpy(pf->Hexaloops, Hexaloops, 360);
 
   return pf;
 }
@@ -921,9 +921,9 @@ get_exp_params_ali(vrna_md_t    *md,
             }
         }
 
-  strncpy(pf->Tetraloops, Tetraloops, 281);
-  strncpy(pf->Triloops, Triloops, 241);
-  strncpy(pf->Hexaloops, Hexaloops, 361);
+  strncpy(pf->Tetraloops, Tetraloops, 280);
+  strncpy(pf->Triloops, Triloops, 240);
+  strncpy(pf->Hexaloops, Hexaloops, 360);
 
   return pf;
 }
