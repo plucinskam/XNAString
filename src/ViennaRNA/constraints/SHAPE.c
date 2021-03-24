@@ -194,7 +194,7 @@ vrna_constraints_add_SHAPE(vrna_fold_compound_t *vc,
                            unsigned int         constraint_type)
 {
   float   p1, p2;
-  char    method;
+  char    *method;
   char    *sequence;
   double  *values;
   int     i, length = vc->length;
