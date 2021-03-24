@@ -100,6 +100,90 @@ PUBLIC int
     return 0; /* error */
   }
 
+PUBLIC int
+  vrna_file_SHAPE_read( const char *file_name,
+                        int length,
+                        double default_value,
+                        char *sequence,
+                        double *values){
+    
+    FILE *fp;
+    char *line;
+    int i;
+    int count = 0;
+    
+    if(!file_name)
+      return 0;
+    
+    if(!(fp = fopen(file_name, "r"))){
+      return 0;
+    }
+    
+    for (i = 0; i < length; ++i)
+    {
+      sequence[i] = 'N';
+      values[i + 1] = default_value;
+    }
+    
+    sequence[length] = '\0';
+    
+    while((line=vrna_read_line(fp))){
+      int position;
+      unsigned char nucleotide = 'N';
+      double reactivity = default_value;
+      char *second_entry = 0;
+      char *third_entry = 0;
+      char *c;
+      
+      if(sscanf(line, "%d", &position) != 1)
+      {
+        free(line);
+        continue;
+      }
+      
+      if(position <= 0 || position > length)
+      {
+        fclose(fp);
+        free(line);
+        return 0;
+      }
+      
+      for(c = line + 1; *c; ++c){
+        if(isspace(*(c-1)) && !isspace(*c)) {
+          if(!second_entry){
+            second_entry = c;
+          }else{
+            third_entry = c;
+            break;
+          }
+        }
+      }
+      
+      if(second_entry){
+        if(third_entry){
+          sscanf(second_entry, "%c", &nucleotide);
+          sscanf(third_entry, "%lf", &reactivity);
+        }else if(sscanf(second_entry, "%lf", &reactivity) != 1)
+          sscanf(second_entry, "%c", &nucleotide);
+      }
+      
+      sequence[position-1] = nucleotide;
+      values[position] = reactivity;
+      ++count;
+      
+      free(line);
+    }
+    
+    fclose(fp);
+    
+    if(!count)
+    {
+      return 0;
+    }
+    
+    return 1;
+  }
+
 
 PUBLIC void
 vrna_constraints_add_SHAPE(vrna_fold_compound_t *vc,
