@@ -7,6 +7,12 @@
 extern "C" {
 #endif
 
+
+int vrna_file_SHAPE_read(const char *file_name,
+                         int        length,
+                         double     default_value,
+                         char       *sequence,
+                         double     *values);
 /**
  *  @file constraints/SHAPE.h
  *  @ingroup SHAPE_reactivities
