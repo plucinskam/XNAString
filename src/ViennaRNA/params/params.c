@@ -730,7 +730,7 @@ get_scaled_exp_params(vrna_md_t *md,
         }
 
   strncpy(pf->Tetraloops, Tetraloops, 281);
-  strncpy(pf->Triloops, Triloops, 241);
+  strncpy(pf->Triloops, Triloops, 240);
   strncpy(pf->Hexaloops, Hexaloops, 361);
 
   return pf;
