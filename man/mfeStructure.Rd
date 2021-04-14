@@ -15,7 +15,8 @@ predictMfeStructure(obj, ...)
 \arguments{
 \item{obj}{XNAString object}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support additional
+methods}
 }
 \value{
 character, secondary structure in dot-bracket notation

@@ -16,7 +16,7 @@ testthat::test_that("Reverse complement works correctly (1)", {
 testthat::test_that("Reverse complement works correctly (2)", {
   obj2 <- XNAString(base = Biostrings::DNAString("ACAGGTGGT"))
   revcom <- XNAReverseComplement(obj2)
-  ref <- Biostrings::DNAString("ACCACCTGT")
+  ref <- "ACCACCTGT"
   testthat::expect_equal(revcom, ref)
 })
 

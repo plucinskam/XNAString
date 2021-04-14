@@ -4,7 +4,8 @@
 #' This function is a wrapper for RNAcofold from ViennaRNA package.
 #'
 #' @param obj XNAString object
-#' @param ... optional arguments to generic function to support additional methods
+#' @param ... optional arguments to generic function to support additional
+#' methods
 #' @return list (structure and mfe)
 #'
 #' @rawNamespace useDynLib(XNAString)
@@ -15,20 +16,21 @@
 #'
 #'
 predictDuplexStructureFun <- function(obj) {
-  base_sl <- obj@base
+  base_sl <- base(obj)
   # for now DNAStringSet and RNASTringSet not allowed
   ((any(
     class(base_sl)[[1]] == c("DNAStringSet", "RNAStringSet")
   ) & length(base_sl) <= 2) |
-    (any(
-      class(base_sl)[[1]] == c("DNAString", "RNAString")
-    )) |
-    (class(base_sl)[[1]] == "character" &
-      length(base_sl) <= 2)) ||
+      (any(
+        class(base_sl)[[1]] == c("DNAString", "RNAString")
+      )) |
+      (class(base_sl)[[1]] == "character" &
+         length(base_sl) <= 2)) ||
     stop(
-      "Base must either 2-elements character vector / DNAStringSet / RNAStringSet or 1-element character vector / DNAString / RNAString."
+      "Base must either 2-elements character vector / DNAStringSet /",
+      "RNAStringSet or 1-element character vector / DNAString / RNAString."
     )
-
+  
   # find length of first sequence (needed to add ampersand in between)
   seq1_length <- nchar(as.character(base_sl)[1])
   # if 2nd base empty - the same length as 1st base
@@ -38,13 +40,13 @@ predictDuplexStructureFun <- function(obj) {
     } else {
       nchar(as.character(base_sl)[2])
     }
-
+  
   if (class(base_sl)[[1]] == "character") {
     if (all(unlist(strsplit(base_sl, "")) %in% c("A", "C", "G", "T", "U"))) {
       base_new <- base_sl
     } else {
       # if other letters than from basic complementary_bases dictionary
-      base_new <- changeBase(obj@compl_dictionary, base_sl)
+      base_new <- changeBase(compl_dictionary(obj), base_sl)
     }
     # if there is lacking compl_target input in compl_dict, then base = ''
     if (all(base_new != "")) {
@@ -66,7 +68,7 @@ predictDuplexStructureFun <- function(obj) {
         base_sl
       }, collapse = "&"))
   }
-
+  
   result <- list(
     # structure = prediction_results[1],
     structure = paste0(
@@ -81,7 +83,7 @@ predictDuplexStructureFun <- function(obj) {
     ),
     mfe = as.numeric(prediction_results[2])
   )
-
+  
   return(result)
 }
 
@@ -90,12 +92,11 @@ predictDuplexStructureFun <- function(obj) {
 #' @rdname duplexStructure
 #' @export
 setGeneric("predictDuplexStructure",
-  signature = "obj",
-  function(obj,
-           ...) {
-    standardGeneric("predictDuplexStructure")
-  }
-)
+           signature = "obj",
+           function(obj,
+                    ...) {
+             standardGeneric("predictDuplexStructure")
+           })
 
 #' @rdname duplexStructure
 #' @examples
@@ -105,9 +106,7 @@ setGeneric("predictDuplexStructure",
 #'   conjugate3 = "TAG"
 #' )
 #' predictDuplexStructure(obj1)
-setMethod(
-  "predictDuplexStructure", c("XNAString"),
-  function(obj) {
-    predictDuplexStructureFun(obj)
-  }
-)
+setMethod("predictDuplexStructure", c("XNAString"),
+          function(obj) {
+            predictDuplexStructureFun(obj)
+          })

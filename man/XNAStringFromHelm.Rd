@@ -35,14 +35,11 @@ Create XNAString object from HELM - user interface
 }
 \examples{
 XNAStringFromHelm("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0")
-XNAStringFromHelm("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0", "name")
-XNAStringFromHelm(
-  c(
-    "RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0",
-    "RNA1{[dR](T)P.[dR](T)P.[dR](A)}$$$$V2.0"
-  ),
-  c("name1", "name2")
-)
+XNAStringFromHelm("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0", 'name')
+XNAStringFromHelm(c("RNA1{[dR](A)P.[dR](A)P.[dR](A)}$$$$V2.0",
+                    "RNA1{[dR](T)P.[dR](T)P.[dR](A)}$$$$V2.0"),
+                  c('name1', 'name2'))
+
 }
 \author{
 Marianna Plucinska

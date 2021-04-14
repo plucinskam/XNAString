@@ -29,7 +29,7 @@ testthat::test_that("XNAMatchPattern works for single target and subject", {
   )
 })
 
-testthat::test_that("XNAMatchPattern works for XNAString with multiple targets 
+testthat::test_that("XNAMatchPattern works for XNAString with multiple targets
                     and takes first as a default", {
   testthat::expect_error(
     XNAString::XNAMatchPattern(
@@ -71,7 +71,7 @@ testthat::test_that("XNAVmatchPattern works for single target and subject", {
   )
 })
 
-testthat::test_that("XNAVmatchPattern works for single target and 
+testthat::test_that("XNAVmatchPattern works for single target and
                     multiple subjects", {
   testthat::expect_error(XNAString::XNAVmatchPattern(
     s1,

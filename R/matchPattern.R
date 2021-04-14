@@ -69,7 +69,7 @@ setMethod("XNAMatchPattern", c("XNAString", "character"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (any(nchar(as.character(pattern@target)) == 0)) {
+            if (any(nchar(as.character(target(pattern))) == 0)) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "DNAStringSet as a target for this algorithm"
@@ -88,7 +88,7 @@ setMethod("XNAMatchPattern", c("XNAString", "character"),
               utils::getFromNamespace(".XString.matchPattern", "Biostrings")
             
             XString.matchPattern(
-              as.character(pattern@target[target.number]),
+              as.character(target(pattern)[target.number]),
               subject,
               max.mismatch,
               min.mismatch,
@@ -108,14 +108,14 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0) {
+            if (nchar(as.character(target(pattern)[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "DNAString as a target for this algorithm"
               )
             }
             
-            if (subject@length == 0) {
+            if (length(subject) == 0) {
               stop(
                 "subject must be a single (non-empty) ",
                 "string as a target for this algorithm. ",
@@ -127,7 +127,7 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
               utils::getFromNamespace(".XString.matchPattern", "Biostrings")
             
             XString.matchPattern(
-              pattern@target[[target.number]],
+              target(pattern)[[target.number]],
               subject,
               max.mismatch,
               min.mismatch,
@@ -227,7 +227,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "character"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0) {
+            if (nchar(as.character(target(pattern)[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
@@ -238,7 +238,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "character"),
               utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
             
             XStringSet.vmatchPattern(
-              as.character(pattern@target[target.number]),
+              as.character(target(pattern)[target.number]),
               subject,
               max.mismatch,
               min.mismatch,
@@ -258,7 +258,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "XStringSet"),
                    with.indels = FALSE,
                    fixed = TRUE,
                    algorithm = "auto") {
-            if (nchar(as.character(pattern@target[target.number])) == 0) {
+            if (nchar(as.character(target(pattern)[target.number])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
@@ -269,7 +269,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "XStringSet"),
               utils::getFromNamespace(".XStringSet.vmatchPattern", "Biostrings")
             
             XStringSet.vmatchPattern(
-              pattern@target[[target.number]],
+              target(pattern)[[target.number]],
               subject,
               max.mismatch,
               min.mismatch,
@@ -345,14 +345,14 @@ setMethod("XNAVmatchPattern", c("XNAString", "BSgenome"),
               )
             }
             
-            if (nchar(as.character(pattern@target[[target.number]])) == 0) {
+            if (nchar(as.character(target(pattern)[[target.number]])) == 0) {
               stop(
                 "pattern must be a XNAString object with non-empty ",
                 "string as a target for this algorithm"
               )
             }
             
-            pattern <- pattern@target[[target.number]]
+            pattern <- target(pattern)[[target.number]]
             
             normargAlgorithm <-
               utils::getFromNamespace("normargAlgorithm", "Biostrings")

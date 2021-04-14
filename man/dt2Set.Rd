@@ -10,7 +10,10 @@ dt2Set(
   col.base = "base",
   col.sugar = "sugar",
   col.backbone = "backbone",
-  col.target = "target"
+  col.target = "target",
+  default_sugar = NA,
+  default_backbone = NA,
+  compl_dict = complementary_bases
 )
 }
 \arguments{
@@ -24,6 +27,15 @@ base, sugar and backbone columns)}
 \item{col.backbone}{character (name of backbone column)}
 
 \item{col.target}{character (name of target column)}
+
+\item{default_sugar}{character - only one letter. Will be replicated
+nchar(base) times}
+
+\item{default_backbone}{character - only one letter. Will be replicated
+nchar(base)-1 times}
+
+\item{compl_dict}{data.table with following columns:
+"base", "target". By default internal XNAString dictionary is used}
 }
 \value{
 XNAStringSet object

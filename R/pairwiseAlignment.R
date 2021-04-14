@@ -1,6 +1,4 @@
 
-
-
 ### =========================================================================
 ### The XNAPairwiseAlignment() generic & related functions based on Biostrings
 ### -------------------------------------------------------------------------
@@ -31,8 +29,8 @@
 #' gap in the alignment.
 #' @param scoreOnly logical to denote whether or not to return just the scores
 #' of the optimal pairwise alignment.
-#' @param ... optional arguments to generic function to support
-#'  additional methods
+#' @param ... optional arguments to generic function to support additional 
+#' methods
 #'
 #' @return an instance of class \code{\link{PairwiseAlignments}}
 #' @importMethodsFrom Biostrings pairwiseAlignment
@@ -79,7 +77,7 @@ setMethod("XNAPairwiseAlignment", c("XNAString", "character"),
                    gapOpening = 10,
                    gapExtension = 4,
                    scoreOnly = FALSE) {
-            pattern <- pattern@target
+            pattern <- target(pattern)
             
             pattern_seqtype <- "B"
             subject_seqtype <- "B"

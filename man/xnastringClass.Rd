@@ -29,7 +29,9 @@ XNAString(
   secondary_structure,
   duplex_structure,
   dictionary,
-  compl_dictionary
+  compl_dictionary,
+  default_sugar,
+  default_backbone
 )
 
 \S4method{show}{XNAString}(object)
@@ -46,7 +48,9 @@ XNAString(
   secondary_structure,
   duplex_structure,
   dictionary,
-  compl_dictionary
+  compl_dictionary,
+  default_sugar,
+  default_backbone
 )
 
 seqtype(x)
@@ -56,7 +60,8 @@ seqtype(x)
 \arguments{
 \item{name}{string (or character)}
 
-\item{base}{string (or character), RNAString, RNAStringSet, DNAString or DNAStringSet}
+\item{base}{string (or character), RNAString, RNAStringSet, DNAString or
+DNAStringSet}
 
 \item{sugar}{string (or character)}
 
@@ -77,6 +82,12 @@ seqtype(x)
 
 \item{compl_dictionary}{data.table with following columns:
 "base", "target". By default internal XNAString dictionary is used}
+
+\item{default_sugar}{character, a single letter which will be replicated
+in sugar slot as default value}
+
+\item{default_backbone}{character, a single letter which will be replicated
+in backbone slot as default value}
 
 \item{object}{XNAString object}
 
@@ -112,12 +123,26 @@ obj2 <- XNAString(
   backbone = "SBB"
 )
 str(obj2)
-name(obj2) <- "a"
-base(obj2) <- "ATTT"
-sugar(obj2) <- "LMFF"
-backbone(obj2) <- "BAB"
-conjugate5(obj2) <- "TFJSJG"
-conjugate3(obj2) <- "ARTSS"
+name(obj2) <- 'a'
+base(obj2) <- 'ATTT'
+sugar(obj2) <- 'LMFF'
+backbone(obj2) <- 'BAB'
+conjugate5(obj2) <- 'TFJSJG'
+conjugate3(obj2) <- 'ARTSS'
+my_dic <- data.table::data.table(type = c(rep('base',3),
+                                          rep('sugar',2),
+                                          rep('backbone',3)),
+                                symbol = c('G', 'E', 'A', 'F',
+                                           'O', 'S', 'B', 'X'))
+obj1 <- XNAString(base = 'AAE',
+                  sugar = 'FFO',
+                  backbone='SB',
+                  dictionary = my_dic)
+obj2 <- XNAString(base = c('EAA', 'AAAA'),
+                  sugar = c('FFO', 'OOOO'),
+                  name = c('a'),
+                  conjugate5 = c('TTT'),
+                  dictionary = my_dic)
 
 my_dic <- data.table::data.table(
   type = c(

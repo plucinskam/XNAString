@@ -19,11 +19,7 @@ setClassUnion(
 )
 
 #' @rdname xnastringClassUnions
-setClassUnion(
-  "charOrDNA",
-  c(
-    "character",
-    "DNAString",
-    "DNAStringSet"
-  )
-)
+setClassUnion("charOrDNA",
+              c("character",
+                "DNAString",
+                "DNAStringSet"))

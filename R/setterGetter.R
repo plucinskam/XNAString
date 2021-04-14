@@ -20,6 +20,9 @@
 #' @return vector in getter method, XNAStringSet object
 #'  (with replaced name slot) in setter method
 #'
+#' @include xnaStringClass.R
+#' @include xnaStringSetClass.R
+#'
 #' @export
 #' @rdname name
 #' @name name
@@ -1152,4 +1155,209 @@ setMethod("duplex_structure<-", "XNAString", function(x, value) {
   x@duplex_structure <- value
   validObject(x)
   x
+})
+
+
+#' Default_sugar setter/getter method
+#'
+#' Getter methods enable extraction of single slots from XNAString
+#' and XNAStringSet objects.
+#' E.g. name method extracts name slot from XNAString/XNAStringSet
+#' object.
+#'
+#' Setter methods enable overwriting single slots from XNAString
+#' and XNAStringSet objects.
+#' E.g. name<- method overwrites existing name slot
+#'
+#' @param x XNAString/XNAStringSet object
+#' @param value character vector applied only for setter method
+#' @param ... optional arguments to generic function to support
+#'  additional methods
+#'
+#' @return vector in getter method, XNAStringSet object
+#'  (with replaced name slot) in setter method
+#' @examples
+#'
+#' my_dic <- data.table::data.table(
+#'   type = c(
+#'     rep("base", 3),
+#'     rep("sugar", 2),
+#'     rep("backbone", 3)
+#'   ),
+#'   symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+#' )
+#' obj <- XNAString(
+#'   name = "b",
+#'   base = "GGE",
+#'   default_sugar = 'F',
+#'   default_backbone = 'X',
+#'   dictionary = my_dic
+#' )
+#' default_sugar(obj)
+#' @export
+#' @rdname default_sugar
+#' @name default_sugar
+setGeneric("default_sugar", function(x, ...) {
+  standardGeneric("default_sugar")
+})
+
+#' @export
+#' @rdname default_sugar
+setMethod("default_sugar", "XNAString", function(x) {
+  x@default_sugar
+})
+
+#' @export
+#' @rdname default_sugar
+setMethod("default_sugar", "XNAStringSet", function(x) {
+  ls <- lapply(x@objects, function(y) {
+    paste(y@default_sugar, collapse = ", ")
+  })
+  
+  unlist(ls)
+})
+
+
+#' @export
+#' @rdname default_sugar
+setGeneric("default_sugar<-", function(x, ..., value) {
+  standardGeneric("default_sugar<-")
+})
+
+#' @export
+#' @rdname default_sugar
+setMethod("default_sugar<-", "XNAString", function(x, value) {
+  x@default_sugar <- value
+  validObject(x)
+  x
+})
+
+
+
+
+
+
+#' Default_backbone setter/getter method
+#'
+#' Getter methods enable extraction of single slots from XNAString
+#' and XNAStringSet objects.
+#' E.g. name method extracts name slot from XNAString/XNAStringSet
+#' object.
+#'
+#' Setter methods enable overwriting single slots from XNAString
+#' and XNAStringSet objects.
+#' E.g. name<- method overwrites existing name slot
+#'
+#' @param x XNAString/XNAStringSet object
+#' @param value character vector applied only for setter method
+#' @param ... optional arguments to generic function to support
+#'  additional methods
+#'
+#' @return vector in getter method, XNAStringSet object
+#'  (with replaced name slot) in setter method
+#' @examples
+#'
+#' my_dic <- data.table::data.table(
+#'   type = c(
+#'     rep("base", 3),
+#'     rep("sugar", 2),
+#'     rep("backbone", 3)
+#'   ),
+#'   symbol = c("G", "E", "A", "F", "O", "S", "B", "X")
+#' )
+#' obj <- XNAString(
+#'   name = "b",
+#'   base = "GGE",
+#'   default_sugar = 'F',
+#'   default_backbone = 'X',
+#'   dictionary = my_dic
+#' )
+#' default_backbone(obj)
+#' @export
+#' @rdname default_backbone
+#' @name default_backbone
+setGeneric("default_backbone", function(x, ...) {
+  standardGeneric("default_backbone")
+})
+
+#' @export
+#' @rdname default_backbone
+setMethod("default_backbone", "XNAString", function(x) {
+  x@default_backbone
+})
+
+#' @export
+#' @rdname default_backbone
+setMethod("default_backbone", "XNAStringSet", function(x) {
+  ls <- lapply(x@objects, function(y) {
+    paste(y@default_backbone, collapse = ", ")
+  })
+  
+  unlist(ls)
+})
+
+
+#' @export
+#' @rdname default_backbone
+setGeneric("default_backbone<-", function(x, ..., value) {
+  standardGeneric("default_backbone<-")
+})
+
+#' @export
+#' @rdname default_backbone
+setMethod("default_backbone<-", "XNAString", function(x, value) {
+  x@default_backbone <- value
+  validObject(x)
+  x
+})
+
+
+
+
+
+
+
+
+#' Objects getter method for XNAStringSet class
+#'
+#' Getter methods enable extraction of single slots from
+#' XNAStringSet objects.
+#' E.g. objects method extracts objects slot from XNAStringSet object. It is
+#' a list of XNAString objects.
+#'
+#'
+#' @param x XNAStringSet object
+#' @param ... optional arguments to generic function to support
+#'  additional methods
+#'
+#' @return list of XNAString objects
+#' @examples
+#' my_dic <- data.table::data.table(type = c(rep('base',3),
+#'                                           rep('sugar',2),
+#'                                           rep('backbone',3)),
+#'                                 symbol = c('G', 'E', 'A', 'F', 
+#'                                            'O', 'S', 'B', 'X'))
+#' obj2 <- XNAString(name = 'b',
+#'                   base = 'GGE',
+#'                   sugar = 'FFO',
+#'                   dictionary = my_dic)
+#' obj3 <- XNAString(name = 'b',
+#'                   base = c('GGE','EEE'),
+#'                   sugar = c('FFO', 'OOO'),
+#'                   dictionary = my_dic)
+#' XNAStringSetObj <- XNAStringSet(objects=list(obj2, obj3))
+#' objects(XNAStringSetObj)
+#'
+#' @export
+#' @rdname objects
+#' @name objects
+setGeneric("objects", function(x, ...) {
+  standardGeneric("objects")
+})
+
+
+#' @export
+#' @rdname objects
+setMethod("objects", "XNAStringSet", function(x) {
+  x@objects
 })

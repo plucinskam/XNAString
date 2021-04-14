@@ -11,7 +11,20 @@
 \alias{[[,XNAStringSet,ANY,ANY-method}
 \title{Create class which consists of XNAString objects given as a list}
 \usage{
-XNAStringSet(objects)
+XNAStringSet(
+  objects = NA,
+  base = NA,
+  sugar = NA,
+  backbone = NA,
+  target = NA,
+  col.base = "base",
+  col.sugar = "sugar",
+  col.backbone = "backbone",
+  col.target = "target",
+  default_sugar = NA,
+  default_backbone = NA,
+  compl_dict = complementary_bases
+)
 
 \S4method{show}{XNAStringSet}(object)
 
@@ -21,6 +34,42 @@ XNAStringSet(objects)
 }
 \arguments{
 \item{objects}{list of XNAString objects}
+
+\item{base}{string (or character), RNAString, RNAStringSet, DNAString or
+DNAStringSet. In use only when objects argument is empty.}
+
+\item{sugar}{string (or character). In use only when objects argument is
+empty.}
+
+\item{backbone}{string (or character). In use only when objects argument
+is empty.}
+
+\item{target}{DNAStringSet, DNAString or character. In use only when objects
+argument is empty.}
+
+\item{col.base}{character (name of base column). In use only when objects
+argument is empty.}
+
+\item{col.sugar}{character (name of sugar column). In use only when objects
+argument is empty.}
+
+\item{col.backbone}{character (name of backbone column). In use only when o
+bjects argument is empty.}
+
+\item{col.target}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{default_sugar}{character - only one letter. Will be replicated
+nchar(base) times. In use only when objects argument is
+empty.}
+
+\item{default_backbone}{character - only one letter. Will be replicated
+nchar(base)-1 times. In use only when objects
+argument is empty.}
+
+\item{compl_dict}{data.table with following columns:
+"base", "target". By default internal XNAString dictionary is used. In use
+only when objects argument is empty.}
 
 \item{object}{XNAStringSet object}
 
@@ -34,6 +83,8 @@ XNASTringSet object
 }
 \description{
 Create class which consists of XNAString objects given as a list
+
+Create XNAStringSet object
 
 Define show method
 

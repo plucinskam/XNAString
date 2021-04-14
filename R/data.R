@@ -34,3 +34,5 @@
 #' @usage data(complementary_bases)
 #' @source RMR internal bioinformatics database (Mimir)
 "complementary_bases"
+
+

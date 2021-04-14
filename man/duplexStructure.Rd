@@ -16,7 +16,8 @@ predictDuplexStructure(obj, ...)
 \arguments{
 \item{obj}{XNAString object}
 
-\item{...}{optional arguments to generic function to support additional methods}
+\item{...}{optional arguments to generic function to support additional
+methods}
 }
 \value{
 list (structure and mfe)

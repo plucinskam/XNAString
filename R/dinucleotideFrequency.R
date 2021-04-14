@@ -1,7 +1,8 @@
 #' Create set of functions and methods to calculate dinucleotide frequency in
 #' base, sugar and backbone slots
 #'
-#' @param unique_sets string vector of double letters -these letters pose column names
+#' @param unique_sets string vector of double letters -these letters pose
+#'                    column names
 #' @param seq string (or character) - frequency is calculated for
 #'                                   this string
 #' @param as.prob logical - if TRUE frequency returned as probability of
@@ -10,8 +11,12 @@
 #' @return numeric - named numeric vector
 #' @importFrom stringr str_sub
 #'
-#' @examples seqDinucleotideFrequency(c("AB", "BA", "CD"), "ABABAB", as.prob = FALSE)
-#' seqDinucleotideFrequency(c("GC", "CG", "CC"), "GCCG", as.prob = FALSE)
+#' @examples seqDinucleotideFrequency(c("AB", "BA", "CD"),
+#'                                    "ABABAB",
+#'                                     as.prob = FALSE)
+#' seqDinucleotideFrequency(c("GC", "CG", "CC"),
+#'                          "GCCG",
+#'                          as.prob = FALSE)
 #' @export
 seqDinucleotideFrequency <- function(unique_sets, seq, as.prob) {
   # split sequence to double letters
@@ -21,13 +26,13 @@ seqDinucleotideFrequency <- function(unique_sets, seq, as.prob) {
   } else {
     seq <- ""
   }
-
+  
   # return frequency
   freq <- base::table(seq)
   if (as.prob == TRUE) {
     freq <- base::prop.table(freq)
   }
-
+  
   # table function returns frequency for double letters existing in sequence,
   # let's extend it to the possible double letters in unique_letters
   extended_freq <- vapply(unique_sets, function(letter) {
@@ -36,14 +41,16 @@ seqDinucleotideFrequency <- function(unique_sets, seq, as.prob) {
   # if na -> 0 occurence
   extended_freq[is.na(extended_freq)] <- 0
   names(extended_freq) <- unique_sets
-
+  
   return(extended_freq)
 }
 
 
-#' seqVectorDinucleotideFrequency function calculates frequency for strings vector
+#' seqVectorDinucleotideFrequency function calculates frequency for strings
+#' vector
 #'
-#' @param unique_sets string vector of double letters -these letters pose column names
+#' @param unique_sets string vector of double letters -these letters pose
+#'                    column names
 #' @param seq_vec vector of strings (or characters) - frequency will be
 #'                calculated for this vector
 #' @param as.prob logical - if TRUE frequency returned as probability of
@@ -51,20 +58,20 @@ seqDinucleotideFrequency <- function(unique_sets, seq, as.prob) {
 #'
 #' @return matrix - each row denotes frequency for a specific string of vector
 #'
-#' @examples seqVectorDinucleotideFrequency(c("AB", "BA", "CD"), c("ABABAB", "ABABCD"), as.prob = FALSE)
+#' @examples seqVectorDinucleotideFrequency(c("AB", "BA", "CD"),
+#'                                          c("ABABAB", "ABABCD"),
+#'                                          as.prob = FALSE)
 #' @export
 seqVectorDinucleotideFrequency <-
   function(unique_sets, seq_vec, as.prob) {
     # # create matrix M to store frequency for each element in seq_vec
     M <-
       matrix(,
-        nrow = length(seq_vec),
-        ncol = length(unique_sets)
-      )
-
-    M <- sapply(seq(1, length(seq_vec)), function(i) {
+             nrow = length(seq_vec),
+             ncol = length(unique_sets))
+    M <- vapply(seq(1, length(seq_vec)), function(i) {
       M[i, ] <- seqDinucleotideFrequency(unique_sets, seq_vec[i], as.prob)
-    })
+    }, numeric(length(unique_sets)))
     M <- t(M)
     return(M)
   }
@@ -77,8 +84,8 @@ seqVectorDinucleotideFrequency <-
 #' @name dinucleotideFrequency
 #'
 #' @importFrom formattable formattable
-#' 
-#' @examples 
+#'
+#' @examples
 #'   my_dic <-
 #' data.table::data.table(
 #'  type = c(rep("base", 3), rep("sugar", 2), rep("backbone", 3)),
@@ -105,14 +112,15 @@ XNADinucleotideFrequencyFun <-
            base_only = FALSE) {
     (is(obj, "XNAString") | is(obj, "XNAStringSet")) ||
       stop("An object must be of XNAString or XNAStringSet class")
-
-    !(base_only == TRUE & !all(is.na(double_letters))) ||
+    
+    ! (base_only == TRUE & !all(is.na(double_letters))) ||
       stop("If base_only is TRUE, double_letters argument must be ommited")
-
+    
     matrix_nbr %in% c(1, 2) ||
       stop("The matrix_nbr must be either 1 or 2")
-
-    # base can be DNAString or DNAStringSet, change it to character with base methods
+    
+    # base can be DNAString or DNAStringSet, change it to character with base
+    # methods
     # on the right side, base getter gets base slot and changes to character
     # on the left, base setter changes the base slot
     if (class(obj)[[1]] == "XNAString") {
@@ -123,22 +131,23 @@ XNADinucleotideFrequencyFun <-
         base(obj, 2) <- base(obj, 2)
       }
     }
-
+    
     # if object is "XNAString", change it to XNAStringSet
     if (class(obj)[[1]] == "XNAString") {
       obj <- XNAString2XNAStringSet(obj)
     }
-
+    
     obj_dt <- set2Dt(obj, slots = c(slot))
-
-    # if double_letters missing, check on the possible double_letters in dictionary
+    
+    # if double_letters missing, check on the possible double_letters in
+    # dictionary
     if (any(is.na(double_letters))) {
-      dictionary <- obj@objects[[1]]@dictionary
+      dictionary <- dictionary(objects(obj)[[1]])
       poss_letters <-
         sort(unique(dictionary[dictionary$type == slot][["symbol"]]))
       double_letters <- c(outer(poss_letters, poss_letters, paste0))
     }
-
+    
     # if base_only TRUE and A,C,G, or T not in dictionary -> warning
     base_double_letters <-
       c(
@@ -159,14 +168,14 @@ XNADinucleotideFrequencyFun <-
         "GT",
         "TT"
       )
-    !(base_only == TRUE &
-      !all(base_double_letters %in% double_letters)) ||
+    ! (base_only == TRUE &
+         !all(base_double_letters %in% double_letters)) ||
       stop(
         "base_only parameter set as TRUE, but the objet's dictionary or
-           double_letters parameter does not include even one combination of base
-           letters: A, C, G or T"
+         double_letters parameter does not include even one combination of base
+         letters: A, C, G or T"
       )
-
+    
     eval(parse(
       text = paste(
         "freq <- lapply(obj_dt$",
@@ -179,15 +188,14 @@ XNADinucleotideFrequencyFun <-
         sep = ""
       )
     ))
-
+    
     cols <- colnames(freq[[1]])
     freq <-
       matrix(unlist(freq),
-        nrow = length(freq),
-        byrow = TRUE
-      )
+             nrow = length(freq),
+             byrow = TRUE)
     colnames(freq) <- cols
-
+    
     # if base_only TRUE, frequency for A, C, G, T and other
     if (base_only == TRUE) {
       other_letters <-
@@ -220,9 +228,9 @@ XNADinucleotideFrequencyFun <-
         names(freq)[length(freq)] <- "other"
       }
     }
-
+    
     freq <- formattable(freq, digits = 2, format = "f")
-
+    
     return(freq)
   }
 
@@ -231,7 +239,8 @@ XNADinucleotideFrequencyFun <-
 
 
 
-#' XNADinucleotideFrequency method returns dinucleotide frequency for a given object.
+#' XNADinucleotideFrequency method returns dinucleotide frequency for a given
+#' object.
 #' It works for 3 slots: base, sugar and backbone. If matrix_nbr equals 1,
 #' dinucleotide frequency for the first elements in the slot is returned.
 #' Double letters can be given as argument, otherwise unique double letters in
@@ -245,7 +254,8 @@ XNADinucleotideFrequencyFun <-
 #'                          occurence
 #' @param base_only logical - if TRUE, frequency checked for
 #'                            'A', 'C', 'G', 'T', other
-#' @param ... optional arguments to generic function to support additional methods
+#' @param ... optional arguments to generic function to support additional
+#'            methods
 #'
 #' @return matrix (frequency matrix for a given slot)
 #'
@@ -254,54 +264,45 @@ XNADinucleotideFrequencyFun <-
 #' @rdname dinucleotideFrequency
 #' @export
 setGeneric("XNADinucleotideFrequency",
-  signature = "obj",
-  function(obj,
-           slot,
-           double_letters = NA,
-           matrix_nbr = 1,
-           as.prob = FALSE,
-           base_only = FALSE,
-           ...) {
-    standardGeneric("XNADinucleotideFrequency")
-  }
-)
+           signature = "obj",
+           function(obj,
+                    slot,
+                    double_letters = NA,
+                    matrix_nbr = 1,
+                    as.prob = FALSE,
+                    base_only = FALSE,
+                    ...) {
+             standardGeneric("XNADinucleotideFrequency")
+           })
 
 #' @rdname dinucleotideFrequency
-setMethod(
-  "XNADinucleotideFrequency", c("XNAString"),
-  function(obj,
-           slot,
-           double_letters = NA,
-           matrix_nbr = 1,
-           as.prob = FALSE,
-           base_only = FALSE) {
-    XNADinucleotideFrequencyFun(
-      obj,
-      slot,
-      double_letters,
-      matrix_nbr,
-      as.prob,
-      base_only
-    )
-  }
-)
+setMethod("XNADinucleotideFrequency", c("XNAString"),
+          function(obj,
+                   slot,
+                   double_letters = NA,
+                   matrix_nbr = 1,
+                   as.prob = FALSE,
+                   base_only = FALSE) {
+            XNADinucleotideFrequencyFun(obj,
+                                        slot,
+                                        double_letters,
+                                        matrix_nbr,
+                                        as.prob,
+                                        base_only)
+          })
 
 #' @rdname dinucleotideFrequency
-setMethod(
-  "XNADinucleotideFrequency", c("XNAStringSet"),
-  function(obj,
-           slot,
-           double_letters = NA,
-           matrix_nbr = 1,
-           as.prob = FALSE,
-           base_only = FALSE) {
-    XNADinucleotideFrequencyFun(
-      obj,
-      slot,
-      double_letters,
-      matrix_nbr,
-      as.prob,
-      base_only
-    )
-  }
-)
+setMethod("XNADinucleotideFrequency", c("XNAStringSet"),
+          function(obj,
+                   slot,
+                   double_letters = NA,
+                   matrix_nbr = 1,
+                   as.prob = FALSE,
+                   base_only = FALSE) {
+            XNADinucleotideFrequencyFun(obj,
+                                        slot,
+                                        double_letters,
+                                        matrix_nbr,
+                                        as.prob,
+                                        base_only)
+          })
