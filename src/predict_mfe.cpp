@@ -3,13 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <ViennaRNA/fold.h>
 #include <ViennaRNA/utils/basic.h>
 #include <ViennaRNA/mfe.h>
-#include <ViennaRNA/fold_compound.h>
-#include <ViennaRNA/utils/strings.h>
-
-
 
 
 using namespace Rcpp;

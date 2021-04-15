@@ -58,6 +58,133 @@ prepare_Boltzmann_weights_stack(vrna_fold_compound_t *vc);
  # BEGIN OF FUNCTION DEFINITIONS #
  #################################
  */
+
+
+PUBLIC int
+  vrna_sc_add_SHAPE_deigan(vrna_fold_compound_t *vc,
+                           const double         *reactivities,
+                           double               m,
+                           double               b,
+                           unsigned int         options)
+  {
+    int         i;
+    FLT_OR_DBL  *values;
+    
+    if (vc) {
+      if (!reactivities) {
+        if (options & VRNA_OPTION_PF) {
+          prepare_Boltzmann_weights_stack(vc);
+          return 1;
+        }
+      } else {
+        switch (vc->type) {
+        case VRNA_FC_TYPE_SINGLE:
+          values = (FLT_OR_DBL *)vrna_alloc(sizeof(FLT_OR_DBL) * (vc->length + 1));
+          
+          /* first convert the values according to provided slope and intercept values */
+          for (i = 1; i <= vc->length; ++i)
+            values[i] = reactivities[i] < 0 ? 0. : (FLT_OR_DBL)(m * log(reactivities[i] + 1) + b);
+          
+          /* always store soft constraints in plain format */
+          vrna_sc_set_stack(vc, (const FLT_OR_DBL *)values, options);
+          free(values);
+          
+          return 1; /* success */
+          
+        case VRNA_FC_TYPE_COMPARATIVE:
+          break;
+        }
+      }
+    }
+    
+    return 0; /* error */
+  }
+
+PUBLIC int
+  vrna_file_SHAPE_read( const char *file_name,
+                        int length,
+                        double default_value,
+                        char *sequence,
+                        double *values){
+    
+    FILE *fp;
+    char *line;
+    int i;
+    int count = 0;
+    
+    if(!file_name)
+      return 0;
+    
+    if(!(fp = fopen(file_name, "r"))){
+      return 0;
+    }
+    
+    for (i = 0; i < length; ++i)
+    {
+      sequence[i] = 'N';
+      values[i + 1] = default_value;
+    }
+    
+    sequence[length] = '\0';
+    
+    while((line=vrna_read_line(fp))){
+      int position;
+      unsigned char nucleotide = 'N';
+      double reactivity = default_value;
+      char *second_entry = 0;
+      char *third_entry = 0;
+      char *c;
+      
+      if(sscanf(line, "%d", &position) != 1)
+      {
+        free(line);
+        continue;
+      }
+      
+      if(position <= 0 || position > length)
+      {
+        fclose(fp);
+        free(line);
+        return 0;
+      }
+      
+      for(c = line + 1; *c; ++c){
+        if(isspace(*(c-1)) && !isspace(*c)) {
+          if(!second_entry){
+            second_entry = c;
+          }else{
+            third_entry = c;
+            break;
+          }
+        }
+      }
+      
+      if(second_entry){
+        if(third_entry){
+          sscanf(second_entry, "%c", &nucleotide);
+          sscanf(third_entry, "%lf", &reactivity);
+        }else if(sscanf(second_entry, "%lf", &reactivity) != 1)
+          sscanf(second_entry, "%c", &nucleotide);
+      }
+      
+      sequence[position-1] = nucleotide;
+      values[position] = reactivity;
+      ++count;
+      
+      free(line);
+    }
+    
+    fclose(fp);
+    
+    if(!count)
+    {
+      return 0;
+    }
+    
+    return 1;
+  }
+
+
 PUBLIC void
 vrna_constraints_add_SHAPE(vrna_fold_compound_t *vc,
                            const char           *shape_file,
@@ -67,12 +194,12 @@ vrna_constraints_add_SHAPE(vrna_fold_compound_t *vc,
                            unsigned int         constraint_type)
 {
   float   p1, p2;
-  char    method;
+  char    *method;
   char    *sequence;
   double  *values;
   int     i, length = vc->length;
 
-  
+  method = shape_method;
 
   sequence  = vrna_alloc(sizeof(char) * (length + 1));
   values    = vrna_alloc(sizeof(double) * (length + 1));
@@ -273,47 +400,6 @@ vrna_sc_add_SHAPE_zarringhalam(vrna_fold_compound_t *vc,
   }
 
   return ret;
-}
-
-
-PUBLIC int
-vrna_sc_add_SHAPE_deigan(vrna_fold_compound_t *vc,
-                         const double         *reactivities,
-                         double               m,
-                         double               b,
-                         unsigned int         options)
-{
-  int         i;
-  FLT_OR_DBL  *values;
-
-  if (vc) {
-    if (!reactivities) {
-      if (options & VRNA_OPTION_PF) {
-        prepare_Boltzmann_weights_stack(vc);
-        return 1;
-      }
-    } else {
-      switch (vc->type) {
-        case VRNA_FC_TYPE_SINGLE:
-          values = (FLT_OR_DBL *)vrna_alloc(sizeof(FLT_OR_DBL) * (vc->length + 1));
-
-          /* first convert the values according to provided slope and intercept values */
-          for (i = 1; i <= vc->length; ++i)
-            values[i] = reactivities[i] < 0 ? 0. : (FLT_OR_DBL)(m * log(reactivities[i] + 1) + b);
-
-          /* always store soft constraints in plain format */
-          vrna_sc_set_stack(vc, (const FLT_OR_DBL *)values, options);
-          free(values);
-
-          return 1; /* success */
-
-        case VRNA_FC_TYPE_COMPARATIVE:
-          break;
-      }
-    }
-  }
-
-  return 0; /* error */
 }
 
 
