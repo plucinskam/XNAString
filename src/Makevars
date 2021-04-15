@@ -1,7 +1,7 @@
 CXX_STD = CXX11
-PKG_CPPFLAGS= -Dlibcaf_core_shared_EXPORTS -I../inst -I../inst/include
-PKG_LIBS=-L../inst
-LIBS=-L./libs -L../inst
+PKG_CPPFLAGS= -Dlibcaf_core_shared_EXPORTS -I../src -I../src
+PKG_LIBS=-L../src
+LIBS=-L./libs -L../src
 
 
 SOURCES_CAF= ./ViennaRNA/utils/cpu.c  \

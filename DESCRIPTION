@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 0.99.11
+Version: 0.99.12
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -64,16 +64,18 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Collate:
     'RcppExports.R'
+    'utils.R'
+    'xnaStringSetClass.R'
+    'setterGetter.R'
     'classUnion.R'
     'xnaStringClass.R'
     'XNAString2Helm.R'
     'XNAStringFromHelm.R'
-    'utils.R'
-    'xnaStringSetClass.R'
     'alphabetFrequency.R'
     'data.R'
     'dictFromMimir.R'
     'dinucleotideFrequency.R'
+    'globals.R'
     'helm2String.R'
     'matchPDict.R'
     'matchPattern.R'
@@ -81,5 +83,4 @@ Collate:
     'predictDuplexStructure.R'
     'predictMfeStructure.R'
     'reverseComplement.R'
-    'setterGetter.R'
 VignetteBuilder: knitr
