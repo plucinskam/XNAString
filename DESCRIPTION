@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 0.99.14
+Version: 0.99.15
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -66,9 +66,9 @@ Collate:
     'RcppExports.R'
     'utils.R'
     'xnaStringSetClass.R'
+    'setterGetter.R'
     'classUnion.R'
     'xnaStringClass.R'
-    'setterGetter.R'
     'XNAString2Helm.R'
     'XNAStringFromHelm.R'
     'alphabetFrequency.R'
