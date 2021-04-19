@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 0.99.15
+Version: 0.99.16
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -35,7 +35,7 @@ Description: The XNAString package allows for description of base sequences and
     therefore it stores information about target sequences and provides interface
     for matching and alignment functions from Biostrings package. 
 biocViews: SequenceMatching, Alignment, Sequencing, Genetics
-Depends: R (>= 4.0)
+Depends: R (>= 4.1)
 Imports:
     Biostrings,
     BSgenome,
@@ -49,7 +49,8 @@ Imports:
     future.apply,
     stringr,
     formattable,
-    stats
+    stats,
+    utils
 Suggests:
     BSgenome.Hsapiens.UCSC.hg38,
     pander,
@@ -59,7 +60,6 @@ Suggests:
 LinkingTo: Rcpp
 License: GPL-2
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Collate:

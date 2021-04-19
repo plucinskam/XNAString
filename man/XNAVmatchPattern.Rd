@@ -109,6 +109,8 @@ An \link{MIndex} object for \code{vmatchPattern}.
 \description{
 This is function finding all the occurrences of a given pattern
 (typically short) in a (typically long) set of reference sequences.
+
+Implementation of this method is based on vmatchPatterrm method from BSgenome
 }
 \examples{
 s3 <-

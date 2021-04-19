@@ -89,7 +89,7 @@ helm2String <-
       }
       
       if (conjugate3 != "") {
-        while (stringi::stri_sub(backbone, stringi::stri_length(backbone)) == "O"
+        while(stringi::stri_sub(backbone, stringi::stri_length(backbone)) == "O"
                &
                stringi::stri_sub(sugar, stringi::stri_length(sugar)) != "L") {
           sugar <-

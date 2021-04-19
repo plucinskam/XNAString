@@ -59,7 +59,7 @@ seqVectorAlphabetFrequency <-
              nrow = length(seq_vec),
              ncol = length(unique_letters))
     M <- vapply(seq(1, length(seq_vec)), function(i) {
-      M[i, ] <- seqAlphabetFrequency(unique_letters, seq_vec[i], as.prob)
+      M[i,] <- seqAlphabetFrequency(unique_letters, seq_vec[i], as.prob)
     }, numeric(length(unique_letters)))
     M <- t(M)
     return(M)

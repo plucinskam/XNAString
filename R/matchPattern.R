@@ -194,7 +194,9 @@ setMethod("XNAMatchPattern", c("XNAString", "XString"),
 #' XNAString::XNAString(
 #'  base = "GCGGAGAGAGCACAGATACA",
 #'  sugar = "FODDDDDDDDDDDDDDDDDD",
-#'  target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+#'  target = Biostrings::DNAStringSet(
+#'      c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA")
+#'  )
 #' )
 #' chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
 #' result <- XNAString::XNAMatchPattern(s3, chrom)
@@ -279,7 +281,7 @@ setMethod("XNAVmatchPattern", c("XNAString", "XStringSet"),
             )
           })
 
-
+#' Implementation of this method is based on vmatchPatterrm method from BSgenome
 #' @rdname XNAVmatchPattern
 setMethod("XNAVmatchPattern", c("XNAString", "BSgenome"),
           function(pattern,
