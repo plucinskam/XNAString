@@ -117,7 +117,9 @@ s3 <-
 XNAString::XNAString(
  base = "GCGGAGAGAGCACAGATACA",
  sugar = "FODDDDDDDDDDDDDDDDDD",
- target = Biostrings::DNAStringSet(c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA"))
+ target = Biostrings::DNAStringSet(
+     c("AAAAGCTTTACAAAATCCAAGATC", "GGCGGAGAGAGCACAGATACA")
+ )
 )
 chrom <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38$chr1
 result <- XNAString::XNAMatchPattern(s3, chrom)
