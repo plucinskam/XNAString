@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 0.99.18
+Version: 0.99.19
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -56,7 +56,9 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
-    rmarkdown
+    rmarkdown,
+    pander,
+    markdown
 LinkingTo: Rcpp
 License: GPL-2
 Encoding: UTF-8
