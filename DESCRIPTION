@@ -52,10 +52,11 @@ Imports:
     formattable,
     stats,
     testthat,
-    BSgenome.Hsapiens.UCSC.hg38,
-    pander
-Suggested:
-    pander
+    BSgenome.Hsapiens.UCSC.hg38
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown
 LinkingTo: Rcpp
 License: GPL-2
 Encoding: UTF-8
@@ -82,9 +83,4 @@ Collate:
     'predictDuplexStructure.R'
     'predictMfeStructure.R'
     'reverseComplement.R'
-Suggests: 
-    BiocStyle,
-    knitr,
-    rmarkdown,
-    markdown
 VignetteBuilder: knitr
