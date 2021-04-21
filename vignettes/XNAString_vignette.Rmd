@@ -1,16 +1,15 @@
 ---
 title: "XNAString_vignette"
-subtitle: "Methods overview and classes description"
 author:
 - Anna Gorska
 - Marianna Plucinska
 date: "`r Sys.Date()`"
 output:
-  BiocStyle::html_document
-vignette: >
-  %\VignetteIndexEntry{XNAString_vignette}
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteEncoding{UTF-8}
+  rmarkdown::html_vignette: default
+  BiocStyle::html_document: default
+subtitle: Methods overview and classes description
+vignette: |
+  %\VignetteIndexEntry{XNAString_vignette} %\VignetteEngine{knitr::knitr} %\VignetteEncoding{UTF-8}
 ---
 
 ```{r style, echo = FALSE, results = 'asis'}
