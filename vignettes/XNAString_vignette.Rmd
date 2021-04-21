@@ -8,8 +8,10 @@ output:
   rmarkdown::html_vignette: default
   BiocStyle::html_document: default
 subtitle: Methods overview and classes description
-vignette: |
-  %\VignetteIndexEntry{XNAString_vignette} %\VignetteEngine{knitr::knitr} %\VignetteEncoding{UTF-8}
+vignette: >
+  %\VignetteIndexEntry{XNAString_vignette} 
+  %\VignetteEngine{knitr::knitr} 
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r style, echo = FALSE, results = 'asis'}
