@@ -134,13 +134,18 @@ XNAStringSet <- function(objects = NA,
 #' @importFrom data.table setDT
 #'
 xnaObj2Dt <- function(obj, slots) {
-  dt <- data.table::data.table()
-  dt <- data.table::setDT(as.list(sapply(slots, function(x) {
-    eval(parse(text = paste(
-      "dt[ ,'", x, "'] <- list(list(", x, "(obj)))",
+  
+  a <- lapply(slots, function(x) {
+    list(eval(parse(text = paste(
+      "as.character(obj","@", x, ")",
       sep = ''
-    )))
-  })))
+    ))))
+  })
+  
+  names(a) <- slots
+  
+  dt <- data.table::setDT(a)
+  
   # target is DNAStringSet object and has to be overwritten manually
   if ('target' %in% slots) {
     dt[, 'target'] <- paste(target(obj), sep = '')
@@ -203,18 +208,11 @@ xnaObj2Dt <- function(obj, slots) {
 #' XNAStringSetObj <- XNAStringSet(objects = list(obj2, obj3))
 #' set2Dt(XNAStringSetObj, c("base", "sugar"))
 set2Dt <- function(obj, slots) {
-  M <- sapply(seq(1, length(objects(obj))), function(i) {
+  a <- lapply(seq(1, length(objects(obj))), function(i) {
     xnaObj2Dt(objects(obj)[i][[1]], slots)
   })
-  # if there is just slot, list returned instead of matrix
-  if (length(slots) == 1) {
-    M <- matrix(M)
-    colnames(M) <- slots
-    M <- t(M)
-  }
-  df <- as.data.frame(t(M))
-  # df columns are lists of lists
-  dt <- as.data.table(apply(df, 2, unlist, recursive = FALSE))
+  
+  dt <- data.table::rbindlist(a)
   
   return(dt)
 }
@@ -545,7 +543,7 @@ setMethod("set2List", "XNAStringSet",
             ls <- list()
             obj_len <- length(objects(obj))
             
-            ls <- sapply(seq(1, obj_len), function(i)
+            ls <- lapply(seq(1, obj_len), function(i)
               obj[i])
             return(ls)
           })
