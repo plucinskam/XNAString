@@ -1,22 +1,32 @@
+
 ---
-title: "XNAString_vignette"
+title: "XNAString package"
 author:
-- Anna Gorska
-- Marianna Plucinska
-date: "`r Sys.Date()`"
+- name: Anna Górska
+  affiliation:  Roche Global IT Solution Centre, Roche Polska Sp. z o.o.
+- name: Marianna Plucinska
+  affiliation:  Roche Global IT Solution Centre, Roche Polska Sp. z o.o.
+  email: marinna.plucinska@roche.com
+- name: Łukasz Kiełpiński
+  affiliation: Roche Pharma Research and Early Development, Roche Innovation Center Copenhagen, DK-2970 Hørsholm, Denmark.
+- name: Lykke Pedersen
+  affiliation: Roche Pharma Research and Early Development, Roche Innovation Center Copenhagen, DK-2970 Hørsholm, Denmark.
+- name: Disa Theler
+  affiliation: Roche Pharma Research and Early Development, Roche Innovation Center Copenhagen, DK-2970 Hørsholm, Denmark.
+- name: Peter H. Hagedorn
+  affiliation: Roche Pharma Research and Early Development, Roche Innovation Center Copenhagen, DK-2970 Hørsholm, Denmark.
+  email: peter.hagedorn@roche.com 
 output:
-  rmarkdown::html_vignette: default
-  BiocStyle::html_document: default
-subtitle: Methods overview and classes description
-vignette: >
-  %\VignetteIndexEntry{XNAString_vignette} 
-  %\VignetteEngine{knitr::knitr} 
+  BiocStyle::html_document:
+    toc_float: true
+  BiocStyle::pdf_document: default
+package: XNAString
+vignette: |
+  %\VignetteIndexEntry{Authoring R Markdown vignettes}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r style, echo = FALSE, results = 'asis'}
-BiocStyle::markdown()
-```
 
 # Introduction
 
@@ -24,9 +34,6 @@ Development of XNAString package aims at enabling efficient manipulation of modi
 The package inherits some of the functionalities from `r Biocpkg("Biostrings")` package. In contrary to Biostrings sequences, XNAString classes allow for description of base sequence, sugar and backbone in a single object. 
 XNAString is able to capture single stranded oligonucleotides, siRNAs, PNAs, shRNAs, gRNAs and synthetic mRNAs, and enable users to apply sequence-manipulating Bioconductor packages to their analysis. 
 XNAString can read and write a HELM notation, compute alphabet frequency, align and match targets.
-
-
-<!-- <p style="color: blue; text-align: center; font-size: 20px;">Methods overview</p> -->
 
 # Methods and functions overview
 
@@ -1004,4 +1011,14 @@ compl_dict
 xna <- XNAString::XNAStringSet(base = c("ACGTACG", "CCCGTAC", "AATACTT"), compl_dict = compl_dict)
 xna
 
+```
+
+
+# Session info {.unnumbered}
+
+Here is the output of `sessionInfo()` on the system on which this document was
+compiled running pandoc `r rmarkdown::pandoc_version()`:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
 ```
