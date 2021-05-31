@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 0.99.27
+Version: 1.0.1
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -11,20 +11,17 @@ Authors@R: c(person(given = "Anna",
             person(given = "Lykke",
                    family = "Pedersen",
                    role = "aut"),
-            person(given = "Lykke",
-                   family = "Pedersen",
-                   role = "aut"),
             person(given = "Lukasz",
                    family = "Kielpinski",
                    role = "aut"),
             person(given = "Disa",
                    family = "Tehler",
                    role = "aut"),
-            person(given = "Peter",
+            person(given = "Peter H.",
                    family = "Hagedorn",
                    role = "aut",
                    email = "peter.hagedorn@roche.com"))
-Date: 17.05.2021
+Date: 31.05.2021
 Description: The XNAString package allows for description of base sequences and 
     associated chemical modifications in a single object. XNAString is able to 
     capture single stranded, as well as double stranded molecules. Chemical 

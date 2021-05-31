@@ -1,8 +1,5 @@
 # XNAString: Efficient manipulation of modified oligonucleotide sequences
 ------------------------------------------------------------------------
-<!-- badges: start -->
-[![R-CMD-check-bioc](https://github.com/plucinskam/XNAString/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/plucinskam/XNAString/actions)
-<!-- badges: end -->
 
 ### **Description**
 The XNAString package allows for description of base sequences and associated chemical modifications in a single object. XNAString is able to capture single stranded, as well as double stranded molecules. Chemical modifications are represented as independent strings associated with different features of the molecules (base sequence, sugar sequence, backbone sequence, modifications) and can be read or written to a HELM notation. It also enables secondary structure prediction using RNAfold from ViennaRNA.
