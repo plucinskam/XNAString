@@ -22,7 +22,7 @@ output:
   BiocStyle::pdf_document: default
 package: XNAString
 vignette: |
-  %\VignetteIndexEntry{Authoring R Markdown vignettes}
+  %\VignetteIndexEntry{XNAString classes and functionalities}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
