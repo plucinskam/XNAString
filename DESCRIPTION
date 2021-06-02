@@ -21,7 +21,7 @@ Authors@R: c(person(given = "Anna",
                    family = "Hagedorn",
                    role = "aut",
                    email = "peter.hagedorn@roche.com"))
-Date: 31.05.2021
+Date: 02.06.2021
 Description: The XNAString package allows for description of base sequences and 
     associated chemical modifications in a single object. XNAString is able to 
     capture single stranded, as well as double stranded molecules. Chemical 
