@@ -1,6 +1,6 @@
 Package: XNAString
 Title: Efficient Manipulation of Modified Oligonucleotide Sequences
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(person(given = "Anna",
                   family = "Górska",
                   role = "aut"),
@@ -28,8 +28,10 @@ Description: The XNAString package allows for description of base sequences and
     modifications are represented as independent strings associated with different 
     features of the molecules (base sequence, sugar sequence, backbone sequence,
     modifications) and can be read or written to a HELM notation. It also enables
-    secondary structure prediction using RNAfold from ViennaRNA. XNAString is 
-    designed to be efficient representation of nucleic-acid based therapeutics, 
+    secondary structure prediction using RNAfold from ViennaRNA (distributed under 
+    its own \licence{https://github.com/ViennaRNA/ViennaRNA/blob/master/license.txt};
+    \citation{https://github.com/plucinskam/XNAString/blob/master/README.md#dependencies}).
+    XNAString is designed to be efficient representation of nucleic-acid based therapeutics, 
     therefore it stores information about target sequences and provides interface
     for matching and alignment functions from Biostrings package. 
 biocViews: SequenceMatching, Alignment, Sequencing, Genetics
@@ -83,5 +85,6 @@ Collate:
     'pairwiseAlignment.R'
     'predictDuplexStructure.R'
     'predictMfeStructure.R'
+    'replaceBase.R'
     'reverseComplement.R'
 VignetteBuilder: knitr

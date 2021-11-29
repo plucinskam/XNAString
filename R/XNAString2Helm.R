@@ -19,6 +19,7 @@
 XNAStringToHelm <-
   function(xnastring_obj,
            dictionary = xna_dictionary) {
+
     base_dict <- dictionary[dictionary$type == "base", ]
     sugar_dict <- dictionary[dictionary$type == "sugar", ]
     backbone_dict <- dictionary[dictionary$type == "backbone", ]
@@ -30,63 +31,86 @@ XNAStringToHelm <-
     indx_backbone <-
       stats::setNames(as.character(backbone_dict$HELM), backbone_dict$symbol)
     
-    base <- as.character(base(xnastring_obj))
-    sugar <- as.character(sugar(xnastring_obj))
-    backbone <- as.character(backbone(xnastring_obj))
-    conjugate5 <- conjugate5(xnastring_obj)
-    conjugate3 <- conjugate3(xnastring_obj)
-    
-    helms <- vapply(seq(1, length(base)), function(strand_nr) {
-      base_trans <-
-        vapply(strsplit(as.character(strsplit(base[strand_nr],
-                                              "")[[1]]), ">"),
-               function(x) {
-                 paste(indx_base[x], collapse = ">")
-               }, FUN.VALUE = 'character')
-      
-      sugar_trans <-
-        vapply(strsplit(as.character(strsplit(sugar[strand_nr],
-                                              "")[[1]]), ">"),
-               function(x) {
-                 paste(indx_sugar[x], collapse = ">")
-               }, FUN.VALUE = 'character')
-      
-      backbone_trans <-
-        vapply(strsplit(as.character(strsplit(backbone[strand_nr],
-                                              "")[[1]]), ">"),
-               function(x) {
-                 paste(indx_backbone[x], collapse = ">")
-               }, FUN.VALUE = 'character')
-      # add '' manually as the last symbol
-      backbone_trans[length(backbone_trans) + 1] <- ""
-      
-      parsed_xna_obj <-
-        paste(sugar_trans, base_trans, backbone_trans, sep = "")
-      parsed_xna_obj <- paste0(parsed_xna_obj, collapse = ".")
-      paste("RNA", strand_nr, "{", parsed_xna_obj, "}", sep = "")
-    }, FUN.VALUE = 'character')
-    
-    # if any of conjugate slots not missing, extend helms
-    if (!is.na(conjugate5) & conjugate5 != "") {
-      helms[[1]] <- paste0("CHEM1{", conjugate5, "}|", helms[[1]])
-    }
-    if (!is.na(conjugate3) & conjugate3 != "") {
-      helms[[1]] <- paste0(helms[[1]], "|CHEM1{", conjugate3, "}")
-    }
-    
-    # if base is a 2-elements vector, add pairing information with
-    # siRNA_HELM function
-    if (length(base) == 2) {
-      helms <-
-        paste(paste0(helms, collapse = '|'),
-              "$",
-              siRNA_HELM(xnastring_obj),
-              "$$$$V2.0",
-              sep = '')
+    if (class(xnastring_obj)[1] == "XNAString"){
+      xnastring_obj_set <- XNAStringSet(list(xnastring_obj))
     } else {
-      helms <- paste(paste0(helms, collapse = '|'), "$$$$V2.0", sep = '')
+      xnastring_obj_set <- xnastring_obj
     }
-    return(helms)
+    
+    helms_all <- c()
+    
+    for (i in seq(1, length(xnastring_obj_set@objects))){
+      
+      xnastring_obj <- xnastring_obj_set[[i]]
+        
+      base <- as.character(base(xnastring_obj))
+      sugar <- as.character(sugar(xnastring_obj))
+      backbone <- as.character(backbone(xnastring_obj))
+      conjugate5 <- conjugate5(xnastring_obj)
+      conjugate3 <- conjugate3(xnastring_obj)
+      
+      helms <- vapply(seq(1, length(base)), function(strand_nr) {
+        base_trans <-
+          vapply(strsplit(as.character(strsplit(base[strand_nr],
+                                                "")[[1]]), ">"),
+                 function(x) {
+                   paste(indx_base[x], collapse = ">")
+                 }, FUN.VALUE = 'character')
+        
+        sugar_trans <-
+          vapply(strsplit(as.character(strsplit(sugar[strand_nr],
+                                                "")[[1]]), ">"),
+                 function(x) {
+                   paste(indx_sugar[x], collapse = ">")
+                 }, FUN.VALUE = 'character')
+        
+        backbone_trans <-
+          vapply(strsplit(as.character(strsplit(backbone[strand_nr],
+                                                "")[[1]]), ">"),
+                 function(x) {
+                   paste(indx_backbone[x], collapse = ">")
+                 }, FUN.VALUE = 'character')
+        # add '' manually as the last symbol
+        backbone_trans[length(backbone_trans) + 1] <- ""
+        
+        parsed_xna_obj <-
+          paste(sugar_trans, base_trans, backbone_trans, sep = "")
+        parsed_xna_obj <- paste0(parsed_xna_obj, collapse = ".")
+        paste("RNA", strand_nr, "{", parsed_xna_obj, "}", sep = "")
+      }, FUN.VALUE = 'character')
+      
+      # if any of conjugate slots not missing, extend helms
+      if (!is.na(conjugate5) & conjugate5 != "") {
+        helms[[1]] <- paste0("CHEM1{", conjugate5, "}|", helms[[1]])
+      }
+      if (!is.na(conjugate3) & conjugate3 != "") {
+        helms[[1]] <- paste0(helms[[1]], "|CHEM1{", conjugate3, "}")
+      }
+      
+      if ((!is.na(conjugate5) & conjugate5 != "") || (!is.na(conjugate3) & conjugate3 != "")){
+        dol_singns <- "$$$V2.0"
+      } else {
+        dol_singns <- "$$$$V2.0"
+      }
+      
+      # if base is a 2-elements vector, add pairing information with
+      # siRNA_HELM function
+      if (length(base) == 2) {
+        helms <-
+          paste(paste0(helms, collapse = '|'),
+                "$",
+                siRNA_HELM(xnastring_obj),
+                "$$$V2.0",
+                sep = '')
+      } else {
+        helms <- paste(paste0(helms, collapse = '|'), dol_singns, sep = '')
+      }
+      
+      helms_all <- c(helms_all, helms)
+    }
+    
+
+    return(helms_all)
   }
 
 

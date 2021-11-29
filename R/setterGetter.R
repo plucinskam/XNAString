@@ -158,15 +158,13 @@ setMethod("name<-", "XNAString", function(x, value) {
 #'   dictionary = my_dic
 #' )
 #' XNAStringSetObj <- XNAStringSet(objects = list(obj1, obj2))
-#' name(XNAStringSetObj, 1) <- c("new1", "new2")
-setMethod("name<-", "XNAStringSet", function(x, i = 1, value) {
-  stopifnot(i %in% c(1, 2))
-  
+#' name(XNAStringSetObj) <- c("new1", "new2")
+setMethod("name<-", "XNAStringSet", function(x, value) {
   x <- x@objects
   
   for (j in seq_len(length(x))) {
     x[[j]]@name <- as.character(x[[j]]@name)
-    x[[j]]@name[i] <- value[j]
+    x[[j]]@name <- value[j]
     validObject(x[[j]])
   }
   
@@ -1233,10 +1231,6 @@ setMethod("default_sugar<-", "XNAString", function(x, value) {
 })
 
 
-
-
-
-
 #' Default_backbone setter/getter method
 #'
 #' Getter methods enable extraction of single slots from XNAString
@@ -1312,13 +1306,7 @@ setMethod("default_backbone<-", "XNAString", function(x, value) {
 })
 
 
-
-
-
-
-
-
-#' Objects getter method for XNAStringSet class
+#' Objects getter/setter method for XNAStringSet class
 #'
 #' Getter methods enable extraction of single slots from
 #' XNAStringSet objects.
@@ -1360,4 +1348,19 @@ setGeneric("objects", function(x, ...) {
 #' @rdname objects
 setMethod("objects", "XNAStringSet", function(x) {
   x@objects
+})
+
+
+#' @export
+#' @rdname objects
+setGeneric("objects<-", function(x, ..., value) {
+  standardGeneric("objects<-")
+})
+ 
+#' @export
+#' @rdname objects
+setMethod("objects<-", "XNAStringSet", function(x, value) {
+  x@objects <- value
+  validObject(x)
+  x
 })

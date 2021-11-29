@@ -54,7 +54,7 @@ typedListCheck <- function(object) {
   is_correct_object_type <- vector()
   equal_dict <- vector()
   
-  stopifnot(length(objects(object)) >= 1)
+  #stopifnot(length(objects(object)) >= 1)
   
   for (i in seq_len(length(objects(object)))) {
     obj <- objects(object)[[i]]

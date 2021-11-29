@@ -4,7 +4,11 @@
 \alias{set2Dt}
 \title{set2Dt function - changes XNAStringSet object to data.table}
 \usage{
-set2Dt(obj, slots)
+set2Dt(
+  obj,
+  slots = c("name", "base", "sugar", "backbone", "target", "secondary_structure",
+    "conjugate5", "conjugate3")
+)
 }
 \arguments{
 \item{obj}{XNAStringSet object}

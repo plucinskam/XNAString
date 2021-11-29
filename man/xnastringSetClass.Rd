@@ -9,6 +9,7 @@
 \alias{[,XNAStringSet,ANY,ANY,ANY-method}
 \alias{extractionMethods}
 \alias{[[,XNAStringSet,ANY,ANY-method}
+\alias{[[<-,XNAStringSet,ANY,ANY-method}
 \title{Create class which consists of XNAString objects given as a list}
 \usage{
 XNAStringSet(
@@ -17,10 +18,16 @@ XNAStringSet(
   sugar = NA,
   backbone = NA,
   target = NA,
+  name = NA,
+  conjugate3 = NA,
+  conjugate5 = NA,
   col.base = "base",
   col.sugar = "sugar",
   col.backbone = "backbone",
   col.target = "target",
+  col.conjugate3 = "conjugate3",
+  col.conjugate5 = "conjugate5",
+  col.name = "name",
   default_sugar = NA,
   default_backbone = NA,
   compl_dict = complementary_bases
@@ -31,6 +38,8 @@ XNAStringSet(
 \S4method{[}{XNAStringSet,ANY,ANY,ANY}(x, i)
 
 \S4method{[[}{XNAStringSet,ANY,ANY}(x, i)
+
+\S4method{[[}{XNAStringSet,ANY,ANY}(x, i) <- value
 }
 \arguments{
 \item{objects}{list of XNAString objects}
@@ -47,6 +56,15 @@ is empty.}
 \item{target}{DNAStringSet, DNAString or character. In use only when objects
 argument is empty.}
 
+\item{name}{string (or character). In use only when objects argument
+is empty.}
+
+\item{conjugate3}{string (or character). In use only when objects argument
+is empty.}
+
+\item{conjugate5}{string (or character). In use only when objects argument
+is empty.}
+
 \item{col.base}{character (name of base column). In use only when objects
 argument is empty.}
 
@@ -57,6 +75,15 @@ argument is empty.}
 bjects argument is empty.}
 
 \item{col.target}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{col.conjugate3}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{col.conjugate5}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{col.name}{character (name of target column). In use only when objects
 argument is empty.}
 
 \item{default_sugar}{character - only one letter. Will be replicated
@@ -93,6 +120,9 @@ XNAStringSet object is returned.
 
 Method to extract a single row (either by row index or by 'name' slot)
 XNAString object is returned.
+
+Method to add/replace a single row (either by row index or by 'name' slot)
+XNAStringSet object is returned.
 }
 \examples{
 my_dic <- data.table::data.table(

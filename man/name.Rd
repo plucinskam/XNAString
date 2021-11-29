@@ -19,7 +19,7 @@ name(x, ...) <- value
 
 \S4method{name}{XNAString}(x) <- value
 
-\S4method{name}{XNAStringSet}(x, i = 1) <- value
+\S4method{name}{XNAStringSet}(x) <- value
 }
 \arguments{
 \item{x}{XNAString/XNAStringSet object}
@@ -123,5 +123,5 @@ obj2 <- XNAString(
   dictionary = my_dic
 )
 XNAStringSetObj <- XNAStringSet(objects = list(obj1, obj2))
-name(XNAStringSetObj, 1) <- c("new1", "new2")
+name(XNAStringSetObj) <- c("new1", "new2")
 }

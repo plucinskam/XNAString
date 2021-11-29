@@ -11,6 +11,9 @@ dt2Set(
   col.sugar = "sugar",
   col.backbone = "backbone",
   col.target = "target",
+  col.conjugate3 = "conjugate3",
+  col.conjugate5 = "conjugate5",
+  col.name = "name",
   default_sugar = NA,
   default_backbone = NA,
   compl_dict = complementary_bases
@@ -27,6 +30,15 @@ base, sugar and backbone columns)}
 \item{col.backbone}{character (name of backbone column)}
 
 \item{col.target}{character (name of target column)}
+
+\item{col.conjugate3}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{col.conjugate5}{character (name of target column). In use only when objects
+argument is empty.}
+
+\item{col.name}{character (name of target column). In use only when objects
+argument is empty.}
 
 \item{default_sugar}{character - only one letter. Will be replicated
 nchar(base) times}

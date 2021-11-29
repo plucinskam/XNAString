@@ -58,6 +58,12 @@ XNAStringSetMethod <- setClass("XNAStringSet",
 #' empty.
 #' @param backbone string (or character). In use only when objects argument
 #' is empty.
+#' @param name string (or character). In use only when objects argument
+#' is empty.
+#' @param conjugate5 string (or character). In use only when objects argument
+#' is empty.
+#' @param conjugate3 string (or character). In use only when objects argument
+#' is empty.
 #' @param target DNAStringSet, DNAString or character. In use only when objects
 #' argument is empty.
 #' @param col.base character (name of base column). In use only when objects
@@ -68,6 +74,14 @@ XNAStringSetMethod <- setClass("XNAStringSet",
 #' bjects argument is empty.
 #' @param col.target character (name of target column). In use only when objects
 #'  argument is empty.
+#' @param col.name character (name of target column). In use only when objects
+#'  argument is empty.
+#' @param col.conjugate3 character (name of target column). In use only when objects
+#'  argument is empty.
+#' @param col.conjugate5 character (name of target column). In use only when objects
+#'  argument is empty.
+#' @param col.base character (name of base column). In use only when objects
+#' argument is empty.
 #' @param default_sugar character - only one letter. Will be replicated
 #'                      nchar(base) times. In use only when objects argument is
 #'                       empty.
@@ -87,35 +101,49 @@ XNAStringSet <- function(objects = NA,
                          sugar = NA,
                          backbone = NA,
                          target = NA,
+                         name = NA,
+                         conjugate3 = NA,
+                         conjugate5 = NA,
                          col.base = 'base',
                          col.sugar = 'sugar',
                          col.backbone = 'backbone',
                          col.target = 'target',
+                         col.conjugate3 = "conjugate3",
+                         col.conjugate5 = "conjugate5",
+                         col.name = "name",
                          default_sugar = NA,
                          default_backbone = NA,
                          compl_dict = complementary_bases) {
   if (!all(is.na(objects))) {
     set <- XNAStringSetMethod(objects = objects)
-  } else {
+  } else if (!is.na(base[1])) {
     dt <- data.table::data.table(
       base = base,
       sugar = sugar,
       backbone = backbone,
-      target = target
+      target = target,
+      name = name,
+      conjugate3 = conjugate3,
+      conjugate5 = conjugate5
     )
     cols_not_NA <- colSums(is.na(dt)) < nrow(dt)
     dt <- dt[, cols_not_NA, with = FALSE]
     set <-
       XNAString::dt2Set(
         dt,
-        col.base,
-        col.sugar,
-        col.backbone,
-        col.target,
+        col.base = col.base,
+        col.sugar = col.sugar,
+        col.backbone = col.backbone,
+        col.target = col.target,
+        col.name = col.name,
+        col.conjugate3 = col.conjugate3,
+        col.conjugate5 = col.conjugate5,
         default_sugar,
         default_backbone,
         compl_dict
       )
+  } else {
+    set <- XNAStringSetMethod(objects = list())
   }
   
   return(set)
@@ -207,13 +235,26 @@ xnaObj2Dt <- function(obj, slots) {
 #' )
 #' XNAStringSetObj <- XNAStringSet(objects = list(obj2, obj3))
 #' set2Dt(XNAStringSetObj, c("base", "sugar"))
-set2Dt <- function(obj, slots) {
-  a <- lapply(seq(1, length(objects(obj))), function(i) {
-    xnaObj2Dt(objects(obj)[i][[1]], slots)
-  })
-  
-  dt <- data.table::rbindlist(a)
-  
+set2Dt <- function(obj,
+                   slots = c(
+                     "name",
+                     "base",
+                     "sugar",
+                     "backbone",
+                     "target",
+                     "secondary_structure",
+                     "conjugate5",
+                     "conjugate3"
+                   ))
+{
+  if (length(obj@objects) > 0){
+    a <- lapply(seq(1, length(objects(obj))), function(i) {
+      xnaObj2Dt(objects(obj)[i][[1]], slots)
+    })
+    dt <- data.table::rbindlist(a)
+  } else {
+    dt <- data.table::data.table()
+  }
   return(dt)
 }
 
@@ -226,6 +267,12 @@ set2Dt <- function(obj, slots) {
 #' @param col.sugar character (name of sugar column)
 #' @param col.backbone character (name of backbone column)
 #' @param col.target character (name of target column)
+#' @param col.name character (name of target column). In use only when objects
+#'  argument is empty.
+#' @param col.conjugate3 character (name of target column). In use only when objects
+#'  argument is empty.
+#' @param col.conjugate5 character (name of target column). In use only when objects
+#'  argument is empty.
 #' @param compl_dict data.table with following columns:
 #' "base", "target". By default internal XNAString dictionary is used
 #' @param default_sugar character - only one letter. Will be replicated
@@ -250,6 +297,9 @@ dt2Set <- function(table,
                    col.sugar = 'sugar',
                    col.backbone = 'backbone',
                    col.target = 'target',
+                   col.conjugate3 = "conjugate3",
+                   col.conjugate5 = "conjugate5",
+                   col.name = "name",
                    default_sugar = NA,
                    default_backbone = NA,
                    compl_dict = complementary_bases) {
@@ -277,6 +327,30 @@ dt2Set <- function(table,
     )))
   }
   
+  if (any(colnames(table) == col.name)) {
+    eval(parse(text = paste(
+      "name_vec <- table$", col.name, sep = ''
+    )))
+  } else {
+    name_vec <- rep(list(NA), nrow(table))
+  }
+  
+  if (any(colnames(table) == col.conjugate3)) {
+    eval(parse(text = paste(
+      "conjugate3_vec <- table$", col.conjugate3, sep = ''
+    )))
+  } else {
+    conjugate3_vec <- rep(list(NA), nrow(table))
+  }
+  
+  if (any(colnames(table) == col.conjugate5)) {
+    eval(parse(text = paste(
+      "conjugate5_vec <- table$", col.conjugate5, sep = ''
+    )))
+  } else {
+    conjugate5_vec <- rep(list(NA), nrow(table))
+  }
+  
   obj_ls <- list()
   if (exists("base_vec") &
       !exists("sugar_vec") &
@@ -284,7 +358,7 @@ dt2Set <- function(table,
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = base_vec[[i]],",
             ifelse(
@@ -301,6 +375,20 @@ dt2Set <- function(table,
             sep = ''
           )
         ))
+        
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
   } else if (exists("base_vec") &
              exists("sugar_vec") &
@@ -308,13 +396,27 @@ dt2Set <- function(table,
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = base_vec[[i]],
-                                  sugar = sugar_vec[[i]],
-                                  compl_dictionary = compl_dict)"
+            sugar = sugar_vec[[i]],
+            compl_dictionary = compl_dict)"
           )
         ))
+        
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
   } else if (exists("base_vec") &
              exists("sugar_vec") &
@@ -322,29 +424,56 @@ dt2Set <- function(table,
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = base_vec[[i]],
-                                sugar = sugar_vec[[i]],
-                                backbone = backbone_vec[[i]],
-                                compl_dictionary = compl_dict)"
+                      sugar = sugar_vec[[i]],
+                      backbone = backbone_vec[[i]],
+                      compl_dictionary = compl_dict)"
           )
         ))
+        
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
-  }
-  if (exists("base_vec") &
-      !exists("sugar_vec") &
-      !exists("backbone_vec") & exists("target_vec")) {
+  } else if (exists("base_vec") &
+             !exists("sugar_vec") &
+             !exists("backbone_vec") & exists("target_vec")) {
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = Biostrings::DNAStringSet(base_vec[[i]]),
-                                target = target_vec[[i]],
-                                compl_dictionary = compl_dict)"
+                        target = target_vec[[i]],
+                        compl_dictionary = compl_dict)"
           )
         ))
+        
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
   } else if (exists("base_vec") &
              exists("sugar_vec") &
@@ -352,14 +481,28 @@ dt2Set <- function(table,
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = base_vec[[i]],
-                                sugar = sugar_vec[[i]],
-                                target = target_vec[[i]],
-                                compl_dictionary = compl_dict)"
+                      sugar = sugar_vec[[i]],
+                      target = target_vec[[i]],
+                      compl_dictionary = compl_dict)"
           )
         ))
+        
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
   } else if (exists("base_vec") &
              exists("sugar_vec") &
@@ -367,18 +510,31 @@ dt2Set <- function(table,
     #create list of xnastring objects and check validity
     obj_ls <-
       future.apply::future_sapply(seq(1, nrow(table)), function(i) {
-        eval(parse(
+        obj <- eval(parse(
           text = paste(
             "XNAString(base = base_vec[[i]],
-                                sugar = sugar_vec[[i]],
-                                backbone = backbone_vec[[i]],
-                                target = target_vec[[i]],
-                                compl_dictionary = compl_dict)"
+                      sugar = sugar_vec[[i]],
+                      backbone = backbone_vec[[i]],
+                      target = target_vec[[i]],
+                      compl_dictionary = compl_dict)"
           )
         ))
+        if(!is.na(name_vec[[i]])){
+          obj@name <- name_vec[[i]]
+        }
+        
+        if(!is.na(conjugate3_vec[[i]])){
+          obj@conjugate3 <- conjugate3_vec[[i]]
+        }
+        
+        if(!is.na(conjugate5_vec[[i]])){
+          obj@conjugate5 <- conjugate5_vec[[i]]
+        } 
+        
+        return(obj)
       }, future.globals = structure(FALSE, add = "XNAString"))
-  }
-  
+    
+  } 
   
   # create XNAStringSet object
   obj_set <- XNAStringSet(objects = obj_ls)
@@ -393,21 +549,26 @@ dt2Set <- function(table,
 setMethod("show", "XNAStringSet",
           function(object) {
             cat("XNAStringSet object\n", sep = "")
-            res <-
-              set2Dt(
-                object,
-                c(
-                  "name",
-                  "base",
-                  "sugar",
-                  "backbone",
-                  "target",
-                  "conjugate5",
-                  "conjugate3",
-                  "secondary_structure"
+            if(length(object) > 0){
+              res <-
+                set2Dt(
+                  object,
+                  c(
+                    "name",
+                    "base",
+                    "sugar",
+                    "backbone",
+                    "target",
+                    "conjugate5",
+                    "conjugate3",
+                    "secondary_structure"
+                  )
                 )
-              )
-            print(res)
+              print(res)
+            } else {
+              
+            }
+
           })
 
 
@@ -505,7 +666,31 @@ setMethod(
   }
 )
 
-
+#' Method to add/replace a single row (either by row index or by 'name' slot)
+#' XNAStringSet object is returned.
+#' @rdname xnastringSetClass
+#' 
+#' @export
+setMethod(
+  f = "[[<-",
+  signature = "XNAStringSet",
+  definition = function(x, i, value) {
+    # extract rows either by rows index or by name slot
+    stopifnot(
+      class(i) %in% c("numeric", "integer", "character", "logical") &
+        length(i) == 1 &
+        class(x)[[1]] == "XNAStringSet"
+    )
+    
+    if(i > length(x@objects) + 1){
+      stop("Index must be <= ", length(x@objects) + 1)
+    }
+    
+    x@objects[[i]] <- value
+    
+    return(x)
+  }
+)
 
 #'
 #' Define method to save XNAStringSet object as a list of XNAString objects

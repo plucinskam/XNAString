@@ -3,11 +3,17 @@
 \name{objects}
 \alias{objects}
 \alias{objects,XNAStringSet-method}
-\title{Objects getter method for XNAStringSet class}
+\alias{objects<-}
+\alias{objects<-,XNAStringSet-method}
+\title{Objects getter/setter method for XNAStringSet class}
 \usage{
 objects(x, ...)
 
 \S4method{objects}{XNAStringSet}(x)
+
+objects(x, ...) <- value
+
+\S4method{objects}{XNAStringSet}(x) <- value
 }
 \arguments{
 \item{x}{XNAStringSet object}

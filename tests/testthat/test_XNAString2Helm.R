@@ -7,12 +7,11 @@ testthat::test_that("XNAString2Helm gives correct result for double stranded mol
     backbone = c("OOOOOO", "OOOOOO"),
     target = "",
     conjugate3 = "",
-    conjugate5 = ""
+    conjugate5 = "[5mC]"
   )
 
   res <- XNAStringToHelm(obj)
-  ref <- "RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR]([5meC])P.[mR](G)P.[fR](C)}|RNA2{[fR](U)P.[fR](U)P.[mR](A)P.[fR](U)P.[mR](G)P.[fR](A)P.[mR](T)}$RNA1,RNA2,2:pair-20:pair|RNA1,RNA2,5:pair-17:pair|RNA1,RNA2,8:pair-14:pair|RNA1,RNA2,11:pair-11:pair|RNA1,RNA2,14:pair-8:pair|RNA1,RNA2,17:pair-5:pair|RNA1,RNA2,20:pair-2:pair$$$$V2.0"
-  
+  ref <- "CHEM1{[5mC]}|RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR]([5meC])P.[mR](G)P.[fR](C)}|RNA2{[fR](U)P.[fR](U)P.[mR](A)P.[fR](U)P.[mR](G)P.[fR](A)P.[mR](T)}$RNA1,RNA2,2:pair-20:pair|RNA1,RNA2,5:pair-17:pair|RNA1,RNA2,8:pair-14:pair|RNA1,RNA2,11:pair-11:pair|RNA1,RNA2,14:pair-8:pair|RNA1,RNA2,17:pair-5:pair|RNA1,RNA2,20:pair-2:pair$$$V2.0"
   testthat::expect_equal(res, ref)
 })
 
@@ -71,7 +70,7 @@ testthat::test_that("XNAString2Helm gives correct result if base is DNAString", 
 
   res <- XNAStringToHelm(obj)
 
-  ref <- "RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)}|RNA2{[fR](G)P.[fR](G)P.[mR](G)P.[fR](G)}$RNA1,RNA2,2:pair-11:pair|RNA1,RNA2,5:pair-8:pair|RNA1,RNA2,8:pair-5:pair|RNA1,RNA2,11:pair-2:pair$$$$V2.0"
+  ref <- "RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)}|RNA2{[fR](G)P.[fR](G)P.[mR](G)P.[fR](G)}$RNA1,RNA2,2:pair-11:pair|RNA1,RNA2,5:pair-8:pair|RNA1,RNA2,8:pair-5:pair|RNA1,RNA2,11:pair-2:pair$$$V2.0"
   
   testthat::expect_equal(res, ref)
 })
@@ -106,10 +105,37 @@ testthat::test_that("XNAStringToHelm gives additionaly pairing info for double s
   )
 
   ref <-
-    "RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR](U)P.[mR](G)P.[fR](C)P.[mR](C)P.[fR](G)P.[mR](U)P.[fR](G)P.[mR](G)P.[fR](U)P.[mR](U)P.[fR](C)P.[mR](A)P.[fR](U)P.[mR](A)P.[fR](A)}|RNA2{[fR](U)P.[fR](U)P.[mR](A)P.[fR](U)P.[mR](G)P.[fR](A)P.[mR](A)P.[fR](C)P.[mR](C)P.[fR](A)P.[mR](C)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](A)P.[fR](G)P.[mR](G)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](G)}$RNA1,RNA2,2:pair-56:pair|RNA1,RNA2,5:pair-53:pair|RNA1,RNA2,8:pair-50:pair|RNA1,RNA2,11:pair-47:pair|RNA1,RNA2,14:pair-44:pair|RNA1,RNA2,17:pair-41:pair|RNA1,RNA2,20:pair-38:pair|RNA1,RNA2,23:pair-35:pair|RNA1,RNA2,26:pair-32:pair|RNA1,RNA2,29:pair-29:pair|RNA1,RNA2,32:pair-26:pair|RNA1,RNA2,35:pair-23:pair|RNA1,RNA2,38:pair-20:pair|RNA1,RNA2,41:pair-17:pair|RNA1,RNA2,44:pair-14:pair|RNA1,RNA2,47:pair-11:pair|RNA1,RNA2,50:pair-8:pair|RNA1,RNA2,53:pair-5:pair|RNA1,RNA2,56:pair-2:pair$$$$V2.0"
+    "RNA1{[mR](C)P.[mR](C)P.[fR](C)P.[mR](C)P.[fR](U)P.[mR](G)P.[fR](C)P.[mR](C)P.[fR](G)P.[mR](U)P.[fR](G)P.[mR](G)P.[fR](U)P.[mR](U)P.[fR](C)P.[mR](A)P.[fR](U)P.[mR](A)P.[fR](A)}|RNA2{[fR](U)P.[fR](U)P.[mR](A)P.[fR](U)P.[mR](G)P.[fR](A)P.[mR](A)P.[fR](C)P.[mR](C)P.[fR](A)P.[mR](C)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](A)P.[fR](G)P.[mR](G)P.[fR](G)P.[mR](G)P.[fR](C)P.[mR](G)}$RNA1,RNA2,2:pair-56:pair|RNA1,RNA2,5:pair-53:pair|RNA1,RNA2,8:pair-50:pair|RNA1,RNA2,11:pair-47:pair|RNA1,RNA2,14:pair-44:pair|RNA1,RNA2,17:pair-41:pair|RNA1,RNA2,20:pair-38:pair|RNA1,RNA2,23:pair-35:pair|RNA1,RNA2,26:pair-32:pair|RNA1,RNA2,29:pair-29:pair|RNA1,RNA2,32:pair-26:pair|RNA1,RNA2,35:pair-23:pair|RNA1,RNA2,38:pair-20:pair|RNA1,RNA2,41:pair-17:pair|RNA1,RNA2,44:pair-14:pair|RNA1,RNA2,47:pair-11:pair|RNA1,RNA2,50:pair-8:pair|RNA1,RNA2,53:pair-5:pair|RNA1,RNA2,56:pair-2:pair$$$V2.0"
   
   
   res <- XNAStringToHelm(obj1) 
   
+  testthat::expect_equal(res, ref)
+})
+
+
+testthat::test_that("XNAString2Helm gives correct result for XNAStringSet", {
+  
+  obj1 <-
+    XNAString(
+      name = 'a',
+      base = 'GGE',
+      sugar = 'FFO',
+      backbone = 'SB'
+    )
+  
+  obj2 <-
+    XNAString(
+      name = 'b',
+      base = 'GGE',
+      sugar = 'OOO',
+      backbone = 'SB'
+    )
+  
+  setObj <-
+    XNAStringSet(objects = list(obj1, obj2))
+  
+  res <- XNAStringToHelm(setObj)
+  ref <- c("RNA1{[fR](G)[ssP].[fR](G)[sPpace].[mR]([5meC])}$$$$V2.0", "RNA1{[mR](G)[ssP].[mR](G)[sPpace].[mR]([5meC])}$$$$V2.0")
   testthat::expect_equal(res, ref)
 })
