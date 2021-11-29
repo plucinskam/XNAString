@@ -1306,7 +1306,7 @@ setMethod("default_backbone<-", "XNAString", function(x, value) {
 })
 
 
-#' Objects getter/setter method for XNAStringSet class
+#' Objects getter method for XNAStringSet class
 #'
 #' Getter methods enable extraction of single slots from
 #' XNAStringSet objects.
@@ -1349,18 +1349,4 @@ setGeneric("objects", function(x, ...) {
 setMethod("objects", "XNAStringSet", function(x) {
   x@objects
 })
-
-
-#' @export
-#' @rdname objects
-setGeneric("objects<-", function(x, ..., value) {
-  standardGeneric("objects<-")
-})
  
-#' @export
-#' @rdname objects
-setMethod("objects<-", "XNAStringSet", function(x, value) {
-  x@objects <- value
-  validObject(x)
-  x
-})

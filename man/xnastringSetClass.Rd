@@ -104,6 +104,8 @@ only when objects argument is empty.}
 
 \item{i}{numeric, integer, character, logical - filter needed for extraction
 method}
+
+\item{value}{XNAString object}
 }
 \value{
 XNASTringSet object

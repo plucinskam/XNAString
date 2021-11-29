@@ -668,6 +668,7 @@ setMethod(
 
 #' Method to add/replace a single row (either by row index or by 'name' slot)
 #' XNAStringSet object is returned.
+#' @param value XNAString object
 #' @rdname xnastringSetClass
 #' 
 #' @export
